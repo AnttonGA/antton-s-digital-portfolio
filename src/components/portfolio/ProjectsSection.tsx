@@ -1,8 +1,10 @@
+import { useState } from "react";
 import ProjectCard, { ProjectData } from "./ProjectCard";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { Code, Megaphone } from "lucide-react";
 
-// Modular project data - easy to add new projects
-const projectsData: ProjectData[] = [
+// Web Development Projects
+const webDevProjects: ProjectData[] = [
   {
     id: "birakari",
     title: "Birakari",
@@ -83,15 +85,49 @@ const projectsData: ProjectData[] = [
   },
 ];
 
+// Social Media / Content Creation Projects (placeholder - user can add content)
+const socialMediaProjects: ProjectData[] = [
+  {
+    id: "social-placeholder",
+    title: "Próximamente",
+    year: "2025",
+    type: "RRSS / Contenido",
+    description:
+      "Aquí se mostrarán los proyectos de gestión de redes sociales y creación de contenido. Esta sección está preparada para añadir nuevos proyectos de forma modular.",
+    features: [
+      {
+        title: "Gestión de RRSS",
+        description:
+          "Estrategias de contenido y gestión de comunidades en redes sociales.",
+      },
+      {
+        title: "Creación de contenido",
+        description:
+          "Desarrollo de contenido visual y escrito para plataformas digitales.",
+      },
+      {
+        title: "Analítica social",
+        description:
+          "Medición y análisis de resultados en campañas de redes sociales.",
+      },
+    ],
+  },
+];
+
+type TabType = "web" | "social";
+
 const ProjectsSection = () => {
+  const [activeTab, setActiveTab] = useState<TabType>("web");
   const { ref: titleRef, isVisible: titleVisible } = useScrollReveal({ threshold: 0.3 });
+
+  const currentProjects = activeTab === "web" ? webDevProjects : socialMediaProjects;
 
   return (
     <section id="proyectos" className="px-6 py-20 bg-secondary/50">
       <div className="max-w-5xl mx-auto">
         <h2 
           ref={titleRef as React.RefObject<HTMLHeadingElement>}
-          className={`text-3xl md:text-4xl font-bold mb-12 transition-all duration-700 ease-out ${
+          className={`text-3xl md:text-4xl font-bold mb-8 transition-all duration-700 ease-out ${
             titleVisible 
               ? "opacity-100 translate-y-0" 
               : "opacity-0 translate-y-6"
@@ -99,8 +135,36 @@ const ProjectsSection = () => {
         >
           Proyectos
         </h2>
+
+        {/* Tabs */}
+        <div className="flex gap-2 mb-10">
+          <button
+            onClick={() => setActiveTab("web")}
+            className={`flex items-center gap-2 px-5 py-3 rounded-lg font-medium transition-all duration-300 ${
+              activeTab === "web"
+                ? "bg-primary text-primary-foreground shadow-lg"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            <Code className="w-4 h-4" />
+            Desarrollo Web
+          </button>
+          <button
+            onClick={() => setActiveTab("social")}
+            className={`flex items-center gap-2 px-5 py-3 rounded-lg font-medium transition-all duration-300 ${
+              activeTab === "social"
+                ? "bg-primary text-primary-foreground shadow-lg"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            <Megaphone className="w-4 h-4" />
+            Gestión RRSS / Contenido
+          </button>
+        </div>
+
+        {/* Projects */}
         <div className="space-y-8">
-          {projectsData.map((project, index) => (
+          {currentProjects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
