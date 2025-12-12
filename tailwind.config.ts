@@ -2,7 +2,12 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -47,6 +52,17 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        heading: "hsl(var(--heading))",
+        subtle: "hsl(var(--text-subtle))",
+        "year-accent": "hsl(var(--year-accent))",
+        "project-card": {
+          DEFAULT: "hsl(var(--project-card-bg))",
+          border: "hsl(var(--project-card-border))",
+        },
+        "feature-badge": {
+          DEFAULT: "hsl(var(--feature-badge-bg))",
+          text: "hsl(var(--feature-badge-text))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -62,6 +78,10 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        heading: ["Sora", "sans-serif"],
+        body: ["Outfit", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {
