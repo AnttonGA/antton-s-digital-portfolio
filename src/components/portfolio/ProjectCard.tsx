@@ -10,7 +10,7 @@ export interface ProjectData {
   id: string;
   title: string;
   year: string;
-  type: "Proyecto personal" | "Proyecto" | "Prácticas";
+  type: "Proyecto personal" | "Proyecto" | "Prácticas" | "RRSS / Contenido";
   description: string;
   features: ProjectFeature[];
   link?: string;
