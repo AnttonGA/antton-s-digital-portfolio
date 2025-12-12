@@ -1,4 +1,5 @@
 import ProjectCard, { ProjectData } from "./ProjectCard";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 // Modular project data - easy to add new projects
 const projectsData: ProjectData[] = [
@@ -83,10 +84,19 @@ const projectsData: ProjectData[] = [
 ];
 
 const ProjectsSection = () => {
+  const { ref: titleRef, isVisible: titleVisible } = useScrollReveal({ threshold: 0.3 });
+
   return (
     <section id="proyectos" className="px-6 py-20 bg-secondary/50">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 animate-fade-in-up">
+        <h2 
+          ref={titleRef as React.RefObject<HTMLHeadingElement>}
+          className={`text-3xl md:text-4xl font-bold mb-12 transition-all duration-700 ease-out ${
+            titleVisible 
+              ? "opacity-100 translate-y-0" 
+              : "opacity-0 translate-y-6"
+          }`}
+        >
           Proyectos
         </h2>
         <div className="space-y-8">

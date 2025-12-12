@@ -1,6 +1,10 @@
 import { Mail, Phone, Instagram, Linkedin } from "lucide-react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const ContactSection = () => {
+  const { ref: titleRef, isVisible: titleVisible } = useScrollReveal({ threshold: 0.2 });
+  const { ref: cardsRef, isVisible: cardsVisible } = useScrollReveal({ threshold: 0.1 });
+
   const contactItems = [
     {
       icon: Mail,
@@ -33,7 +37,14 @@ const ContactSection = () => {
       <div className="max-w-5xl mx-auto">
         <div className="grid md:grid-cols-2 gap-12 items-start">
           {/* Message */}
-          <div className="space-y-6 animate-fade-in-up">
+          <div 
+            ref={titleRef as React.RefObject<HTMLDivElement>}
+            className={`space-y-6 transition-all duration-700 ease-out ${
+              titleVisible 
+                ? "opacity-100 translate-x-0" 
+                : "opacity-0 -translate-x-8"
+            }`}
+          >
             <span className="text-sm font-medium text-year-accent tracking-widest uppercase">
               Contacto
             </span>
@@ -49,16 +60,24 @@ const ContactSection = () => {
           </div>
 
           {/* Contact Details */}
-          <div className="space-y-6 animate-fade-in-up delay-200">
+          <div 
+            ref={cardsRef as React.RefObject<HTMLDivElement>}
+            className="space-y-4"
+          >
             {contactItems.map((item, index) => (
               <a
                 key={index}
                 href={item.href}
                 target={item.href.startsWith("http") ? "_blank" : undefined}
                 rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="flex items-center gap-4 p-4 rounded-lg bg-project-card border border-project-card hover:border-primary/30 transition-all group"
+                className={`flex items-center gap-4 p-4 rounded-lg bg-project-card border border-project-card hover:border-primary/30 hover:shadow-md transition-all duration-500 ease-out group ${
+                  cardsVisible 
+                    ? "opacity-100 translate-x-0" 
+                    : "opacity-0 translate-x-8"
+                }`}
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
                   <item.icon className="w-5 h-5 text-primary-foreground" />
                 </div>
                 <div>
