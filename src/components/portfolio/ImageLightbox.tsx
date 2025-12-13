@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Heart, MessageCircle, Send, Bookmark, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Heart, MessageCircle, Send, Bookmark, ChevronLeft, ChevronRight, X } from "lucide-react";
 
 export interface SocialMediaItem {
   id: string;
@@ -27,15 +27,10 @@ export interface SocialMediaItem {
 }
 
 interface ImageLightboxProps {
-  image: SocialMediaItem | null;
+  allPosts: SocialMediaItem[];
+  initialIndex: number;
   isOpen: boolean;
   onClose: () => void;
-  onPrevious: () => void;
-  onNext: () => void;
-  hasPrevious: boolean;
-  hasNext: boolean;
-  currentIndex?: number;
-  totalItems?: number;
 }
 
 const formatNumber = (num: number): string => {
@@ -70,103 +65,95 @@ const isDirectVideoUrl = (url: string): boolean => {
 };
 
 const ImageLightbox = ({ 
-  image, 
+  allPosts,
+  initialIndex,
   isOpen, 
-  onClose, 
-  onPrevious, 
-  onNext, 
-  hasPrevious, 
-  hasNext,
-  currentIndex = 0,
-  totalItems = 0
+  onClose
 }: ImageLightboxProps) => {
-  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [carouselIndices, setCarouselIndices] = useState<Record<string, number>>({});
+  const [currentPostIndex, setCurrentPostIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const postRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Reset carousel index when image changes
+  // Scroll to initial post when lightbox opens
   useEffect(() => {
-    setCarouselIndex(0);
-  }, [image?.id]);
-
-  // Handle wheel navigation with debounce
-  const handleWheel = useCallback((e: WheelEvent) => {
-    e.preventDefault();
-    
-    const threshold = 50;
-    if (Math.abs(e.deltaY) < threshold) return;
-
-    if (e.deltaY > 0 && hasNext) {
-      onNext();
-    } else if (e.deltaY < 0 && hasPrevious) {
-      onPrevious();
+    if (isOpen && scrollContainerRef.current && postRefs.current[initialIndex]) {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        postRefs.current[initialIndex]?.scrollIntoView({ behavior: "instant" });
+        setCurrentPostIndex(initialIndex);
+      }, 50);
     }
-  }, [hasNext, hasPrevious, onNext, onPrevious]);
+  }, [isOpen, initialIndex]);
 
-  // Handle keyboard navigation
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === "ArrowDown" && hasNext) {
-      e.preventDefault();
-      onNext();
-    } else if (e.key === "ArrowUp" && hasPrevious) {
-      e.preventDefault();
-      onPrevious();
-    } else if (e.key === "Escape") {
-      onClose();
-    }
-  }, [hasNext, hasPrevious, onNext, onPrevious, onClose]);
-
-  // Attach wheel and keyboard listeners
+  // Intersection Observer to track current visible post
   useEffect(() => {
     if (!isOpen) return;
 
-    let wheelTimeout: ReturnType<typeof setTimeout>;
-    let canScroll = true;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+            const index = postRefs.current.findIndex((ref) => ref === entry.target);
+            if (index !== -1) {
+              setCurrentPostIndex(index);
+            }
+          }
+        });
+      },
+      {
+        root: scrollContainerRef.current,
+        threshold: 0.5,
+      }
+    );
 
-    const throttledWheel = (e: WheelEvent) => {
-      if (!canScroll) return;
-      handleWheel(e);
-      canScroll = false;
-      wheelTimeout = setTimeout(() => {
-        canScroll = true;
-      }, 300);
-    };
+    postRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
 
-    window.addEventListener("wheel", throttledWheel, { passive: false });
+    return () => observer.disconnect();
+  }, [isOpen, allPosts.length]);
+
+  // Handle keyboard navigation
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      onClose();
+    }
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
     window.addEventListener("keydown", handleKeyDown);
     document.body.style.overflow = "hidden";
-
     return () => {
-      window.removeEventListener("wheel", throttledWheel);
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
-      clearTimeout(wheelTimeout);
     };
-  }, [isOpen, handleWheel, handleKeyDown]);
+  }, [isOpen, handleKeyDown]);
 
-  if (!image) return null;
+  if (allPosts.length === 0) return null;
 
-  const isCarousel = image.mediaType === "carousel" && image.mediaUrls && image.mediaUrls.length > 1;
-  const isVideo = image.mediaType === "video";
-  const carouselImages = isCarousel ? image.mediaUrls! : [image.imageUrl];
-  const totalCarouselImages = carouselImages.length;
-
-  const handleCarouselPrev = () => {
-    setCarouselIndex((prev) => (prev > 0 ? prev - 1 : totalCarouselImages - 1));
+  const getCarouselIndex = (postId: string) => carouselIndices[postId] || 0;
+  
+  const setCarouselIndex = (postId: string, index: number) => {
+    setCarouselIndices(prev => ({ ...prev, [postId]: index }));
   };
 
-  const handleCarouselNext = () => {
-    setCarouselIndex((prev) => (prev < totalCarouselImages - 1 ? prev + 1 : 0));
+  const handleCarouselPrev = (post: SocialMediaItem, totalImages: number) => {
+    const current = getCarouselIndex(post.id);
+    setCarouselIndex(post.id, current > 0 ? current - 1 : totalImages - 1);
   };
 
-  const handleClose = () => {
-    setCarouselIndex(0);
-    onClose();
+  const handleCarouselNext = (post: SocialMediaItem, totalImages: number) => {
+    const current = getCarouselIndex(post.id);
+    setCarouselIndex(post.id, current < totalImages - 1 ? current + 1 : 0);
   };
 
-  // Render video content
-  const renderVideoContent = () => {
-    if (!image.videoUrl) return null;
+  // Render video content for a specific post
+  const renderVideoContent = (post: SocialMediaItem) => {
+    if (!post.videoUrl) return null;
 
-    const embedUrl = getVideoEmbedUrl(image.videoUrl);
+    const embedUrl = getVideoEmbedUrl(post.videoUrl);
     
     if (embedUrl) {
       return (
@@ -179,10 +166,10 @@ const ImageLightbox = ({
       );
     }
     
-    if (isDirectVideoUrl(image.videoUrl)) {
+    if (isDirectVideoUrl(post.videoUrl)) {
       return (
         <video
-          src={image.videoUrl}
+          src={post.videoUrl}
           controls
           className="w-full max-h-[50vh] object-contain"
         >
@@ -194,187 +181,191 @@ const ImageLightbox = ({
     return null;
   };
 
+  // Render a single post
+  const renderPost = (post: SocialMediaItem, index: number) => {
+    const isCarousel = post.mediaType === "carousel" && post.mediaUrls && post.mediaUrls.length > 1;
+    const isVideo = post.mediaType === "video";
+    const carouselImages = isCarousel ? post.mediaUrls! : [post.imageUrl];
+    const totalCarouselImages = carouselImages.length;
+    const currentCarouselIndex = getCarouselIndex(post.id);
+
+    return (
+      <div
+        key={post.id}
+        ref={(el) => { postRefs.current[index] = el; }}
+        className="h-[95vh] flex-shrink-0 snap-start snap-always flex flex-col md:flex-row"
+      >
+        {/* Left Column - Media + Stats + Description (50%) */}
+        <div className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col border-r-0 md:border-r border-divider overflow-y-auto">
+          {/* Media section */}
+          <div className="relative flex-shrink-0 flex items-center justify-center bg-foreground/5 min-h-[200px] md:min-h-[300px]">
+            {/* Carousel navigation */}
+            {isCarousel && (
+              <>
+                <button
+                  onClick={() => handleCarouselPrev(post, totalCarouselImages)}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-background/80 hover:bg-background transition-colors duration-200 border border-divider"
+                  aria-label="Imagen anterior del carrusel"
+                >
+                  <ChevronLeft className="w-4 h-4 text-foreground" strokeWidth={1.5} />
+                </button>
+                <button
+                  onClick={() => handleCarouselNext(post, totalCarouselImages)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-background/80 hover:bg-background transition-colors duration-200 border border-divider"
+                  aria-label="Siguiente imagen del carrusel"
+                >
+                  <ChevronRight className="w-4 h-4 text-foreground" strokeWidth={1.5} />
+                </button>
+              </>
+            )}
+
+            {/* Content */}
+            {isVideo ? (
+              <div className="w-full flex items-center justify-center p-4">
+                {renderVideoContent(post)}
+              </div>
+            ) : (
+              <img
+                src={carouselImages[currentCarouselIndex]}
+                alt={post.title || "Imagen de galería"}
+                className="max-w-full max-h-[40vh] md:max-h-[50vh] object-contain"
+                loading="lazy"
+              />
+            )}
+
+            {/* Carousel dots */}
+            {isCarousel && (
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                {carouselImages.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCarouselIndex(post.id, idx)}
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                      idx === currentCarouselIndex ? "bg-foreground" : "bg-foreground/30"
+                    }`}
+                    aria-label={`Ir a imagen ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Carousel counter */}
+            {isCarousel && (
+              <div className="absolute top-4 right-4 px-2 py-1 rounded bg-background/80 text-xs font-medium z-10">
+                {currentCarouselIndex + 1} / {totalCarouselImages}
+              </div>
+            )}
+          </div>
+
+          {/* Stats section */}
+          {post.stats && (
+            <div className="flex-shrink-0 px-6 py-4 border-t border-divider">
+              <div className="flex items-center justify-around">
+                <div className="flex items-center gap-2">
+                  <Heart className="w-5 h-5 text-subtle" strokeWidth={1.5} />
+                  <span className="text-sm font-medium">{formatNumber(post.stats.likes)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-subtle" strokeWidth={1.5} />
+                  <span className="text-sm font-medium">{formatNumber(post.stats.comments)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Send className="w-5 h-5 text-subtle" strokeWidth={1.5} />
+                  <span className="text-sm font-medium">{formatNumber(post.stats.shares)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Bookmark className="w-5 h-5 text-subtle" strokeWidth={1.5} />
+                  <span className="text-sm font-medium">{formatNumber(post.stats.saves)}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Title & Description */}
+          <div className="flex-1 px-6 py-4 border-t border-divider overflow-y-auto">
+            {post.title && (
+              <h3 className="text-lg font-semibold tracking-tight mb-2">{post.title}</h3>
+            )}
+            {post.category && (
+              <span className="inline-block mb-3 text-xs font-medium text-year-accent uppercase tracking-widest">
+                {post.category}
+              </span>
+            )}
+            {post.description && (
+              <p className="text-sm text-subtle leading-relaxed font-light">{post.description}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Right Column - Reasoning (50%) */}
+        <div className="w-full md:w-1/2 h-1/2 md:h-full bg-foreground/[0.02] flex flex-col overflow-y-auto">
+          <div className="p-6 md:p-8">
+            <h4 className="text-xs font-medium text-year-accent uppercase tracking-widest mb-4">
+              Razonamiento estratégico
+            </h4>
+            
+            {post.reasoning ? (
+              <div className="prose prose-sm max-w-none">
+                <p className="text-foreground leading-relaxed whitespace-pre-wrap">
+                  {post.reasoning}
+                </p>
+              </div>
+            ) : (
+              <div className="text-subtle text-sm leading-relaxed space-y-4">
+                <p>
+                  Este contenido forma parte del portfolio de creación de contenido y gestión de redes sociales.
+                </p>
+                <p>
+                  Cada pieza ha sido diseñada considerando:
+                </p>
+                <ul className="list-disc list-inside space-y-1 text-subtle/80">
+                  <li>Objetivos de comunicación de la marca</li>
+                  <li>Audiencia objetivo y sus intereses</li>
+                  <li>Tendencias actuales del sector</li>
+                  <li>Optimización para el algoritmo de la plataforma</li>
+                  <li>Coherencia con la identidad visual</li>
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[95vw] w-full h-[95vh] max-h-[95vh] p-0 bg-background border-0 overflow-hidden">
         <VisuallyHidden>
-          <DialogTitle>{image.title || "Imagen"}</DialogTitle>
+          <DialogTitle>Galería de contenido</DialogTitle>
         </VisuallyHidden>
 
         {/* Close button */}
         <button
-          onClick={handleClose}
+          onClick={onClose}
           className="absolute top-4 right-4 z-50 p-2 rounded-full bg-background/80 hover:bg-background transition-colors border border-divider"
           aria-label="Cerrar"
         >
           <X className="w-5 h-5 text-foreground" strokeWidth={1.5} />
         </button>
 
-        {/* Vertical navigation buttons */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-4 z-40 flex flex-col gap-2">
-          {hasPrevious && (
-            <button
-              onClick={onPrevious}
-              className="p-2 rounded-full bg-background/80 hover:bg-background transition-colors border border-divider"
-              aria-label="Post anterior"
-            >
-              <ChevronUp className="w-5 h-5 text-foreground" strokeWidth={1.5} />
-            </button>
-          )}
-        </div>
-
-        <div className="absolute left-1/2 -translate-x-1/2 bottom-4 z-40 flex flex-col items-center gap-2">
-          {/* Position indicator */}
-          {totalItems > 0 && (
-            <span className="text-xs text-subtle font-medium">
-              {currentIndex + 1} / {totalItems}
-            </span>
-          )}
-          {hasNext && (
-            <button
-              onClick={onNext}
-              className="p-2 rounded-full bg-background/80 hover:bg-background transition-colors border border-divider"
-              aria-label="Siguiente post"
-            >
-              <ChevronDown className="w-5 h-5 text-foreground" strokeWidth={1.5} />
-            </button>
-          )}
+        {/* Position indicator */}
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-4 z-40">
+          <span className="px-3 py-1.5 rounded-full bg-background/80 text-xs text-subtle font-medium border border-divider">
+            {currentPostIndex + 1} / {allPosts.length}
+          </span>
         </div>
         
-        <div className="flex flex-col md:flex-row h-full">
-          {/* Left Column - Media + Stats + Description (50%) */}
-          <div className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col border-r-0 md:border-r border-divider overflow-y-auto">
-            {/* Media section */}
-            <div className="relative flex-shrink-0 flex items-center justify-center bg-foreground/5 min-h-[200px] md:min-h-[300px]">
-              {/* Carousel navigation */}
-              {isCarousel && (
-                <>
-                  <button
-                    onClick={handleCarouselPrev}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-background/80 hover:bg-background transition-colors duration-200 border border-divider"
-                    aria-label="Imagen anterior del carrusel"
-                  >
-                    <ChevronLeft className="w-4 h-4 text-foreground" strokeWidth={1.5} />
-                  </button>
-                  <button
-                    onClick={handleCarouselNext}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-background/80 hover:bg-background transition-colors duration-200 border border-divider"
-                    aria-label="Siguiente imagen del carrusel"
-                  >
-                    <ChevronRight className="w-4 h-4 text-foreground" strokeWidth={1.5} />
-                  </button>
-                </>
-              )}
-
-              {/* Content */}
-              {isVideo ? (
-                <div className="w-full flex items-center justify-center p-4">
-                  {renderVideoContent()}
-                </div>
-              ) : (
-                <img
-                  src={carouselImages[carouselIndex]}
-                  alt={image.title || "Imagen de galería"}
-                  className="max-w-full max-h-[40vh] md:max-h-[50vh] object-contain"
-                />
-              )}
-
-              {/* Carousel dots */}
-              {isCarousel && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
-                  {carouselImages.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCarouselIndex(idx)}
-                      className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                        idx === carouselIndex ? "bg-foreground" : "bg-foreground/30"
-                      }`}
-                      aria-label={`Ir a imagen ${idx + 1}`}
-                    />
-                  ))}
-                </div>
-              )}
-
-              {/* Carousel counter */}
-              {isCarousel && (
-                <div className="absolute top-4 right-4 px-2 py-1 rounded bg-background/80 text-xs font-medium z-10">
-                  {carouselIndex + 1} / {totalCarouselImages}
-                </div>
-              )}
-            </div>
-
-            {/* Stats section */}
-            {image.stats && (
-              <div className="flex-shrink-0 px-6 py-4 border-t border-divider">
-                <div className="flex items-center justify-around">
-                  <div className="flex items-center gap-2">
-                    <Heart className="w-5 h-5 text-subtle" strokeWidth={1.5} />
-                    <span className="text-sm font-medium">{formatNumber(image.stats.likes)}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MessageCircle className="w-5 h-5 text-subtle" strokeWidth={1.5} />
-                    <span className="text-sm font-medium">{formatNumber(image.stats.comments)}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Send className="w-5 h-5 text-subtle" strokeWidth={1.5} />
-                    <span className="text-sm font-medium">{formatNumber(image.stats.shares)}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Bookmark className="w-5 h-5 text-subtle" strokeWidth={1.5} />
-                    <span className="text-sm font-medium">{formatNumber(image.stats.saves)}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Title & Description */}
-            <div className="flex-1 px-6 py-4 border-t border-divider overflow-y-auto">
-              {image.title && (
-                <h3 className="text-lg font-semibold tracking-tight mb-2">{image.title}</h3>
-              )}
-              {image.category && (
-                <span className="inline-block mb-3 text-xs font-medium text-year-accent uppercase tracking-widest">
-                  {image.category}
-                </span>
-              )}
-              {image.description && (
-                <p className="text-sm text-subtle leading-relaxed font-light">{image.description}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Right Column - Reasoning (50%) */}
-          <div className="w-full md:w-1/2 h-1/2 md:h-full bg-foreground/[0.02] flex flex-col overflow-y-auto">
-            <div className="p-6 md:p-8">
-              <h4 className="text-xs font-medium text-year-accent uppercase tracking-widest mb-4">
-                Razonamiento estratégico
-              </h4>
-              
-              {image.reasoning ? (
-                <div className="prose prose-sm max-w-none">
-                  <p className="text-foreground leading-relaxed whitespace-pre-wrap">
-                    {image.reasoning}
-                  </p>
-                </div>
-              ) : (
-                <div className="text-subtle text-sm leading-relaxed space-y-4">
-                  <p>
-                    Este contenido forma parte del portfolio de creación de contenido y gestión de redes sociales.
-                  </p>
-                  <p>
-                    Cada pieza ha sido diseñada considerando:
-                  </p>
-                  <ul className="list-disc list-inside space-y-1 text-subtle/80">
-                    <li>Objetivos de comunicación de la marca</li>
-                    <li>Audiencia objetivo y sus intereses</li>
-                    <li>Tendencias actuales del sector</li>
-                    <li>Optimización para el algoritmo de la plataforma</li>
-                    <li>Coherencia con la identidad visual</li>
-                  </ul>
-                </div>
-              )}
-            </div>
-          </div>
+        {/* Scrollable container with all posts */}
+        <div 
+          ref={scrollContainerRef}
+          className="h-full overflow-y-auto snap-y snap-mandatory scroll-smooth"
+          style={{ 
+            scrollBehavior: 'smooth',
+            WebkitOverflowScrolling: 'touch'
+          }}
+        >
+          {allPosts.map((post, index) => renderPost(post, index))}
         </div>
       </DialogContent>
     </Dialog>
