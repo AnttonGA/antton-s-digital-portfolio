@@ -1,3 +1,4 @@
+import { Download } from "lucide-react";
 import profilePhoto from "@/assets/profile-antton.jpg";
 
 const HeroSection = () => {
@@ -19,6 +20,16 @@ const HeroSection = () => {
                 Aguirre
               </h1>
             </div>
+            
+            {/* Download CV Button */}
+            <a
+              href="/Antton-CV.pdf"
+              download
+              className="inline-flex items-center gap-2 text-sm font-medium border border-foreground px-4 py-2 rounded-sm hover:bg-foreground hover:text-background transition-colors duration-300"
+            >
+              <Download size={16} />
+              Descargar CV
+            </a>
             
             {/* Subtitle */}
             <div className="flex items-center gap-4">
