@@ -19,12 +19,6 @@ const ContactSection = () => {
       href: "tel:+34653893353",
     },
     {
-      icon: Instagram,
-      label: "Instagram",
-      value: "@anttooon",
-      href: "https://instagram.com/anttooon",
-    },
-    {
       icon: Linkedin,
       label: "LinkedIn",
       value: "Antton Gorrochategui",
