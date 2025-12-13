@@ -148,20 +148,6 @@ const InstagramFeed = () => {
     setSelectedIndex(null);
   };
 
-  const handlePrevious = () => {
-    if (selectedIndex !== null && selectedIndex > 0) {
-      setSelectedIndex(selectedIndex - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (selectedIndex !== null && selectedIndex < gallery.length - 1) {
-      setSelectedIndex(selectedIndex + 1);
-    }
-  };
-
-  const selectedImage = selectedIndex !== null ? gallery[selectedIndex] : null;
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -191,15 +177,10 @@ const InstagramFeed = () => {
       </div>
 
       <ImageLightbox
-        image={selectedImage}
+        allPosts={gallery}
+        initialIndex={selectedIndex ?? 0}
         isOpen={lightboxOpen}
         onClose={handleCloseLightbox}
-        onPrevious={handlePrevious}
-        onNext={handleNext}
-        hasPrevious={selectedIndex !== null && selectedIndex > 0}
-        hasNext={selectedIndex !== null && selectedIndex < gallery.length - 1}
-        currentIndex={selectedIndex ?? 0}
-        totalItems={gallery.length}
       />
     </>
   );
