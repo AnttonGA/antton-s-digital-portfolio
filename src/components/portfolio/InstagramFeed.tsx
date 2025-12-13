@@ -71,23 +71,23 @@ const FeedItem = ({ item, index, onClick }: FeedItemProps) => {
   return (
     <div
       ref={ref as React.RefObject<HTMLDivElement>}
-      className={`relative aspect-square overflow-hidden rounded-lg cursor-pointer group transition-all duration-500 ${
+      className={`relative aspect-square overflow-hidden cursor-pointer group transition-all duration-400 ${
         isVisible
           ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-8"
+          : "opacity-0 translate-y-4"
       }`}
-      style={{ transitionDelay: `${(index % 6) * 100}ms` }}
+      style={{ transitionDelay: `${(index % 6) * 60}ms` }}
       onClick={onClick}
     >
       <img
         src={item.imageUrl}
         alt={item.title || "Imagen de galería"}
-        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+        className="w-full h-full object-cover transition-transform duration-400 ease-out group-hover:scale-105"
         loading="lazy"
       />
-      {/* Hover overlay */}
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300 flex items-center justify-center">
-        <Expand className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      {/* Minimal hover overlay */}
+      <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/60 transition-all duration-300 flex items-center justify-center">
+        <Expand className="w-5 h-5 text-background opacity-0 group-hover:opacity-100 transition-opacity duration-300" strokeWidth={1.5} />
       </div>
     </div>
   );
@@ -141,15 +141,15 @@ const InstagramFeed = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-16">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-5 h-5 animate-spin text-subtle" />
       </div>
     );
   }
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
         {gallery.map((item, index) => (
           <FeedItem
             key={item.id}

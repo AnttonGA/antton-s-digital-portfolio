@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ProjectCard from "./ProjectCard";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Code, Megaphone, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import InstagramFeed from "./InstagramFeed";
 import { useWebProjects, WebProject } from "@/hooks/useWebProjects";
 
@@ -98,53 +98,57 @@ const ProjectsSection = () => {
   const projects = dbProjects && dbProjects.length > 0 ? dbProjects : fallbackProjects;
 
   return (
-    <section id="proyectos" className="px-6 py-20 bg-secondary/50">
-      <div className="max-w-5xl mx-auto">
-        <h2 
-          ref={titleRef as React.RefObject<HTMLHeadingElement>}
-          className={`text-3xl md:text-4xl font-bold mb-8 transition-all duration-700 ease-out ${
+    <section id="proyectos" className="px-6 py-24 md:py-32">
+      <div className="max-w-4xl mx-auto">
+        {/* Section Header */}
+        <div 
+          ref={titleRef as React.RefObject<HTMLDivElement>}
+          className={`mb-16 transition-all duration-500 ease-out ${
             titleVisible 
               ? "opacity-100 translate-y-0" 
-              : "opacity-0 translate-y-6"
+              : "opacity-0 translate-y-4"
           }`}
         >
-          Proyectos
-        </h2>
+          <span className="inline-block text-xs font-medium text-year-accent tracking-[0.2em] uppercase mb-4">
+            Trabajo
+          </span>
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
+            Proyectos seleccionados
+          </h2>
+        </div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 mb-10">
+        {/* Minimal Tabs */}
+        <div className="flex gap-8 mb-12 border-b border-divider">
           <button
             onClick={() => setActiveTab("web")}
-            className={`flex items-center gap-2 px-5 py-3 rounded-lg font-medium transition-all duration-300 ${
+            className={`pb-4 text-sm font-medium tracking-wide transition-all duration-200 border-b-2 -mb-px ${
               activeTab === "web"
-                ? "bg-primary text-primary-foreground shadow-lg"
-                : "bg-muted text-muted-foreground hover:bg-muted/80"
+                ? "border-foreground text-foreground"
+                : "border-transparent text-subtle hover:text-foreground"
             }`}
           >
-            <Code className="w-4 h-4" />
             Desarrollo Web
           </button>
           <button
             onClick={() => setActiveTab("social")}
-            className={`flex items-center gap-2 px-5 py-3 rounded-lg font-medium transition-all duration-300 ${
+            className={`pb-4 text-sm font-medium tracking-wide transition-all duration-200 border-b-2 -mb-px ${
               activeTab === "social"
-                ? "bg-primary text-primary-foreground shadow-lg"
-                : "bg-muted text-muted-foreground hover:bg-muted/80"
+                ? "border-foreground text-foreground"
+                : "border-transparent text-subtle hover:text-foreground"
             }`}
           >
-            <Megaphone className="w-4 h-4" />
-            Gestión RRSS / Contenido
+            RRSS / Contenido
           </button>
         </div>
 
         {/* Content based on active tab */}
         {activeTab === "web" ? (
           isLoading ? (
-            <div className="flex items-center justify-center py-16">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="w-5 h-5 animate-spin text-subtle" />
             </div>
           ) : (
-            <div className="space-y-8">
+            <div>
               {projects.map((project, index) => (
                 <ProjectCard key={project.id} project={project} index={index} />
               ))}

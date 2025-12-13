@@ -1,4 +1,4 @@
-import { Mail, Phone, Instagram, Linkedin } from "lucide-react";
+import { Mail, Phone, Instagram, Linkedin, ArrowUpRight } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const ContactSection = () => {
@@ -33,36 +33,35 @@ const ContactSection = () => {
   ];
 
   return (
-    <section id="contacto" className="px-6 py-24">
-      <div className="max-w-5xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+    <section id="contacto" className="px-6 py-24 md:py-32">
+      <div className="max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-16 items-start">
           {/* Message */}
           <div 
             ref={titleRef as React.RefObject<HTMLDivElement>}
-            className={`space-y-6 transition-all duration-700 ease-out ${
+            className={`space-y-6 transition-all duration-500 ease-out ${
               titleVisible 
                 ? "opacity-100 translate-x-0" 
-                : "opacity-0 -translate-x-8"
+                : "opacity-0 -translate-x-6"
             }`}
           >
-            <span className="text-sm font-medium text-year-accent tracking-widest uppercase">
+            <span className="inline-block text-xs font-medium text-year-accent tracking-[0.2em] uppercase">
               Contacto
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold">
-              Trabajemos juntos
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
+              Trabajemos<br />juntos
             </h2>
-            <p className="text-lg text-subtle leading-relaxed">
+            <p className="text-base text-subtle leading-relaxed font-light">
               Estoy abierto a colaborar en proyectos donde pueda aportar mi experiencia 
               en marketing digital, desarrollo web y creación de contenido. Me gusta 
-              trabajar de forma clara, estratégica y orientada a resultados. Si crees 
-              que encajo en tu proyecto, estaré encantado de que trabajemos juntos.
+              trabajar de forma clara, estratégica y orientada a resultados.
             </p>
           </div>
 
           {/* Contact Details */}
           <div 
             ref={cardsRef as React.RefObject<HTMLDivElement>}
-            className="space-y-4"
+            className="space-y-1"
           >
             {contactItems.map((item, index) => (
               <a
@@ -70,22 +69,21 @@ const ContactSection = () => {
                 href={item.href}
                 target={item.href.startsWith("http") ? "_blank" : undefined}
                 rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                className={`flex items-center gap-4 p-4 rounded-lg bg-project-card border border-project-card hover:border-primary/30 hover:shadow-md transition-all duration-500 ease-out group ${
+                className={`flex items-center justify-between py-4 border-b border-divider hover:bg-accent/50 transition-all duration-300 ease-out group ${
                   cardsVisible 
                     ? "opacity-100 translate-x-0" 
-                    : "opacity-0 translate-x-8"
+                    : "opacity-0 translate-x-6"
                 }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                style={{ transitionDelay: `${index * 80}ms` }}
               >
-                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                  <item.icon className="w-5 h-5 text-primary-foreground" />
+                <div className="flex items-center gap-4">
+                  <item.icon className="w-4 h-4 text-subtle" strokeWidth={1.5} />
+                  <div>
+                    <span className="text-xs text-year-accent uppercase tracking-wider">{item.label}</span>
+                    <p className="text-sm font-medium">{item.value}</p>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-sm text-subtle">{item.label}</span>
-                  <p className="font-medium group-hover:text-primary transition-colors">
-                    {item.value}
-                  </p>
-                </div>
+                <ArrowUpRight className="w-4 h-4 text-subtle opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
               </a>
             ))}
           </div>

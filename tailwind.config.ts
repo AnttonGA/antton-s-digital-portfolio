@@ -80,8 +80,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        heading: ["Sora", "sans-serif"],
-        body: ["Outfit", "sans-serif"],
+        heading: ["Inter", "Helvetica Neue", "Arial", "sans-serif"],
+        body: ["Inter", "Helvetica Neue", "Arial", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {
