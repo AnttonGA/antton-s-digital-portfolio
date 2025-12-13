@@ -35,6 +35,7 @@ interface PostFormData {
   mediaType: MediaType;
   videoUrl: string;
   thumbnailUrl: string;
+  reasoning: string;
   stats: {
     likes: number;
     comments: number;
@@ -60,6 +61,7 @@ const AdminSocialPosts = () => {
     mediaType: "image",
     videoUrl: "",
     thumbnailUrl: "",
+    reasoning: "",
     stats: {
       likes: 0,
       comments: 0,
@@ -141,6 +143,7 @@ const AdminSocialPosts = () => {
       media_urls: mediaUrls,
       video_url: formData.mediaType === "video" ? videoUrl : null,
       thumbnail_url: thumbnailUrl || null,
+      reasoning: formData.reasoning || null,
       likes: formData.stats.likes,
       comments: formData.stats.comments,
       shares: formData.stats.shares,
@@ -160,6 +163,7 @@ const AdminSocialPosts = () => {
       mediaType: "image",
       videoUrl: "",
       thumbnailUrl: "",
+      reasoning: "",
       stats: {
         likes: 0,
         comments: 0,
@@ -333,6 +337,17 @@ const AdminSocialPosts = () => {
                   onChange={(e) => handleFieldChange("description", e.target.value)}
                   placeholder="Descripción breve del post..."
                   rows={2}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="reasoning">Razonamiento estratégico</Label>
+                <Textarea
+                  id="reasoning"
+                  value={formData.reasoning}
+                  onChange={(e) => handleFieldChange("reasoning", e.target.value)}
+                  placeholder="Explica el objetivo, la audiencia objetivo, las decisiones creativas, qué funcionó bien, etc."
+                  rows={5}
                 />
               </div>
 

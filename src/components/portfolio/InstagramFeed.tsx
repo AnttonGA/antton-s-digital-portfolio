@@ -128,6 +128,7 @@ const InstagramFeed = () => {
         mediaUrls: post.media_urls || [],
         videoUrl: post.video_url || undefined,
         thumbnailUrl: post.thumbnail_url || undefined,
+        reasoning: post.reasoning || undefined,
         stats: {
           likes: post.likes,
           comments: post.comments,
@@ -197,6 +198,8 @@ const InstagramFeed = () => {
         onNext={handleNext}
         hasPrevious={selectedIndex !== null && selectedIndex > 0}
         hasNext={selectedIndex !== null && selectedIndex < gallery.length - 1}
+        currentIndex={selectedIndex ?? 0}
+        totalItems={gallery.length}
       />
     </>
   );

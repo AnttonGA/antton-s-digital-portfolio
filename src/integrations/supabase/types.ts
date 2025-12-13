@@ -133,6 +133,7 @@ export type Database = {
           likes: number
           media_type: string
           media_urls: Json | null
+          reasoning: string | null
           saves: number
           shares: number
           thumbnail_url: string | null
@@ -150,6 +151,7 @@ export type Database = {
           likes?: number
           media_type?: string
           media_urls?: Json | null
+          reasoning?: string | null
           saves?: number
           shares?: number
           thumbnail_url?: string | null
@@ -167,6 +169,7 @@ export type Database = {
           likes?: number
           media_type?: string
           media_urls?: Json | null
+          reasoning?: string | null
           saves?: number
           shares?: number
           thumbnail_url?: string | null
