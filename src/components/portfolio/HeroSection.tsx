@@ -41,7 +41,7 @@ const HeroSection = () => {
             
             {/* Description */}
             <p className="text-base md:text-lg text-subtle leading-relaxed max-w-2xl font-light">
-              Graduado en Marketing e Investigación de Mercados, especializado en marketing digital, 
+              Profesional de Marketing e Investigación de Mercados, especializado en marketing digital, 
               desarrollo web y estrategia de crecimiento online. Con experiencia liderando proyectos 
               de marketing, gestionando clientes y desarrollando contenido y productos digitales.
             </p>
