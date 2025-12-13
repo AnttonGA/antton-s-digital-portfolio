@@ -2,6 +2,7 @@ import { useState } from "react";
 import ProjectCard, { ProjectData } from "./ProjectCard";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Code, Megaphone } from "lucide-react";
+import InstagramFeed from "./InstagramFeed";
 
 // Web Development Projects
 const webDevProjects: ProjectData[] = [
@@ -85,42 +86,11 @@ const webDevProjects: ProjectData[] = [
   },
 ];
 
-// Social Media / Content Creation Projects (placeholder - user can add content)
-const socialMediaProjects: ProjectData[] = [
-  {
-    id: "social-placeholder",
-    title: "Próximamente",
-    year: "2025",
-    type: "RRSS / Contenido",
-    description:
-      "Aquí se mostrarán los proyectos de gestión de redes sociales y creación de contenido. Esta sección está preparada para añadir nuevos proyectos de forma modular.",
-    features: [
-      {
-        title: "Gestión de RRSS",
-        description:
-          "Estrategias de contenido y gestión de comunidades en redes sociales.",
-      },
-      {
-        title: "Creación de contenido",
-        description:
-          "Desarrollo de contenido visual y escrito para plataformas digitales.",
-      },
-      {
-        title: "Analítica social",
-        description:
-          "Medición y análisis de resultados en campañas de redes sociales.",
-      },
-    ],
-  },
-];
-
 type TabType = "web" | "social";
 
 const ProjectsSection = () => {
   const [activeTab, setActiveTab] = useState<TabType>("web");
   const { ref: titleRef, isVisible: titleVisible } = useScrollReveal({ threshold: 0.3 });
-
-  const currentProjects = activeTab === "web" ? webDevProjects : socialMediaProjects;
 
   return (
     <section id="proyectos" className="px-6 py-20 bg-secondary/50">
@@ -162,12 +132,16 @@ const ProjectsSection = () => {
           </button>
         </div>
 
-        {/* Projects */}
-        <div className="space-y-8">
-          {currentProjects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </div>
+        {/* Content based on active tab */}
+        {activeTab === "web" ? (
+          <div className="space-y-8">
+            {webDevProjects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
+            ))}
+          </div>
+        ) : (
+          <InstagramFeed />
+        )}
       </div>
     </section>
   );
