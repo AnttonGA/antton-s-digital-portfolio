@@ -12,6 +12,7 @@ export interface SocialPost {
   media_urls: string[];
   video_url: string | null;
   thumbnail_url: string | null;
+  reasoning: string | null;
   likes: number;
   comments: number;
   shares: number;
