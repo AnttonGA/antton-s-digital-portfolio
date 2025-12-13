@@ -3,14 +3,15 @@ import { Expand } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import ImageLightbox, { SocialMediaItem } from "./ImageLightbox";
 
-// Placeholder gallery data - easy to add new images
+// Placeholder gallery data - easy to add new images with stats
 const socialMediaGallery: SocialMediaItem[] = [
   {
     id: "1",
-    imageUrl: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&h=600&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-611162617474-5b21e879e113?w=600&h=600&fit=crop",
     title: "Diseño de marca",
     description: "Identidad visual para startup tecnológica",
     category: "diseño",
+    stats: { likes: 1245, comments: 87, shares: 156, saves: 342 },
   },
   {
     id: "2",
@@ -18,6 +19,7 @@ const socialMediaGallery: SocialMediaItem[] = [
     title: "Campaña digital",
     description: "Arte gráfico para redes sociales",
     category: "diseño",
+    stats: { likes: 2103, comments: 124, shares: 89, saves: 567 },
   },
   {
     id: "3",
@@ -25,6 +27,7 @@ const socialMediaGallery: SocialMediaItem[] = [
     title: "Fotografía de producto",
     description: "Sesión para ecommerce",
     category: "foto",
+    stats: { likes: 3456, comments: 201, shares: 312, saves: 890 },
   },
   {
     id: "4",
@@ -32,6 +35,7 @@ const socialMediaGallery: SocialMediaItem[] = [
     title: "Ilustración digital",
     description: "Arte conceptual para marca",
     category: "ilustración",
+    stats: { likes: 987, comments: 56, shares: 78, saves: 234 },
   },
   {
     id: "5",
@@ -39,6 +43,7 @@ const socialMediaGallery: SocialMediaItem[] = [
     title: "Contenido visual",
     description: "Post para Instagram",
     category: "diseño",
+    stats: { likes: 4521, comments: 312, shares: 456, saves: 1023 },
   },
   {
     id: "6",
@@ -46,6 +51,7 @@ const socialMediaGallery: SocialMediaItem[] = [
     title: "Diseño gráfico",
     description: "Material promocional",
     category: "diseño",
+    stats: { likes: 1876, comments: 98, shares: 167, saves: 421 },
   },
   {
     id: "7",
@@ -53,6 +59,7 @@ const socialMediaGallery: SocialMediaItem[] = [
     title: "Fotografía lifestyle",
     description: "Contenido para marca personal",
     category: "foto",
+    stats: { likes: 2987, comments: 176, shares: 234, saves: 678 },
   },
   {
     id: "8",
@@ -60,6 +67,7 @@ const socialMediaGallery: SocialMediaItem[] = [
     title: "Arte abstracto",
     description: "Ilustración para campaña creativa",
     category: "ilustración",
+    stats: { likes: 1543, comments: 89, shares: 112, saves: 356 },
   },
   {
     id: "9",
@@ -67,6 +75,7 @@ const socialMediaGallery: SocialMediaItem[] = [
     title: "Branding",
     description: "Diseño de identidad corporativa",
     category: "diseño",
+    stats: { likes: 5234, comments: 287, shares: 398, saves: 1245 },
   },
 ];
 
@@ -108,18 +117,32 @@ const FeedItem = ({ item, index, onClick }: FeedItemProps) => {
 };
 
 const InstagramFeed = () => {
-  const [selectedImage, setSelectedImage] = useState<SocialMediaItem | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
-  const handleImageClick = (image: SocialMediaItem) => {
-    setSelectedImage(image);
+  const handleImageClick = (index: number) => {
+    setSelectedIndex(index);
     setLightboxOpen(true);
   };
 
   const handleCloseLightbox = () => {
     setLightboxOpen(false);
-    setSelectedImage(null);
+    setSelectedIndex(null);
   };
+
+  const handlePrevious = () => {
+    if (selectedIndex !== null && selectedIndex > 0) {
+      setSelectedIndex(selectedIndex - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (selectedIndex !== null && selectedIndex < socialMediaGallery.length - 1) {
+      setSelectedIndex(selectedIndex + 1);
+    }
+  };
+
+  const selectedImage = selectedIndex !== null ? socialMediaGallery[selectedIndex] : null;
 
   return (
     <>
@@ -129,7 +152,7 @@ const InstagramFeed = () => {
             key={item.id}
             item={item}
             index={index}
-            onClick={() => handleImageClick(item)}
+            onClick={() => handleImageClick(index)}
           />
         ))}
       </div>
@@ -138,6 +161,10 @@ const InstagramFeed = () => {
         image={selectedImage}
         isOpen={lightboxOpen}
         onClose={handleCloseLightbox}
+        onPrevious={handlePrevious}
+        onNext={handleNext}
+        hasPrevious={selectedIndex !== null && selectedIndex > 0}
+        hasNext={selectedIndex !== null && selectedIndex < socialMediaGallery.length - 1}
       />
     </>
   );
