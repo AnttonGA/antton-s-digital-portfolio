@@ -14,60 +14,60 @@ const skills = [
 ];
 
 const languages = [
-  { language: "Español", level: "Nativo" },
-  { language: "Euskera", level: "C1" },
-  { language: "Inglés", level: "B2" },
+  { language: "Euskera", level: "Nativo" },
+  { language: "Castellano", level: "Nativo" },
+  { language: "Inglés", level: "C1" },
+  { language: "Francés", level: "A1" },
 ];
 
 const experiences = [
   {
+    company: "Ayesa",
+    role: "Encargado de atención al cliente",
+    period: "Sep 2025 - Actualidad",
+    description: [
+      "Gestión de nuevos clientes",
+      "Crear y aplicar estrategias de retención",
+      "Contacto directo con el cliente",
+    ],
+  },
+  {
+    company: "Teklatam (Chile)",
+    role: "Marketing Leader",
+    period: "Ene 2025 - Ago 2025",
+    description: [
+      "Responsable de estrategias de marketing y presencia online",
+      "Desarrollo página web",
+      "Lanzamiento nuevos productos",
+    ],
+  },
+  {
+    company: "Bizipoza",
+    role: "Organización de eventos (Proyecto)",
+    period: "Abr 2025 - May 2025",
+    description: [
+      "Supervisión de operaciones",
+      "Desarrollar plan de crecimiento",
+      "Capacitación de personal",
+    ],
+  },
+  {
+    company: "FITT",
+    role: "Asistente de Marketing (prácticas)",
+    period: "Mar 2021 - May 2021",
+    description: [
+      "Gestión RRSS",
+      "Desarrollo estrategia email marketing",
+    ],
+  },
+  {
     company: "Loco Polo",
-    role: "Prácticas Marketing",
-    period: "Feb 2025 - Actualidad",
+    role: "Asistente de Marketing (prácticas)",
+    period: "Mar 2021 - May 2021",
     description: [
-      "Gestión de ecommerce y marketplaces",
-      "SEO técnico y on-page",
-      "Desarrollo web con WordPress",
-    ],
-  },
-  {
-    company: "Agencia EDE",
-    role: "Prácticas Comunicación",
-    period: "Sep 2024 - Ene 2025",
-    description: [
-      "Estrategia de contenidos y redes sociales",
-      "Redacción de newsletters",
-      "Análisis y segmentación de audiencias",
-    ],
-  },
-  {
-    company: "Saski Baskonia",
-    role: "Prácticas Comunicación",
-    period: "Ene 2024 - Jun 2024",
-    description: [
-      "Gestión de redes sociales del equipo",
-      "Cobertura de eventos deportivos",
-      "Creación de contenido multimedia",
-    ],
-  },
-  {
-    company: "ESI (UPV/EHU)",
-    role: "Técnico Comunicación",
-    period: "Sep 2022 - Sep 2023",
-    description: [
-      "Community management",
-      "Diseño gráfico y edición de vídeo",
-      "Organización de eventos universitarios",
-    ],
-  },
-  {
-    company: "CEBEK",
-    role: "Prácticas Marketing",
-    period: "Feb 2022 - Jun 2022",
-    description: [
-      "Email marketing y automatizaciones",
-      "Análisis de campañas digitales",
-      "Gestión de base de datos CRM",
+      "Gestión RRSS",
+      "Desarrollo página web",
+      "Desarrollo estrategia email marketing",
     ],
   },
 ];
