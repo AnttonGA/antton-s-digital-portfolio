@@ -11,7 +11,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Copy, Check, ImageIcon } from "lucide-react";
+import { LogOut, ImageIcon, Trash2, Loader2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSocialPosts, useCreateSocialPost, useDeleteSocialPost, SocialPost } from "@/hooks/useSocialPosts";
+
+const generateSlug = (title: string): string => {
+  return title
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+};
 
 interface PostFormData {
   id: string;
@@ -27,17 +38,12 @@ interface PostFormData {
   };
 }
 
-const generateSlug = (title: string): string => {
-  return title
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-};
-
 const AdminSocialPosts = () => {
-  const [copied, setCopied] = useState(false);
+  const { signOut, user } = useAuth();
+  const { data: posts, isLoading } = useSocialPosts();
+  const createPost = useCreateSocialPost();
+  const deletePost = useDeleteSocialPost();
+
   const [formData, setFormData] = useState<PostFormData>({
     id: "",
     imageUrl: "",
@@ -72,33 +78,23 @@ const AdminSocialPosts = () => {
     }));
   };
 
-  const isExternalUrl = formData.imageUrl.startsWith("http");
-  const isLocalPath = formData.imageUrl.startsWith("/") || formData.imageUrl.includes("assets");
+  const handleSave = async () => {
+    if (!formData.title || !formData.imageUrl) return;
 
-  const generateCode = (): string => {
-    const imageRef = isLocalPath
-      ? `miImagen // Importa arriba: import miImagen from "@/assets/nombre.jpg";`
-      : `"${formData.imageUrl}"`;
+    const postData: Omit<SocialPost, "created_at" | "updated_at"> = {
+      id: formData.id,
+      image_url: formData.imageUrl,
+      title: formData.title,
+      description: formData.description,
+      category: formData.category,
+      likes: formData.stats.likes,
+      comments: formData.stats.comments,
+      shares: formData.stats.shares,
+      saves: formData.stats.saves,
+    };
 
-    return `{
-  id: "${formData.id}",
-  imageUrl: ${imageRef},
-  title: "${formData.title}",
-  description: "${formData.description}",
-  category: "${formData.category}",
-  stats: {
-    likes: ${formData.stats.likes},
-    comments: ${formData.stats.comments},
-    shares: ${formData.stats.shares},
-    saves: ${formData.stats.saves},
-  },
-}`;
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(generateCode());
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    await createPost.mutateAsync(postData);
+    resetForm();
   };
 
   const resetForm = () => {
@@ -117,13 +113,24 @@ const AdminSocialPosts = () => {
     });
   };
 
+  const isExternalUrl = formData.imageUrl.startsWith("http");
+
   return (
     <div className="min-h-screen bg-background p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          Panel de Administración
-        </h1>
-        
+      <div className="max-w-6xl mx-auto">
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-3xl font-bold text-foreground">
+            Panel de Administración
+          </h1>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-muted-foreground">{user?.email}</span>
+            <Button variant="outline" size="sm" onClick={signOut}>
+              <LogOut className="w-4 h-4 mr-2" />
+              Cerrar sesión
+            </Button>
+          </div>
+        </div>
+
         <div className="flex gap-2 mb-6">
           <Link to="/admin/web-projects">
             <Button variant="outline">Proyectos Web</Button>
@@ -132,16 +139,12 @@ const AdminSocialPosts = () => {
             <Button variant="default">Posts RRSS</Button>
           </Link>
         </div>
-        
-        <p className="text-muted-foreground mb-8">
-          Rellena el formulario para generar el código del post.
-        </p>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-8">
           {/* Formulario */}
           <div className="space-y-6">
             <div className="bg-card border border-border rounded-lg p-6 space-y-4">
-              <h2 className="text-xl font-semibold mb-4">Datos del post</h2>
+              <h2 className="text-xl font-semibold mb-4">Nuevo post</h2>
 
               <div className="space-y-2">
                 <Label htmlFor="title">Título *</Label>
@@ -165,16 +168,13 @@ const AdminSocialPosts = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="imageUrl">URL o ruta de imagen *</Label>
+                <Label htmlFor="imageUrl">URL de imagen *</Label>
                 <Input
                   id="imageUrl"
                   value={formData.imageUrl}
                   onChange={(e) => handleFieldChange("imageUrl", e.target.value)}
-                  placeholder="https://... o /assets/imagen.jpg"
+                  placeholder="https://..."
                 />
-                <p className="text-xs text-muted-foreground">
-                  Para imágenes locales: sube primero a src/assets/ y usa la ruta
-                </p>
               </div>
 
               {/* Vista previa de imagen */}
@@ -195,7 +195,7 @@ const AdminSocialPosts = () => {
                       <div className="text-center p-4">
                         <ImageIcon className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
                         <span className="text-xs text-muted-foreground">
-                          Imagen local
+                          URL inválida
                         </span>
                       </div>
                     )}
@@ -237,10 +237,6 @@ const AdminSocialPosts = () => {
               <h2 className="text-xl font-semibold mb-4">
                 Estadísticas de Instagram
               </h2>
-              <p className="text-sm text-muted-foreground mb-4">
-                Obtén estos datos desde "Ver estadísticas" en tu publicación de
-                Instagram.
-              </p>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -291,67 +287,71 @@ const AdminSocialPosts = () => {
                   />
                 </div>
               </div>
+
+              <div className="mt-6 flex gap-2">
+                <Button 
+                  onClick={handleSave} 
+                  disabled={createPost.isPending || !formData.title || !formData.imageUrl}
+                  className="flex-1"
+                >
+                  {createPost.isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Guardando...
+                    </>
+                  ) : (
+                    "Guardar post"
+                  )}
+                </Button>
+                <Button variant="outline" onClick={resetForm}>
+                  Limpiar
+                </Button>
+              </div>
             </div>
           </div>
 
-          {/* Vista previa del código */}
+          {/* Lista de posts */}
           <div className="space-y-4">
             <div className="bg-card border border-border rounded-lg p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold">Código generado</h2>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={resetForm}>
-                    Limpiar
-                  </Button>
-                  <Button size="sm" onClick={handleCopy}>
-                    {copied ? (
-                      <Check className="w-4 h-4 mr-1" />
-                    ) : (
-                      <Copy className="w-4 h-4 mr-1" />
-                    )}
-                    {copied ? "Copiado" : "Copiar"}
-                  </Button>
+              <h2 className="text-xl font-semibold mb-4">Posts guardados</h2>
+
+              {isLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="w-8 h-8 animate-spin text-primary" />
                 </div>
-              </div>
-
-              <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm max-h-[400px] overflow-y-auto">
-                <code>{generateCode()}</code>
-              </pre>
-            </div>
-
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h2 className="text-lg font-semibold mb-3">Instrucciones</h2>
-              <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-                <li>
-                  Si usas imagen local: sube la imagen a{" "}
-                  <code className="bg-muted px-1 rounded">src/assets/</code>
-                </li>
-                <li>Rellena todos los campos del formulario</li>
-                <li>Copia el código generado</li>
-                <li>
-                  Abre{" "}
-                  <code className="bg-muted px-1 rounded">
-                    src/components/portfolio/InstagramFeed.tsx
-                  </code>
-                </li>
-                <li>
-                  Añade el import de la imagen arriba del archivo (si es local)
-                </li>
-                <li>
-                  Añade el código al array{" "}
-                  <code className="bg-muted px-1 rounded">socialMediaGallery</code>
-                </li>
-                <li>Guarda el archivo</li>
-              </ol>
-            </div>
-
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h2 className="text-lg font-semibold mb-3">
-                Ejemplo de import para imagen local
-              </h2>
-              <pre className="bg-muted p-3 rounded-lg text-sm overflow-x-auto">
-                <code>{`import miImagen from "@/assets/mi-foto.jpg";`}</code>
-              </pre>
+              ) : posts && posts.length > 0 ? (
+                <div className="grid grid-cols-2 gap-3">
+                  {posts.map((post) => (
+                    <div
+                      key={post.id}
+                      className="relative group rounded-lg overflow-hidden bg-muted"
+                    >
+                      <img
+                        src={post.image_url}
+                        alt={post.title}
+                        className="w-full aspect-square object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-2">
+                        <p className="text-white text-sm font-medium text-center line-clamp-2 mb-2">
+                          {post.title}
+                        </p>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => deletePost.mutate(post.id)}
+                          disabled={deletePost.isPending}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-muted-foreground text-center py-8">
+                  No hay posts guardados
+                </p>
+              )}
             </div>
           </div>
         </div>

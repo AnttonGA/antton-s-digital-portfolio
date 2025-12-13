@@ -11,12 +11,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Copy, Check, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, LogOut, Loader2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useWebProjects, useCreateWebProject, useDeleteWebProject, Feature, WebProject } from "@/hooks/useWebProjects";
 
-interface Feature {
-  title: string;
-  description: string;
-}
+const generateSlug = (title: string): string => {
+  return title
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+};
 
 interface ProjectFormData {
   id: string;
@@ -28,17 +34,12 @@ interface ProjectFormData {
   link: string;
 }
 
-const generateSlug = (title: string): string => {
-  return title
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-};
-
 const AdminWebProjects = () => {
-  const [copied, setCopied] = useState(false);
+  const { signOut, user } = useAuth();
+  const { data: projects, isLoading } = useWebProjects();
+  const createProject = useCreateWebProject();
+  const deleteProject = useDeleteWebProject();
+
   const [formData, setFormData] = useState<ProjectFormData>({
     id: "",
     title: "",
@@ -87,32 +88,21 @@ const AdminWebProjects = () => {
     }
   };
 
-  const generateCode = (): string => {
-    const featuresCode = formData.features
-      .filter((f) => f.title || f.description)
-      .map(
-        (f) =>
-          `      { title: "${f.title}", description: "${f.description}" }`
-      )
-      .join(",\n");
+  const handleSave = async () => {
+    if (!formData.title || !formData.description) return;
 
-    return `{
-  id: "${formData.id}",
-  title: "${formData.title}",
-  year: "${formData.year}",
-  type: "${formData.type}",
-  description: "${formData.description}",
-  features: [
-${featuresCode}
-  ],
-  link: "${formData.link}",
-}`;
-  };
+    const projectData: Omit<WebProject, "created_at" | "updated_at"> = {
+      id: formData.id,
+      title: formData.title,
+      year: formData.year,
+      type: formData.type,
+      description: formData.description,
+      features: formData.features.filter((f) => f.title || f.description),
+      link: formData.link || null,
+    };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(generateCode());
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    await createProject.mutateAsync(projectData);
+    resetForm();
   };
 
   const resetForm = () => {
@@ -129,11 +119,20 @@ ${featuresCode}
 
   return (
     <div className="min-h-screen bg-background p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          Panel de Administración
-        </h1>
-        
+      <div className="max-w-6xl mx-auto">
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-3xl font-bold text-foreground">
+            Panel de Administración
+          </h1>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-muted-foreground">{user?.email}</span>
+            <Button variant="outline" size="sm" onClick={signOut}>
+              <LogOut className="w-4 h-4 mr-2" />
+              Cerrar sesión
+            </Button>
+          </div>
+        </div>
+
         <div className="flex gap-2 mb-6">
           <Link to="/admin/web-projects">
             <Button variant="default">Proyectos Web</Button>
@@ -142,16 +141,12 @@ ${featuresCode}
             <Button variant="outline">Posts RRSS</Button>
           </Link>
         </div>
-        
-        <p className="text-muted-foreground mb-8">
-          Rellena el formulario para generar el código del proyecto.
-        </p>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-8">
           {/* Formulario */}
           <div className="space-y-6">
             <div className="bg-card border border-border rounded-lg p-6 space-y-4">
-              <h2 className="text-xl font-semibold mb-4">Datos del proyecto</h2>
+              <h2 className="text-xl font-semibold mb-4">Nuevo proyecto</h2>
 
               <div className="space-y-2">
                 <Label htmlFor="title">Título *</Label>
@@ -279,51 +274,71 @@ ${featuresCode}
                   </div>
                 ))}
               </div>
+
+              <div className="mt-6 flex gap-2">
+                <Button 
+                  onClick={handleSave} 
+                  disabled={createProject.isPending || !formData.title || !formData.description}
+                  className="flex-1"
+                >
+                  {createProject.isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Guardando...
+                    </>
+                  ) : (
+                    "Guardar proyecto"
+                  )}
+                </Button>
+                <Button variant="outline" onClick={resetForm}>
+                  Limpiar
+                </Button>
+              </div>
             </div>
           </div>
 
-          {/* Vista previa del código */}
+          {/* Lista de proyectos */}
           <div className="space-y-4">
             <div className="bg-card border border-border rounded-lg p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold">Código generado</h2>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={resetForm}>
-                    Limpiar
-                  </Button>
-                  <Button size="sm" onClick={handleCopy}>
-                    {copied ? (
-                      <Check className="w-4 h-4 mr-1" />
-                    ) : (
-                      <Copy className="w-4 h-4 mr-1" />
-                    )}
-                    {copied ? "Copiado" : "Copiar"}
-                  </Button>
+              <h2 className="text-xl font-semibold mb-4">Proyectos guardados</h2>
+
+              {isLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="w-8 h-8 animate-spin text-primary" />
                 </div>
-              </div>
-
-              <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm max-h-[500px] overflow-y-auto">
-                <code>{generateCode()}</code>
-              </pre>
-            </div>
-
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h2 className="text-lg font-semibold mb-3">Instrucciones</h2>
-              <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-                <li>Rellena todos los campos del formulario</li>
-                <li>Copia el código generado</li>
-                <li>
-                  Abre{" "}
-                  <code className="bg-muted px-1 rounded">
-                    src/components/portfolio/ProjectsSection.tsx
-                  </code>
-                </li>
-                <li>
-                  Añade el código al array{" "}
-                  <code className="bg-muted px-1 rounded">webDevProjects</code>
-                </li>
-                <li>Guarda el archivo</li>
-              </ol>
+              ) : projects && projects.length > 0 ? (
+                <div className="space-y-3">
+                  {projects.map((project) => (
+                    <div
+                      key={project.id}
+                      className="p-4 bg-muted/50 rounded-lg flex items-start justify-between gap-4"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-medium truncate">{project.title}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {project.year} · {project.type}
+                        </p>
+                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                          {project.description}
+                        </p>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => deleteProject.mutate(project.id)}
+                        className="text-destructive shrink-0"
+                        disabled={deleteProject.isPending}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-muted-foreground text-center py-8">
+                  No hay proyectos guardados
+                </p>
+              )}
             </div>
           </div>
         </div>

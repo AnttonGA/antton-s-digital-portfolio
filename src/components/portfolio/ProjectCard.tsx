@@ -10,10 +10,10 @@ export interface ProjectData {
   id: string;
   title: string;
   year: string;
-  type: "Proyecto personal" | "Proyecto" | "Prácticas" | "RRSS / Contenido";
+  type: string;
   description: string;
   features: ProjectFeature[];
-  link?: string;
+  link?: string | null;
 }
 
 interface ProjectCardProps {
