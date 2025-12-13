@@ -138,7 +138,7 @@ const ProjectsSection = () => {
                 : "border-transparent text-subtle hover:text-foreground"
             }`}
           >
-            RRSS / Contenido
+            Creación de Contenido
           </button>
           <button
             onClick={() => setActiveTab("about")}
