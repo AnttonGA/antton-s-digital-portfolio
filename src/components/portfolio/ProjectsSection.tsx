@@ -3,6 +3,7 @@ import ProjectCard from "./ProjectCard";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Loader2 } from "lucide-react";
 import InstagramFeed from "./InstagramFeed";
+import AboutTab from "./AboutTab";
 import { useWebProjects, WebProject } from "@/hooks/useWebProjects";
 
 // Fallback data for when database is empty
@@ -87,7 +88,7 @@ const fallbackProjects: WebProject[] = [
   },
 ];
 
-type TabType = "web" | "social";
+type TabType = "web" | "social" | "about";
 
 const ProjectsSection = () => {
   const [activeTab, setActiveTab] = useState<TabType>("web");
@@ -139,6 +140,16 @@ const ProjectsSection = () => {
           >
             RRSS / Contenido
           </button>
+          <button
+            onClick={() => setActiveTab("about")}
+            className={`pb-4 text-sm font-medium tracking-wide transition-all duration-200 border-b-2 -mb-px ${
+              activeTab === "about"
+                ? "border-foreground text-foreground"
+                : "border-transparent text-subtle hover:text-foreground"
+            }`}
+          >
+            Sobre Mí
+          </button>
         </div>
 
         {/* Content based on active tab */}
@@ -154,8 +165,10 @@ const ProjectsSection = () => {
               ))}
             </div>
           )
-        ) : (
+        ) : activeTab === "social" ? (
           <InstagramFeed />
+        ) : (
+          <AboutTab />
         )}
       </div>
     </section>
