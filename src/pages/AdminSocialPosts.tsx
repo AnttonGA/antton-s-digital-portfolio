@@ -11,8 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { LogOut, ImageIcon, Trash2, Loader2 } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import { ImageIcon, Trash2, Loader2 } from "lucide-react";
 import { useSocialPosts, useCreateSocialPost, useDeleteSocialPost, SocialPost } from "@/hooks/useSocialPosts";
 
 const generateSlug = (title: string): string => {
@@ -39,7 +38,6 @@ interface PostFormData {
 }
 
 const AdminSocialPosts = () => {
-  const { signOut, user } = useAuth();
   const { data: posts, isLoading } = useSocialPosts();
   const createPost = useCreateSocialPost();
   const deletePost = useDeleteSocialPost();
@@ -118,18 +116,9 @@ const AdminSocialPosts = () => {
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-2">
-          <h1 className="text-3xl font-bold text-foreground">
-            Panel de Administración
-          </h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">{user?.email}</span>
-            <Button variant="outline" size="sm" onClick={signOut}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Cerrar sesión
-            </Button>
-          </div>
-        </div>
+        <h1 className="text-3xl font-bold text-foreground mb-2">
+          Panel de Administración
+        </h1>
 
         <div className="flex gap-2 mb-6">
           <Link to="/admin/web-projects">
