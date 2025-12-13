@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -120,8 +121,18 @@ const AdminSocialPosts = () => {
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-foreground mb-2">
-          Admin: Posts RRSS / Contenido
+          Panel de Administración
         </h1>
+        
+        <div className="flex gap-2 mb-6">
+          <Link to="/admin/web-projects">
+            <Button variant="outline">Proyectos Web</Button>
+          </Link>
+          <Link to="/admin/social-posts">
+            <Button variant="default">Posts RRSS</Button>
+          </Link>
+        </div>
+        
         <p className="text-muted-foreground mb-8">
           Rellena el formulario para generar el código del post.
         </p>
