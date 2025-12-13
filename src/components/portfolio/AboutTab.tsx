@@ -1,5 +1,4 @@
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Loader2 } from "lucide-react";
 import { useSkills, useLanguages, useExperiences } from "@/hooks/useAboutData";
 
 // Fallback data
@@ -94,16 +93,6 @@ const AboutTab = () => {
   const skills = dbSkills && dbSkills.length > 0 ? dbSkills : fallbackSkills;
   const languages = dbLanguages && dbLanguages.length > 0 ? dbLanguages : fallbackLanguages;
   const experiences = dbExperiences && dbExperiences.length > 0 ? dbExperiences : fallbackExperiences;
-
-  const isLoading = skillsLoading || languagesLoading || experiencesLoading;
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-5 h-5 animate-spin text-subtle" />
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-16">
