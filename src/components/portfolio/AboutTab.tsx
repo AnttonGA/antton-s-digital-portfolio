@@ -1,27 +1,31 @@
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { Loader2 } from "lucide-react";
+import { useSkills, useLanguages, useExperiences } from "@/hooks/useAboutData";
 
-const skills = [
-  { name: "Google Analytics 4", category: "analytics" },
-  { name: "SEMrush", category: "seo" },
-  { name: "Ahrefs", category: "seo" },
-  { name: "Google Tag Manager", category: "analytics" },
-  { name: "Mailchimp", category: "marketing" },
-  { name: "WordPress", category: "development" },
-  { name: "PHP", category: "development" },
-  { name: "JavaScript", category: "development" },
-  { name: "Figma", category: "design" },
-  { name: "GitHub", category: "development" },
+// Fallback data
+const fallbackSkills = [
+  { id: "1", name: "Google Analytics 4", category: "analytics", display_order: 0 },
+  { id: "2", name: "SEMrush", category: "seo", display_order: 1 },
+  { id: "3", name: "Ahrefs", category: "seo", display_order: 2 },
+  { id: "4", name: "Google Tag Manager", category: "analytics", display_order: 3 },
+  { id: "5", name: "Mailchimp", category: "marketing", display_order: 4 },
+  { id: "6", name: "WordPress", category: "development", display_order: 5 },
+  { id: "7", name: "PHP", category: "development", display_order: 6 },
+  { id: "8", name: "JavaScript", category: "development", display_order: 7 },
+  { id: "9", name: "Figma", category: "design", display_order: 8 },
+  { id: "10", name: "GitHub", category: "development", display_order: 9 },
 ];
 
-const languages = [
-  { language: "Euskera", level: "Nativo" },
-  { language: "Castellano", level: "Nativo" },
-  { language: "Inglés", level: "C1" },
-  { language: "Francés", level: "A1" },
+const fallbackLanguages = [
+  { id: "1", language: "Euskera", level: "Nativo", display_order: 0 },
+  { id: "2", language: "Castellano", level: "Nativo", display_order: 1 },
+  { id: "3", language: "Inglés", level: "C1", display_order: 2 },
+  { id: "4", language: "Francés", level: "A1", display_order: 3 },
 ];
 
-const experiences = [
+const fallbackExperiences = [
   {
+    id: "1",
     company: "Ayesa",
     role: "Encargado de atención al cliente",
     period: "Sep 2025 - Actualidad",
@@ -30,8 +34,10 @@ const experiences = [
       "Crear y aplicar estrategias de retención",
       "Contacto directo con el cliente",
     ],
+    display_order: 0,
   },
   {
+    id: "2",
     company: "Teklatam (Chile)",
     role: "Marketing Leader",
     period: "Ene 2025 - Ago 2025",
@@ -40,8 +46,10 @@ const experiences = [
       "Desarrollo página web",
       "Lanzamiento nuevos productos",
     ],
+    display_order: 1,
   },
   {
+    id: "3",
     company: "Bizipoza",
     role: "Organización de eventos (Proyecto)",
     period: "Abr 2025 - May 2025",
@@ -50,17 +58,18 @@ const experiences = [
       "Desarrollar plan de crecimiento",
       "Capacitación de personal",
     ],
+    display_order: 2,
   },
   {
+    id: "4",
     company: "FITT",
     role: "Asistente de Marketing (prácticas)",
     period: "Mar 2021 - May 2021",
-    description: [
-      "Gestión RRSS",
-      "Desarrollo estrategia email marketing",
-    ],
+    description: ["Gestión RRSS", "Desarrollo estrategia email marketing"],
+    display_order: 3,
   },
   {
+    id: "5",
     company: "Loco Polo",
     role: "Asistente de Marketing (prácticas)",
     period: "Mar 2021 - May 2021",
@@ -69,6 +78,7 @@ const experiences = [
       "Desarrollo página web",
       "Desarrollo estrategia email marketing",
     ],
+    display_order: 4,
   },
 ];
 
@@ -76,6 +86,24 @@ const AboutTab = () => {
   const { ref: skillsRef, isVisible: skillsVisible } = useScrollReveal({ threshold: 0.2 });
   const { ref: langRef, isVisible: langVisible } = useScrollReveal({ threshold: 0.2 });
   const { ref: expRef, isVisible: expVisible } = useScrollReveal({ threshold: 0.1 });
+
+  const { data: dbSkills, isLoading: skillsLoading } = useSkills();
+  const { data: dbLanguages, isLoading: languagesLoading } = useLanguages();
+  const { data: dbExperiences, isLoading: experiencesLoading } = useExperiences();
+
+  const skills = dbSkills && dbSkills.length > 0 ? dbSkills : fallbackSkills;
+  const languages = dbLanguages && dbLanguages.length > 0 ? dbLanguages : fallbackLanguages;
+  const experiences = dbExperiences && dbExperiences.length > 0 ? dbExperiences : fallbackExperiences;
+
+  const isLoading = skillsLoading || languagesLoading || experiencesLoading;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-5 h-5 animate-spin text-subtle" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-16">
@@ -92,7 +120,7 @@ const AboutTab = () => {
         <div className="flex flex-wrap gap-3">
           {skills.map((skill, index) => (
             <span
-              key={skill.name}
+              key={skill.id}
               className="px-4 py-2 text-sm border border-divider rounded-full text-foreground hover:border-foreground transition-colors duration-200"
               style={{ animationDelay: `${index * 50}ms` }}
             >
@@ -114,7 +142,7 @@ const AboutTab = () => {
         </h3>
         <div className="flex flex-wrap gap-8">
           {languages.map((lang) => (
-            <div key={lang.language} className="flex items-center gap-2">
+            <div key={lang.id} className="flex items-center gap-2">
               <span className="text-foreground font-medium">{lang.language}</span>
               <span className="text-subtle text-sm">({lang.level})</span>
             </div>
@@ -133,8 +161,8 @@ const AboutTab = () => {
           Experiencia
         </h3>
         <div className="space-y-8">
-          {experiences.map((exp, index) => (
-            <div key={index} className="relative pl-6 border-l border-divider">
+          {experiences.map((exp) => (
+            <div key={exp.id} className="relative pl-6 border-l border-divider">
               <div className="absolute left-0 top-1.5 w-2 h-2 -translate-x-[5px] rounded-full bg-foreground" />
               <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
                 <div>
