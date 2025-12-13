@@ -171,6 +171,13 @@ const InstagramFeed = () => {
 
   return (
     <>
+      {/* Disclaimer */}
+      <div className="mb-6 p-4 border border-divider rounded-lg bg-muted/30">
+        <p className="text-xs text-subtle leading-relaxed">
+          <span className="font-medium text-foreground">Nota:</span> Los siguientes contenidos han sido creados por mí como ejemplos para este portfolio. No tienen ninguna relación oficial con las marcas mostradas.
+        </p>
+      </div>
+
       <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
         {gallery.map((item, index) => (
           <FeedItem
