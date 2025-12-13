@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Heart, MessageCircle, Send, Bookmark, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Heart, MessageCircle, Send, Bookmark, ChevronLeft, ChevronRight, X, Lightbulb } from "lucide-react";
 
 export interface SocialMediaItem {
   id: string;
@@ -71,55 +71,78 @@ const ImageLightbox = ({
   onClose
 }: ImageLightboxProps) => {
   const [carouselIndices, setCarouselIndices] = useState<Record<string, number>>({});
-  const [currentPostIndex, setCurrentPostIndex] = useState(0);
+  const [currentPostIndex, setCurrentPostIndex] = useState(initialIndex);
+  const [showReasoningForPost, setShowReasoningForPost] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const postRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  // Reset state when lightbox opens
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentPostIndex(initialIndex);
+      setShowReasoningForPost(null);
+    }
+  }, [isOpen, initialIndex]);
 
   // Scroll to initial post when lightbox opens
   useEffect(() => {
     if (isOpen && scrollContainerRef.current && postRefs.current[initialIndex]) {
-      // Small delay to ensure DOM is ready
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         postRefs.current[initialIndex]?.scrollIntoView({ behavior: "instant" });
-        setCurrentPostIndex(initialIndex);
-      }, 50);
+      }, 100);
+      return () => clearTimeout(timeoutId);
     }
   }, [isOpen, initialIndex]);
 
-  // Intersection Observer to track current visible post
+  // Setup Intersection Observer after refs are populated
   useEffect(() => {
     if (!isOpen) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-            const index = postRefs.current.findIndex((ref) => ref === entry.target);
-            if (index !== -1) {
-              setCurrentPostIndex(index);
-            }
-          }
-        });
-      },
-      {
-        root: scrollContainerRef.current,
-        threshold: 0.5,
+    // Delay to ensure refs are assigned
+    const timeoutId = setTimeout(() => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
       }
-    );
 
-    postRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+              const index = postRefs.current.findIndex((ref) => ref === entry.target);
+              if (index !== -1) {
+                setCurrentPostIndex(index);
+              }
+            }
+          });
+        },
+        {
+          root: scrollContainerRef.current,
+          threshold: 0.5,
+        }
+      );
 
-    return () => observer.disconnect();
+      postRefs.current.forEach((ref) => {
+        if (ref) observerRef.current?.observe(ref);
+      });
+    }, 150);
+
+    return () => {
+      clearTimeout(timeoutId);
+      observerRef.current?.disconnect();
+    };
   }, [isOpen, allPosts.length]);
 
   // Handle keyboard navigation
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === "Escape") {
-      onClose();
+      if (showReasoningForPost) {
+        setShowReasoningForPost(null);
+      } else {
+        onClose();
+      }
     }
-  }, [onClose]);
+  }, [onClose, showReasoningForPost]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -181,6 +204,35 @@ const ImageLightbox = ({
     return null;
   };
 
+  // Render reasoning content
+  const renderReasoning = (post: SocialMediaItem) => {
+    if (post.reasoning) {
+      return (
+        <p className="text-foreground leading-relaxed whitespace-pre-wrap">
+          {post.reasoning}
+        </p>
+      );
+    }
+    
+    return (
+      <div className="text-subtle text-sm leading-relaxed space-y-4">
+        <p>
+          Este contenido forma parte del portfolio de creación de contenido y gestión de redes sociales.
+        </p>
+        <p>
+          Cada pieza ha sido diseñada considerando:
+        </p>
+        <ul className="list-disc list-inside space-y-1 text-subtle/80">
+          <li>Objetivos de comunicación de la marca</li>
+          <li>Audiencia objetivo y sus intereses</li>
+          <li>Tendencias actuales del sector</li>
+          <li>Optimización para el algoritmo de la plataforma</li>
+          <li>Coherencia con la identidad visual</li>
+        </ul>
+      </div>
+    );
+  };
+
   // Render a single post
   const renderPost = (post: SocialMediaItem, index: number) => {
     const isCarousel = post.mediaType === "carousel" && post.mediaUrls && post.mediaUrls.length > 1;
@@ -188,6 +240,7 @@ const ImageLightbox = ({
     const carouselImages = isCarousel ? post.mediaUrls! : [post.imageUrl];
     const totalCarouselImages = carouselImages.length;
     const currentCarouselIndex = getCarouselIndex(post.id);
+    const isShowingReasoning = showReasoningForPost === post.id;
 
     return (
       <div
@@ -195,8 +248,8 @@ const ImageLightbox = ({
         ref={(el) => { postRefs.current[index] = el; }}
         className="h-[95vh] flex-shrink-0 snap-start snap-always flex flex-col md:flex-row"
       >
-        {/* Left Column - Media + Stats + Description (50%) */}
-        <div className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col border-r-0 md:border-r border-divider overflow-y-auto">
+        {/* Left Column - Media + Stats + Description (50% on desktop, full on mobile) */}
+        <div className="w-full md:w-1/2 h-full md:h-full flex flex-col border-r-0 md:border-r border-divider overflow-y-auto">
           {/* Media section */}
           <div className="relative flex-shrink-0 flex items-center justify-center bg-foreground/5 min-h-[200px] md:min-h-[300px]">
             {/* Carousel navigation */}
@@ -228,7 +281,7 @@ const ImageLightbox = ({
               <img
                 src={carouselImages[currentCarouselIndex]}
                 alt={post.title || "Imagen de galería"}
-                className="max-w-full max-h-[40vh] md:max-h-[50vh] object-contain"
+                className="max-w-full max-h-[35vh] md:max-h-[50vh] object-contain"
                 loading="lazy"
               />
             )}
@@ -259,76 +312,89 @@ const ImageLightbox = ({
 
           {/* Stats section */}
           {post.stats && (
-            <div className="flex-shrink-0 px-6 py-4 border-t border-divider">
+            <div className="flex-shrink-0 px-6 py-3 md:py-4 border-t border-divider">
               <div className="flex items-center justify-around">
                 <div className="flex items-center gap-2">
-                  <Heart className="w-5 h-5 text-subtle" strokeWidth={1.5} />
-                  <span className="text-sm font-medium">{formatNumber(post.stats.likes)}</span>
+                  <Heart className="w-4 h-4 md:w-5 md:h-5 text-subtle" strokeWidth={1.5} />
+                  <span className="text-xs md:text-sm font-medium">{formatNumber(post.stats.likes)}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <MessageCircle className="w-5 h-5 text-subtle" strokeWidth={1.5} />
-                  <span className="text-sm font-medium">{formatNumber(post.stats.comments)}</span>
+                  <MessageCircle className="w-4 h-4 md:w-5 md:h-5 text-subtle" strokeWidth={1.5} />
+                  <span className="text-xs md:text-sm font-medium">{formatNumber(post.stats.comments)}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Send className="w-5 h-5 text-subtle" strokeWidth={1.5} />
-                  <span className="text-sm font-medium">{formatNumber(post.stats.shares)}</span>
+                  <Send className="w-4 h-4 md:w-5 md:h-5 text-subtle" strokeWidth={1.5} />
+                  <span className="text-xs md:text-sm font-medium">{formatNumber(post.stats.shares)}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Bookmark className="w-5 h-5 text-subtle" strokeWidth={1.5} />
-                  <span className="text-sm font-medium">{formatNumber(post.stats.saves)}</span>
+                  <Bookmark className="w-4 h-4 md:w-5 md:h-5 text-subtle" strokeWidth={1.5} />
+                  <span className="text-xs md:text-sm font-medium">{formatNumber(post.stats.saves)}</span>
                 </div>
               </div>
             </div>
           )}
 
           {/* Title & Description */}
-          <div className="flex-1 px-6 py-4 border-t border-divider overflow-y-auto">
+          <div className="flex-1 px-4 md:px-6 py-3 md:py-4 border-t border-divider overflow-y-auto">
             {post.title && (
-              <h3 className="text-lg font-semibold tracking-tight mb-2">{post.title}</h3>
+              <h3 className="text-base md:text-lg font-semibold tracking-tight mb-2">{post.title}</h3>
             )}
             {post.category && (
-              <span className="inline-block mb-3 text-xs font-medium text-year-accent uppercase tracking-widest">
+              <span className="inline-block mb-2 md:mb-3 text-xs font-medium text-year-accent uppercase tracking-widest">
                 {post.category}
               </span>
             )}
             {post.description && (
               <p className="text-sm text-subtle leading-relaxed font-light">{post.description}</p>
             )}
+
+            {/* Mobile: Button to show reasoning */}
+            <button
+              onClick={() => setShowReasoningForPost(post.id)}
+              className="md:hidden mt-4 flex items-center gap-2 px-4 py-2.5 bg-foreground/5 hover:bg-foreground/10 rounded-lg transition-colors w-full justify-center"
+            >
+              <Lightbulb className="w-4 h-4 text-year-accent" strokeWidth={1.5} />
+              <span className="text-sm font-medium">Ver razonamiento estratégico</span>
+            </button>
           </div>
         </div>
 
-        {/* Right Column - Reasoning (50%) */}
-        <div className="w-full md:w-1/2 h-1/2 md:h-full bg-foreground/[0.02] flex flex-col overflow-y-auto">
+        {/* Right Column - Reasoning (50% on desktop, hidden on mobile) */}
+        <div className="hidden md:flex w-1/2 h-full bg-foreground/[0.02] flex-col overflow-y-auto">
           <div className="p-6 md:p-8">
             <h4 className="text-xs font-medium text-year-accent uppercase tracking-widest mb-4">
               Razonamiento estratégico
             </h4>
-            
-            {post.reasoning ? (
-              <div className="prose prose-sm max-w-none">
-                <p className="text-foreground leading-relaxed whitespace-pre-wrap">
-                  {post.reasoning}
-                </p>
-              </div>
-            ) : (
-              <div className="text-subtle text-sm leading-relaxed space-y-4">
-                <p>
-                  Este contenido forma parte del portfolio de creación de contenido y gestión de redes sociales.
-                </p>
-                <p>
-                  Cada pieza ha sido diseñada considerando:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-subtle/80">
-                  <li>Objetivos de comunicación de la marca</li>
-                  <li>Audiencia objetivo y sus intereses</li>
-                  <li>Tendencias actuales del sector</li>
-                  <li>Optimización para el algoritmo de la plataforma</li>
-                  <li>Coherencia con la identidad visual</li>
-                </ul>
-              </div>
-            )}
+            <div className="prose prose-sm max-w-none">
+              {renderReasoning(post)}
+            </div>
           </div>
         </div>
+
+        {/* Mobile Reasoning Overlay */}
+        {isShowingReasoning && (
+          <div 
+            className="md:hidden fixed inset-0 z-[60] bg-background flex flex-col animate-in slide-in-from-bottom duration-300"
+          >
+            <div className="flex items-center justify-between px-4 py-3 border-b border-divider">
+              <h4 className="text-sm font-medium text-year-accent uppercase tracking-widest">
+                Razonamiento estratégico
+              </h4>
+              <button
+                onClick={() => setShowReasoningForPost(null)}
+                className="p-2 rounded-full hover:bg-foreground/5 transition-colors"
+                aria-label="Cerrar razonamiento"
+              >
+                <X className="w-5 h-5 text-foreground" strokeWidth={1.5} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              <div className="prose prose-sm max-w-none">
+                {renderReasoning(post)}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
