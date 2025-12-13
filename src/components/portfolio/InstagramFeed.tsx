@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Expand } from "lucide-react";
+import { Expand, Loader2 } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import ImageLightbox, { SocialMediaItem } from "./ImageLightbox";
+import { useSocialPosts } from "@/hooks/useSocialPosts";
 
-// Placeholder gallery data - easy to add new images with stats
-const socialMediaGallery: SocialMediaItem[] = [
+// Fallback gallery data
+const fallbackGallery: SocialMediaItem[] = [
   {
     id: "1",
     imageUrl: "https://images.unsplash.com/photo-611162617474-5b21e879e113?w=600&h=600&fit=crop",
@@ -53,30 +54,6 @@ const socialMediaGallery: SocialMediaItem[] = [
     category: "diseño",
     stats: { likes: 1876, comments: 98, shares: 167, saves: 421 },
   },
-  {
-    id: "7",
-    imageUrl: "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=600&h=600&fit=crop",
-    title: "Fotografía lifestyle",
-    description: "Contenido para marca personal",
-    category: "foto",
-    stats: { likes: 2987, comments: 176, shares: 234, saves: 678 },
-  },
-  {
-    id: "8",
-    imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&h=600&fit=crop",
-    title: "Arte abstracto",
-    description: "Ilustración para campaña creativa",
-    category: "ilustración",
-    stats: { likes: 1543, comments: 89, shares: 112, saves: 356 },
-  },
-  {
-    id: "9",
-    imageUrl: "https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=600&h=600&fit=crop",
-    title: "Branding",
-    description: "Diseño de identidad corporativa",
-    category: "diseño",
-    stats: { likes: 5234, comments: 287, shares: 398, saves: 1245 },
-  },
 ];
 
 interface FeedItemProps {
@@ -119,6 +96,24 @@ const FeedItem = ({ item, index, onClick }: FeedItemProps) => {
 const InstagramFeed = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const { data: dbPosts, isLoading } = useSocialPosts();
+
+  // Transform DB posts to SocialMediaItem format, or use fallback
+  const gallery: SocialMediaItem[] = dbPosts && dbPosts.length > 0
+    ? dbPosts.map((post) => ({
+        id: post.id,
+        imageUrl: post.image_url,
+        title: post.title,
+        description: post.description,
+        category: post.category as "diseño" | "foto" | "ilustración" | "video",
+        stats: {
+          likes: post.likes,
+          comments: post.comments,
+          shares: post.shares,
+          saves: post.saves,
+        },
+      }))
+    : fallbackGallery;
 
   const handleImageClick = (index: number) => {
     setSelectedIndex(index);
@@ -137,17 +132,25 @@ const InstagramFeed = () => {
   };
 
   const handleNext = () => {
-    if (selectedIndex !== null && selectedIndex < socialMediaGallery.length - 1) {
+    if (selectedIndex !== null && selectedIndex < gallery.length - 1) {
       setSelectedIndex(selectedIndex + 1);
     }
   };
 
-  const selectedImage = selectedIndex !== null ? socialMediaGallery[selectedIndex] : null;
+  const selectedImage = selectedIndex !== null ? gallery[selectedIndex] : null;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {socialMediaGallery.map((item, index) => (
+        {gallery.map((item, index) => (
           <FeedItem
             key={item.id}
             item={item}
@@ -164,7 +167,7 @@ const InstagramFeed = () => {
         onPrevious={handlePrevious}
         onNext={handleNext}
         hasPrevious={selectedIndex !== null && selectedIndex > 0}
-        hasNext={selectedIndex !== null && selectedIndex < socialMediaGallery.length - 1}
+        hasNext={selectedIndex !== null && selectedIndex < gallery.length - 1}
       />
     </>
   );

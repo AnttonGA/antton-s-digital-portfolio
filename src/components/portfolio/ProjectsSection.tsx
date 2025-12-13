@@ -1,11 +1,12 @@
 import { useState } from "react";
-import ProjectCard, { ProjectData } from "./ProjectCard";
+import ProjectCard from "./ProjectCard";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Code, Megaphone } from "lucide-react";
+import { Code, Megaphone, Loader2 } from "lucide-react";
 import InstagramFeed from "./InstagramFeed";
+import { useWebProjects, WebProject } from "@/hooks/useWebProjects";
 
-// Web Development Projects
-const webDevProjects: ProjectData[] = [
+// Fallback data for when database is empty
+const fallbackProjects: WebProject[] = [
   {
     id: "birakari",
     title: "Birakari",
@@ -91,6 +92,10 @@ type TabType = "web" | "social";
 const ProjectsSection = () => {
   const [activeTab, setActiveTab] = useState<TabType>("web");
   const { ref: titleRef, isVisible: titleVisible } = useScrollReveal({ threshold: 0.3 });
+  const { data: dbProjects, isLoading } = useWebProjects();
+
+  // Use database projects if available, otherwise fallback
+  const projects = dbProjects && dbProjects.length > 0 ? dbProjects : fallbackProjects;
 
   return (
     <section id="proyectos" className="px-6 py-20 bg-secondary/50">
@@ -134,11 +139,17 @@ const ProjectsSection = () => {
 
         {/* Content based on active tab */}
         {activeTab === "web" ? (
-          <div className="space-y-8">
-            {webDevProjects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
-            ))}
-          </div>
+          isLoading ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : (
+            <div className="space-y-8">
+              {projects.map((project, index) => (
+                <ProjectCard key={project.id} project={project} index={index} />
+              ))}
+            </div>
+          )
         ) : (
           <InstagramFeed />
         )}
