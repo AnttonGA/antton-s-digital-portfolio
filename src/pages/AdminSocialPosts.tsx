@@ -11,8 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ImageIcon, Trash2, Loader2 } from "lucide-react";
+import { Image as ImageIcon, Trash2, Loader2, Film, Images, Play } from "lucide-react";
 import { useSocialPosts, useCreateSocialPost, useDeleteSocialPost, SocialPost } from "@/hooks/useSocialPosts";
+import { useMediaUpload } from "@/hooks/useMediaUpload";
+import MediaDropzone, { MediaFile } from "@/components/admin/MediaDropzone";
+
+type MediaType = "image" | "carousel" | "video";
 
 const generateSlug = (title: string): string => {
   return title
@@ -25,10 +29,12 @@ const generateSlug = (title: string): string => {
 
 interface PostFormData {
   id: string;
-  imageUrl: string;
   title: string;
   description: string;
   category: string;
+  mediaType: MediaType;
+  videoUrl: string;
+  thumbnailUrl: string;
   stats: {
     likes: number;
     comments: number;
@@ -41,13 +47,19 @@ const AdminSocialPosts = () => {
   const { data: posts, isLoading } = useSocialPosts();
   const createPost = useCreateSocialPost();
   const deletePost = useDeleteSocialPost();
+  const { uploadMultipleFiles, uploading } = useMediaUpload();
 
+  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
+  const [thumbnailFiles, setThumbnailFiles] = useState<MediaFile[]>([]);
+  
   const [formData, setFormData] = useState<PostFormData>({
     id: "",
-    imageUrl: "",
     title: "",
     description: "",
     category: "diseño",
+    mediaType: "image",
+    videoUrl: "",
+    thumbnailUrl: "",
     stats: {
       likes: 0,
       comments: 0,
@@ -76,15 +88,59 @@ const AdminSocialPosts = () => {
     }));
   };
 
+  const handleMediaTypeChange = (type: MediaType) => {
+    setFormData((prev) => ({ ...prev, mediaType: type }));
+    setMediaFiles([]);
+    setThumbnailFiles([]);
+  };
+
   const handleSave = async () => {
-    if (!formData.title || !formData.imageUrl) return;
+    if (!formData.title) return;
+
+    let mediaUrls: string[] = [];
+    let thumbnailUrl = formData.thumbnailUrl;
+    let videoUrl = formData.videoUrl;
+
+    // Upload media files
+    if (mediaFiles.length > 0) {
+      const files = mediaFiles.map((f) => f.file);
+      mediaUrls = await uploadMultipleFiles(files);
+      
+      if (mediaUrls.length === 0) return; // Upload failed
+    }
+
+    // Upload thumbnail if provided
+    if (thumbnailFiles.length > 0) {
+      const urls = await uploadMultipleFiles([thumbnailFiles[0].file]);
+      if (urls.length > 0) {
+        thumbnailUrl = urls[0];
+      }
+    }
+
+    // Determine main image_url
+    let imageUrl = "";
+    if (formData.mediaType === "image" && mediaUrls.length > 0) {
+      imageUrl = mediaUrls[0];
+    } else if (formData.mediaType === "carousel" && mediaUrls.length > 0) {
+      imageUrl = mediaUrls[0]; // First image as cover
+    } else if (formData.mediaType === "video") {
+      imageUrl = thumbnailUrl || "";
+    }
+
+    if (!imageUrl && formData.mediaType !== "video") {
+      return;
+    }
 
     const postData: Omit<SocialPost, "created_at" | "updated_at"> = {
       id: formData.id,
-      image_url: formData.imageUrl,
+      image_url: imageUrl,
       title: formData.title,
       description: formData.description,
       category: formData.category,
+      media_type: formData.mediaType,
+      media_urls: mediaUrls,
+      video_url: formData.mediaType === "video" ? videoUrl : null,
+      thumbnail_url: thumbnailUrl || null,
       likes: formData.stats.likes,
       comments: formData.stats.comments,
       shares: formData.stats.shares,
@@ -98,10 +154,12 @@ const AdminSocialPosts = () => {
   const resetForm = () => {
     setFormData({
       id: "",
-      imageUrl: "",
       title: "",
       description: "",
       category: "diseño",
+      mediaType: "image",
+      videoUrl: "",
+      thumbnailUrl: "",
       stats: {
         likes: 0,
         comments: 0,
@@ -109,9 +167,28 @@ const AdminSocialPosts = () => {
         saves: 0,
       },
     });
+    setMediaFiles([]);
+    setThumbnailFiles([]);
   };
 
-  const isExternalUrl = formData.imageUrl.startsWith("http");
+  const getMediaTypeIcon = (type: string) => {
+    switch (type) {
+      case "carousel":
+        return <Images className="w-4 h-4" />;
+      case "video":
+        return <Film className="w-4 h-4" />;
+      default:
+        return <ImageIcon className="w-4 h-4" />;
+    }
+  };
+
+  const isSaveDisabled = () => {
+    if (createPost.isPending || uploading || !formData.title) return true;
+    if (formData.mediaType === "video") {
+      return !formData.videoUrl && mediaFiles.length === 0;
+    }
+    return mediaFiles.length === 0;
+  };
 
   return (
     <div className="min-h-screen bg-background p-8">
@@ -135,6 +212,40 @@ const AdminSocialPosts = () => {
             <div className="bg-card border border-border rounded-lg p-6 space-y-4">
               <h2 className="text-xl font-semibold mb-4">Nuevo post</h2>
 
+              {/* Media Type Selector */}
+              <div className="space-y-2">
+                <Label>Tipo de contenido</Label>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={formData.mediaType === "image" ? "default" : "outline"}
+                    onClick={() => handleMediaTypeChange("image")}
+                    className="flex-1"
+                  >
+                    <ImageIcon className="w-4 h-4 mr-2" />
+                    Imagen
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={formData.mediaType === "carousel" ? "default" : "outline"}
+                    onClick={() => handleMediaTypeChange("carousel")}
+                    className="flex-1"
+                  >
+                    <Images className="w-4 h-4 mr-2" />
+                    Carrusel
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={formData.mediaType === "video" ? "default" : "outline"}
+                    onClick={() => handleMediaTypeChange("video")}
+                    className="flex-1"
+                  >
+                    <Film className="w-4 h-4 mr-2" />
+                    Video
+                  </Button>
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="title">Título *</Label>
                 <Input
@@ -156,40 +267,62 @@ const AdminSocialPosts = () => {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="imageUrl">URL de imagen *</Label>
-                <Input
-                  id="imageUrl"
-                  value={formData.imageUrl}
-                  onChange={(e) => handleFieldChange("imageUrl", e.target.value)}
-                  placeholder="https://..."
-                />
-              </div>
-
-              {/* Vista previa de imagen */}
-              {formData.imageUrl && (
+              {/* Media Upload Section */}
+              {formData.mediaType !== "video" && (
                 <div className="space-y-2">
-                  <Label>Vista previa</Label>
-                  <div className="aspect-square w-full max-w-[200px] bg-muted rounded-lg overflow-hidden flex items-center justify-center">
-                    {isExternalUrl ? (
-                      <img
-                        src={formData.imageUrl}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.style.display = "none";
-                        }}
-                      />
-                    ) : (
-                      <div className="text-center p-4">
-                        <ImageIcon className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
-                        <span className="text-xs text-muted-foreground">
-                          URL inválida
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  <Label>
+                    {formData.mediaType === "carousel" ? "Imágenes del carrusel *" : "Imagen *"}
+                  </Label>
+                  <MediaDropzone
+                    files={mediaFiles}
+                    onFilesChange={setMediaFiles}
+                    multiple={formData.mediaType === "carousel"}
+                    accept="image/*"
+                    maxFiles={formData.mediaType === "carousel" ? 10 : 1}
+                    uploading={uploading}
+                  />
                 </div>
+              )}
+
+              {/* Video Section */}
+              {formData.mediaType === "video" && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="videoUrl">URL del video (YouTube/Vimeo)</Label>
+                    <Input
+                      id="videoUrl"
+                      value={formData.videoUrl}
+                      onChange={(e) => handleFieldChange("videoUrl", e.target.value)}
+                      placeholder="https://youtube.com/watch?v=... o https://vimeo.com/..."
+                    />
+                  </div>
+
+                  <div className="text-center text-sm text-muted-foreground">
+                    — o sube un video directamente —
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Subir video (MP4)</Label>
+                    <MediaDropzone
+                      files={mediaFiles}
+                      onFilesChange={setMediaFiles}
+                      multiple={false}
+                      accept="video/*"
+                      uploading={uploading}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Miniatura del video</Label>
+                    <MediaDropzone
+                      files={thumbnailFiles}
+                      onFilesChange={setThumbnailFiles}
+                      multiple={false}
+                      accept="image/*"
+                      uploading={uploading}
+                    />
+                  </div>
+                </>
               )}
 
               <div className="space-y-2">
@@ -216,6 +349,7 @@ const AdminSocialPosts = () => {
                     <SelectItem value="diseño">Diseño</SelectItem>
                     <SelectItem value="foto">Fotografía</SelectItem>
                     <SelectItem value="ilustración">Ilustración</SelectItem>
+                    <SelectItem value="video">Video</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -278,15 +412,15 @@ const AdminSocialPosts = () => {
               </div>
 
               <div className="mt-6 flex gap-2">
-                <Button 
-                  onClick={handleSave} 
-                  disabled={createPost.isPending || !formData.title || !formData.imageUrl}
+                <Button
+                  onClick={handleSave}
+                  disabled={isSaveDisabled()}
                   className="flex-1"
                 >
-                  {createPost.isPending ? (
+                  {createPost.isPending || uploading ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Guardando...
+                      {uploading ? "Subiendo..." : "Guardando..."}
                     </>
                   ) : (
                     "Guardar post"
@@ -316,10 +450,19 @@ const AdminSocialPosts = () => {
                       className="relative group rounded-lg overflow-hidden bg-muted"
                     >
                       <img
-                        src={post.image_url}
+                        src={post.thumbnail_url || post.image_url}
                         alt={post.title}
                         className="w-full aspect-square object-cover"
                       />
+                      
+                      {/* Media type indicator */}
+                      {post.media_type && post.media_type !== "image" && (
+                        <div className="absolute top-2 right-2 p-1.5 rounded bg-background/80">
+                          {post.media_type === "carousel" && <Images className="w-4 h-4" />}
+                          {post.media_type === "video" && <Play className="w-4 h-4" />}
+                        </div>
+                      )}
+                      
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-2">
                         <p className="text-white text-sm font-medium text-center line-clamp-2 mb-2">
                           {post.title}

@@ -1,10 +1,11 @@
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Heart, MessageCircle, Send, Bookmark, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Heart, MessageCircle, Send, Bookmark, ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface SocialMediaItem {
   id: string;
@@ -12,6 +13,10 @@ export interface SocialMediaItem {
   title?: string;
   description?: string;
   category?: "diseño" | "foto" | "ilustración" | "video";
+  mediaType?: "image" | "carousel" | "video";
+  mediaUrls?: string[];
+  videoUrl?: string;
+  thumbnailUrl?: string;
   stats?: {
     likes: number;
     comments: number;
@@ -40,6 +45,27 @@ const formatNumber = (num: number): string => {
   return num.toString();
 };
 
+// Extract video ID from YouTube or Vimeo URL
+const getVideoEmbedUrl = (url: string): string | null => {
+  // YouTube
+  const youtubeMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+  if (youtubeMatch) {
+    return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+  }
+  
+  // Vimeo
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) {
+    return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+  }
+  
+  return null;
+};
+
+const isDirectVideoUrl = (url: string): boolean => {
+  return /\.(mp4|webm|ogg)$/i.test(url);
+};
+
 const ImageLightbox = ({ 
   image, 
   isOpen, 
@@ -49,44 +75,146 @@ const ImageLightbox = ({
   hasPrevious, 
   hasNext 
 }: ImageLightboxProps) => {
+  const [carouselIndex, setCarouselIndex] = useState(0);
+
   if (!image) return null;
 
+  const isCarousel = image.mediaType === "carousel" && image.mediaUrls && image.mediaUrls.length > 1;
+  const isVideo = image.mediaType === "video";
+  const carouselImages = isCarousel ? image.mediaUrls! : [image.imageUrl];
+  const totalCarouselImages = carouselImages.length;
+
+  const handleCarouselPrev = () => {
+    setCarouselIndex((prev) => (prev > 0 ? prev - 1 : totalCarouselImages - 1));
+  };
+
+  const handleCarouselNext = () => {
+    setCarouselIndex((prev) => (prev < totalCarouselImages - 1 ? prev + 1 : 0));
+  };
+
+  const handleClose = () => {
+    setCarouselIndex(0);
+    onClose();
+  };
+
+  // Render video content
+  const renderVideoContent = () => {
+    if (!image.videoUrl) return null;
+
+    const embedUrl = getVideoEmbedUrl(image.videoUrl);
+    
+    if (embedUrl) {
+      return (
+        <iframe
+          src={embedUrl}
+          className="w-full h-full max-h-[60vh] md:max-h-[80vh]"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      );
+    }
+    
+    if (isDirectVideoUrl(image.videoUrl)) {
+      return (
+        <video
+          src={image.videoUrl}
+          controls
+          className="max-w-full max-h-[60vh] md:max-h-[80vh] object-contain"
+        >
+          Tu navegador no soporta la reproducción de video.
+        </video>
+      );
+    }
+
+    return null;
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-5xl w-[95vw] max-h-[95vh] p-0 bg-background border border-divider overflow-hidden rounded-sm">
         <VisuallyHidden>
           <DialogTitle>{image.title || "Imagen"}</DialogTitle>
         </VisuallyHidden>
         
         <div className="flex flex-col md:flex-row h-full">
-          {/* Image section with navigation */}
+          {/* Media section with navigation */}
           <div className="relative flex-1 flex items-center justify-center bg-foreground/5 min-h-[300px] md:min-h-[500px]">
-            {/* Previous button */}
-            {hasPrevious && (
+            {/* Previous post button */}
+            {hasPrevious && !isCarousel && (
               <button
                 onClick={onPrevious}
                 className="absolute left-3 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-background/80 hover:bg-background transition-colors duration-200 border border-divider"
-                aria-label="Imagen anterior"
+                aria-label="Post anterior"
               >
                 <ChevronLeft className="w-4 h-4 text-foreground" strokeWidth={1.5} />
               </button>
             )}
 
-            <img
-              src={image.imageUrl}
-              alt={image.title || "Imagen de galería"}
-              className="max-w-full max-h-[60vh] md:max-h-[80vh] object-contain"
-            />
+            {/* Carousel navigation */}
+            {isCarousel && (
+              <>
+                <button
+                  onClick={handleCarouselPrev}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-background/80 hover:bg-background transition-colors duration-200 border border-divider"
+                  aria-label="Imagen anterior del carrusel"
+                >
+                  <ChevronLeft className="w-4 h-4 text-foreground" strokeWidth={1.5} />
+                </button>
+                <button
+                  onClick={handleCarouselNext}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-background/80 hover:bg-background transition-colors duration-200 border border-divider"
+                  aria-label="Siguiente imagen del carrusel"
+                >
+                  <ChevronRight className="w-4 h-4 text-foreground" strokeWidth={1.5} />
+                </button>
+              </>
+            )}
 
-            {/* Next button */}
-            {hasNext && (
+            {/* Content */}
+            {isVideo ? (
+              <div className="w-full h-full flex items-center justify-center">
+                {renderVideoContent()}
+              </div>
+            ) : (
+              <img
+                src={carouselImages[carouselIndex]}
+                alt={image.title || "Imagen de galería"}
+                className="max-w-full max-h-[60vh] md:max-h-[80vh] object-contain"
+              />
+            )}
+
+            {/* Next post button */}
+            {hasNext && !isCarousel && (
               <button
                 onClick={onNext}
                 className="absolute right-3 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-background/80 hover:bg-background transition-colors duration-200 border border-divider"
-                aria-label="Siguiente imagen"
+                aria-label="Siguiente post"
               >
                 <ChevronRight className="w-4 h-4 text-foreground" strokeWidth={1.5} />
               </button>
+            )}
+
+            {/* Carousel dots */}
+            {isCarousel && (
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                {carouselImages.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCarouselIndex(idx)}
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                      idx === carouselIndex ? "bg-foreground" : "bg-foreground/30"
+                    }`}
+                    aria-label={`Ir a imagen ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Carousel counter */}
+            {isCarousel && (
+              <div className="absolute top-4 right-4 px-2 py-1 rounded bg-background/80 text-xs font-medium z-10">
+                {carouselIndex + 1} / {totalCarouselImages}
+              </div>
             )}
           </div>
 
