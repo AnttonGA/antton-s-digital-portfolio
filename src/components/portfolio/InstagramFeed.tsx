@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Expand, Loader2 } from "lucide-react";
+import { Expand, Loader2, Images, Play } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import ImageLightbox, { SocialMediaItem } from "./ImageLightbox";
 import { useSocialPosts } from "@/hooks/useSocialPosts";
@@ -12,6 +12,7 @@ const fallbackGallery: SocialMediaItem[] = [
     title: "Diseño de marca",
     description: "Identidad visual para startup tecnológica",
     category: "diseño",
+    mediaType: "image",
     stats: { likes: 1245, comments: 87, shares: 156, saves: 342 },
   },
   {
@@ -20,6 +21,7 @@ const fallbackGallery: SocialMediaItem[] = [
     title: "Campaña digital",
     description: "Arte gráfico para redes sociales",
     category: "diseño",
+    mediaType: "image",
     stats: { likes: 2103, comments: 124, shares: 89, saves: 567 },
   },
   {
@@ -28,6 +30,7 @@ const fallbackGallery: SocialMediaItem[] = [
     title: "Fotografía de producto",
     description: "Sesión para ecommerce",
     category: "foto",
+    mediaType: "image",
     stats: { likes: 3456, comments: 201, shares: 312, saves: 890 },
   },
   {
@@ -36,6 +39,7 @@ const fallbackGallery: SocialMediaItem[] = [
     title: "Ilustración digital",
     description: "Arte conceptual para marca",
     category: "ilustración",
+    mediaType: "image",
     stats: { likes: 987, comments: 56, shares: 78, saves: 234 },
   },
   {
@@ -44,6 +48,7 @@ const fallbackGallery: SocialMediaItem[] = [
     title: "Contenido visual",
     description: "Post para Instagram",
     category: "diseño",
+    mediaType: "image",
     stats: { likes: 4521, comments: 312, shares: 456, saves: 1023 },
   },
   {
@@ -52,6 +57,7 @@ const fallbackGallery: SocialMediaItem[] = [
     title: "Diseño gráfico",
     description: "Material promocional",
     category: "diseño",
+    mediaType: "image",
     stats: { likes: 1876, comments: 98, shares: 167, saves: 421 },
   },
 ];
@@ -68,6 +74,9 @@ const FeedItem = ({ item, index, onClick }: FeedItemProps) => {
     rootMargin: "50px"
   });
 
+  const isCarousel = item.mediaType === "carousel";
+  const isVideo = item.mediaType === "video";
+
   return (
     <div
       ref={ref as React.RefObject<HTMLDivElement>}
@@ -80,11 +89,20 @@ const FeedItem = ({ item, index, onClick }: FeedItemProps) => {
       onClick={onClick}
     >
       <img
-        src={item.imageUrl}
+        src={item.thumbnailUrl || item.imageUrl}
         alt={item.title || "Imagen de galería"}
         className="w-full h-full object-cover transition-transform duration-400 ease-out group-hover:scale-105"
         loading="lazy"
       />
+      
+      {/* Media type indicator */}
+      {(isCarousel || isVideo) && (
+        <div className="absolute top-2 right-2 p-1.5 rounded bg-background/80 z-10">
+          {isCarousel && <Images className="w-4 h-4" strokeWidth={1.5} />}
+          {isVideo && <Play className="w-4 h-4" strokeWidth={1.5} />}
+        </div>
+      )}
+      
       {/* Minimal hover overlay */}
       <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/60 transition-all duration-300 flex items-center justify-center">
         <Expand className="w-5 h-5 text-background opacity-0 group-hover:opacity-100 transition-opacity duration-300" strokeWidth={1.5} />
@@ -106,6 +124,10 @@ const InstagramFeed = () => {
         title: post.title,
         description: post.description,
         category: post.category as "diseño" | "foto" | "ilustración" | "video",
+        mediaType: (post.media_type || "image") as "image" | "carousel" | "video",
+        mediaUrls: post.media_urls || [],
+        videoUrl: post.video_url || undefined,
+        thumbnailUrl: post.thumbnail_url || undefined,
         stats: {
           likes: post.likes,
           comments: post.comments,

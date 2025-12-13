@@ -8,6 +8,10 @@ export interface SocialPost {
   title: string;
   description: string;
   category: string;
+  media_type: string;
+  media_urls: string[];
+  video_url: string | null;
+  thumbnail_url: string | null;
   likes: number;
   comments: number;
   shares: number;
@@ -26,7 +30,12 @@ export const useSocialPosts = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return (data || []) as SocialPost[];
+      
+      // Parse media_urls from JSONB
+      return (data || []).map((post) => ({
+        ...post,
+        media_urls: Array.isArray(post.media_urls) ? post.media_urls : [],
+      })) as SocialPost[];
     },
   });
 };
@@ -39,7 +48,10 @@ export const useCreateSocialPost = () => {
     mutationFn: async (post: Omit<SocialPost, "created_at" | "updated_at">) => {
       const { data, error } = await supabase
         .from("social_posts")
-        .insert(post)
+        .insert({
+          ...post,
+          media_urls: post.media_urls || [],
+        })
         .select()
         .single();
 
