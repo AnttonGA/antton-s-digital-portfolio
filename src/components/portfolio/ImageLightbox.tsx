@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Heart, MessageCircle, Send, Bookmark, ChevronLeft, ChevronRight, X, Lightbulb } from "lucide-react";
+import { Heart, MessageCircle, Send, Bookmark, ChevronLeft, ChevronRight, ChevronDown, X, Lightbulb } from "lucide-react";
 
 export interface SocialMediaItem {
   id: string;
@@ -76,12 +76,18 @@ const ImageLightbox = ({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const postRefs = useRef<(HTMLDivElement | null)[]>([]);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  
+  // Touch gesture state for swipe-down to close reasoning
+  const reasoningTouchStartY = useRef<number>(0);
+  const reasoningCurrentY = useRef<number>(0);
+  const [reasoningDragOffset, setReasoningDragOffset] = useState(0);
 
   // Reset state when lightbox opens
   useEffect(() => {
     if (isOpen) {
       setCurrentPostIndex(initialIndex);
       setShowReasoningForPost(null);
+      setReasoningDragOffset(0);
     }
   }, [isOpen, initialIndex]);
 
@@ -154,6 +160,29 @@ const ImageLightbox = ({
     };
   }, [isOpen, handleKeyDown]);
 
+  // Touch handlers for swipe-down gesture on reasoning overlay
+  const handleReasoningTouchStart = (e: React.TouchEvent) => {
+    reasoningTouchStartY.current = e.touches[0].clientY;
+    reasoningCurrentY.current = e.touches[0].clientY;
+  };
+
+  const handleReasoningTouchMove = (e: React.TouchEvent) => {
+    reasoningCurrentY.current = e.touches[0].clientY;
+    const diff = reasoningCurrentY.current - reasoningTouchStartY.current;
+    // Only allow dragging down
+    if (diff > 0) {
+      setReasoningDragOffset(diff);
+    }
+  };
+
+  const handleReasoningTouchEnd = () => {
+    // If dragged more than 100px, close the overlay
+    if (reasoningDragOffset > 100) {
+      setShowReasoningForPost(null);
+    }
+    setReasoningDragOffset(0);
+  };
+
   if (allPosts.length === 0) return null;
 
   const getCarouselIndex = (postId: string) => carouselIndices[postId] || 0;
@@ -170,6 +199,13 @@ const ImageLightbox = ({
   const handleCarouselNext = (post: SocialMediaItem, totalImages: number) => {
     const current = getCarouselIndex(post.id);
     setCarouselIndex(post.id, current < totalImages - 1 ? current + 1 : 0);
+  };
+
+  // Scroll to next post
+  const scrollToNextPost = () => {
+    if (currentPostIndex < allPosts.length - 1 && postRefs.current[currentPostIndex + 1]) {
+      postRefs.current[currentPostIndex + 1]?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   // Render video content for a specific post
@@ -241,15 +277,16 @@ const ImageLightbox = ({
     const totalCarouselImages = carouselImages.length;
     const currentCarouselIndex = getCarouselIndex(post.id);
     const isShowingReasoning = showReasoningForPost === post.id;
+    const isLastPost = index === allPosts.length - 1;
 
     return (
       <div
         key={post.id}
         ref={(el) => { postRefs.current[index] = el; }}
-        className="h-[95vh] flex-shrink-0 snap-start snap-always flex flex-col md:flex-row"
+        className="min-h-[95vh] flex-shrink-0 snap-start snap-always flex flex-col md:flex-row"
       >
         {/* Left Column - Media + Stats + Description (50% on desktop, full on mobile) */}
-        <div className="w-full md:w-1/2 h-full md:h-full flex flex-col border-r-0 md:border-r border-divider overflow-y-auto">
+        <div className="w-full md:w-1/2 md:h-full flex flex-col border-r-0 md:border-r border-divider md:overflow-y-auto">
           {/* Media section */}
           <div className="relative flex-shrink-0 flex items-center justify-center bg-foreground/5 min-h-[200px] md:min-h-[300px]">
             {/* Carousel navigation */}
@@ -335,7 +372,7 @@ const ImageLightbox = ({
           )}
 
           {/* Title & Description */}
-          <div className="flex-1 px-4 md:px-6 py-3 md:py-4 border-t border-divider overflow-y-auto">
+          <div className="flex-shrink-0 px-4 md:px-6 py-3 md:py-4 border-t border-divider md:flex-1 md:overflow-y-auto">
             {post.title && (
               <h3 className="text-base md:text-lg font-semibold tracking-tight mb-2">{post.title}</h3>
             )}
@@ -345,7 +382,7 @@ const ImageLightbox = ({
               </span>
             )}
             {post.description && (
-              <p className="text-sm text-subtle leading-relaxed font-light">{post.description}</p>
+              <p className="text-sm text-subtle leading-relaxed font-light whitespace-pre-wrap">{post.description}</p>
             )}
 
             {/* Mobile: Button to show reasoning */}
@@ -356,6 +393,17 @@ const ImageLightbox = ({
               <Lightbulb className="w-4 h-4 text-year-accent" strokeWidth={1.5} />
               <span className="text-sm font-medium">Ver razonamiento estratégico</span>
             </button>
+
+            {/* Mobile: Next post indicator */}
+            {!isLastPost && (
+              <button
+                onClick={scrollToNextPost}
+                className="md:hidden mt-6 mb-4 flex flex-col items-center gap-1 w-full text-subtle/60 hover:text-subtle transition-colors"
+              >
+                <span className="text-xs uppercase tracking-widest">Siguiente post</span>
+                <ChevronDown className="w-5 h-5 animate-bounce" strokeWidth={1.5} />
+              </button>
+            )}
           </div>
         </div>
 
@@ -371,24 +419,46 @@ const ImageLightbox = ({
           </div>
         </div>
 
-        {/* Mobile Reasoning Overlay */}
+        {/* Mobile Reasoning Overlay with swipe-down gesture */}
         {isShowingReasoning && (
           <div 
             className="md:hidden fixed inset-0 z-[60] bg-background flex flex-col animate-in slide-in-from-bottom duration-300"
+            style={{ 
+              transform: `translateY(${reasoningDragOffset}px)`,
+              opacity: 1 - (reasoningDragOffset / 300)
+            }}
+            onTouchStart={handleReasoningTouchStart}
+            onTouchMove={handleReasoningTouchMove}
+            onTouchEnd={handleReasoningTouchEnd}
           >
-            <div className="flex items-center justify-between px-4 py-3 border-b border-divider">
-              <h4 className="text-sm font-medium text-year-accent uppercase tracking-widest">
-                Razonamiento estratégico
-              </h4>
+            {/* Drag handle for swipe gesture */}
+            <div className="flex justify-center py-2">
+              <div className="w-10 h-1 bg-foreground/20 rounded-full" />
+            </div>
+            
+            {/* Header with back button on the left */}
+            <div className="flex items-center justify-between px-4 py-2 border-b border-divider">
               <button
                 onClick={() => setShowReasoningForPost(null)}
-                className="p-2 rounded-full hover:bg-foreground/5 transition-colors"
-                aria-label="Cerrar razonamiento"
+                className="flex items-center gap-1.5 text-sm text-subtle hover:text-foreground transition-colors py-1"
+                aria-label="Volver al post"
               >
-                <X className="w-5 h-5 text-foreground" strokeWidth={1.5} />
+                <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
+                <span>Volver</span>
               </button>
+              <h4 className="text-xs font-medium text-year-accent uppercase tracking-widest">
+                Razonamiento
+              </h4>
+              {/* Spacer for alignment */}
+              <div className="w-16" />
             </div>
-            <div className="flex-1 overflow-y-auto p-4">
+
+            {/* Swipe hint */}
+            <div className="text-center py-2 text-xs text-subtle/50">
+              Desliza hacia abajo para cerrar
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-4 pb-4">
               <div className="prose prose-sm max-w-none">
                 {renderReasoning(post)}
               </div>
