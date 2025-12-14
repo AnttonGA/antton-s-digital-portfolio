@@ -511,7 +511,7 @@ const ImageLightbox = ({
         {/* Scrollable container with all posts */}
         <div 
           ref={scrollContainerRef}
-          className="h-full overflow-y-auto snap-y snap-mandatory scroll-smooth"
+          className="h-full overflow-y-auto snap-y snap-mandatory scroll-smooth scrollbar-hide"
           style={{ 
             scrollBehavior: 'smooth',
             WebkitOverflowScrolling: 'touch'
