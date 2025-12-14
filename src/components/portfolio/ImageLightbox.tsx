@@ -240,13 +240,29 @@ const ImageLightbox = ({
     return null;
   };
 
+  // Parse simple markdown (bold text with **)
+  const parseMarkdown = (text: string) => {
+    const parts = text.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        const boldText = part.slice(2, -2);
+        return <strong key={index} className="font-semibold">{boldText}</strong>;
+      }
+      return part;
+    });
+  };
+
   // Render reasoning content
   const renderReasoning = (post: SocialMediaItem) => {
     if (post.reasoning) {
+      // Split by double newlines to create paragraphs
+      const paragraphs = post.reasoning.split(/\n\n+/);
       return (
-        <p className="text-foreground leading-relaxed whitespace-pre-wrap">
-          {post.reasoning}
-        </p>
+        <div className="text-foreground leading-relaxed space-y-4">
+          {paragraphs.map((paragraph, idx) => (
+            <p key={idx}>{parseMarkdown(paragraph)}</p>
+          ))}
+        </div>
       );
     }
     
