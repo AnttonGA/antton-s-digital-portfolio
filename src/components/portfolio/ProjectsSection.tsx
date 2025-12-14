@@ -63,7 +63,7 @@ const fallbackProjects: WebProject[] = [
   {
     id: "locopolo",
     title: "Loco Polo",
-    year: "2025",
+    year: "2021",
     type: "Prácticas",
     description:
       "En Loco Polo colaboré en el desarrollo de la página web, trabajando con WordPress y diversos plugins para optimizar su funcionalidad y experiencia de usuario. Además, apoyé el posicionamiento SEO, mejorando la estructura, el contenido y la visibilidad orgánica del sitio.",
