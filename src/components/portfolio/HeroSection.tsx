@@ -42,8 +42,9 @@ const HeroSection = () => {
             {/* Description */}
             <p className="text-base md:text-lg text-subtle leading-relaxed max-w-2xl font-light">
               Profesional de Marketing e Investigación de Mercados, especializado en marketing digital, 
-              desarrollo web y estrategia de crecimiento online. Con experiencia liderando proyectos 
-              de marketing, gestionando clientes y desarrollando contenido y productos digitales.
+              desarrollo web, inteligencia artificial y estrategia de crecimiento online. Con experiencia 
+              liderando equipos de marketing, desarrollando productos digitales y emprendiendo proyectos 
+              tecnológicos con IA aplicada.
             </p>
           </div>
 

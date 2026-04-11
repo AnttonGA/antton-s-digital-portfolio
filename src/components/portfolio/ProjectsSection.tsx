@@ -9,6 +9,32 @@ import { useWebProjects, WebProject } from "@/hooks/useWebProjects";
 // Fallback data for when database is empty
 const fallbackProjects: WebProject[] = [
   {
+    id: "kahir",
+    title: "Kahir",
+    year: "2025",
+    type: "Proyecto personal",
+    description:
+      "Plataforma de IA conversacional especializada en deportes outdoor. Kahir utiliza inteligencia artificial para ofrecer recomendaciones personalizadas sobre rutas, equipamiento y condiciones meteorológicas para actividades al aire libre.",
+    features: [
+      {
+        title: "IA Conversacional",
+        description:
+          "Chatbot inteligente que responde consultas sobre deportes outdoor con recomendaciones personalizadas.",
+      },
+      {
+        title: "Recomendaciones personalizadas",
+        description:
+          "Sistema de IA que adapta las sugerencias según el perfil, nivel y preferencias del usuario.",
+      },
+      {
+        title: "Integración de datos",
+        description:
+          "Conexión con APIs de meteorología, rutas y equipamiento para ofrecer información actualizada y relevante.",
+      },
+    ],
+    link: "Kahir.eus",
+  },
+  {
     id: "birakari",
     title: "Birakari",
     year: "2025",
