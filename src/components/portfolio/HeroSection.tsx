@@ -35,16 +35,13 @@ const HeroSection = () => {
             <div className="flex items-center gap-4">
               <div className="w-12 h-px bg-foreground/20" />
               <h2 className="text-lg md:text-xl font-normal text-subtle tracking-wide">
-                Desarrollo Web & Marketing Digital
+                Marketing & Business Development · Digital Product Builder · Entrepreneur
               </h2>
             </div>
             
             {/* Description */}
             <p className="text-base md:text-lg text-subtle leading-relaxed max-w-2xl font-light">
-              Profesional de Marketing e Investigación de Mercados, especializado en marketing digital, 
-              desarrollo web, inteligencia artificial y estrategia de crecimiento online. Con experiencia 
-              liderando equipos de marketing, desarrollando productos digitales y emprendiendo proyectos 
-              tecnológicos con IA aplicada.
+              Emprendedor y profesional de marketing del País Vasco con base técnica en desarrollo web e integración de IA. Actualmente liderando la presencia digital en Canexion y desarrollando un producto de aprendizaje con IA bajo el programa Erasmus for Entrepreneurs de la UE. Combina estrategia de negocio, marketing digital y desarrollo hands-on para construir productos desde cero.
             </p>
           </div>
 

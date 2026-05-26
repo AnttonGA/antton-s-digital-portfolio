@@ -11,25 +11,25 @@ const fallbackProjects: WebProject[] = [
   {
     id: "kahir",
     title: "Kahir",
-    year: "2025",
+    year: "2024",
     type: "Proyecto personal",
     description:
-      "Plataforma de IA conversacional especializada en deportes outdoor. Kahir utiliza inteligencia artificial para ofrecer recomendaciones personalizadas sobre rutas, equipamiento y condiciones meteorológicas para actividades al aire libre.",
+      "Plataforma de compartición de rutas outdoor al estilo Wikiloc, con funciones sociales completas: perfiles de usuario, registro de actividad e interacción comunitaria. Incluye una capa de IA conversacional con gestión de contexto multi-turno que ofrece recomendaciones personalizadas de rutas según los hábitos deportivos del usuario y previsiones meteorológicas en tiempo real.",
     features: [
+      {
+        title: "Plataforma de rutas",
+        description:
+          "Red social para compartir rutas outdoor con perfiles de usuario, registro de actividad e interacción comunitaria.",
+      },
       {
         title: "IA Conversacional",
         description:
-          "Chatbot inteligente que responde consultas sobre deportes outdoor con recomendaciones personalizadas.",
+          "Chatbot con contexto multi-turno que adapta las recomendaciones de rutas al perfil, nivel y preferencias del usuario.",
       },
       {
-        title: "Recomendaciones personalizadas",
+        title: "Datos en tiempo real",
         description:
-          "Sistema de IA que adapta las sugerencias según el perfil, nivel y preferencias del usuario.",
-      },
-      {
-        title: "Integración de datos",
-        description:
-          "Conexión con APIs de meteorología, rutas y equipamiento para ofrecer información actualizada y relevante.",
+          "Integración con APIs de meteorología y rutas para ofrecer información actualizada en cada recomendación.",
       },
     ],
     link: "Kahir.eus",
