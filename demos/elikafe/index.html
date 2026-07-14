@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eli kafea · Cafetería y brunch en Hernani</title>
+  <meta name="description" content="Eli kafea, la cafetería de brunch y repostería artesana de Encarni en Hernani. Café, tostadas, brunch de fin de semana y nuestra famosa Red Velvet. Latsunbeberri Auzoa 6." />
+
+  <meta property="og:title" content="Eli kafea · Cafetería y brunch en Hernani" />
+  <meta property="og:description" content="Café, brunch y repostería artesana. Nuestra Red Velvet te espera." />
+  <meta property="og:type" content="restaurant.restaurant" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ================= HEADER / NAV ================= -->
+  <header class="site-header" id="top">
+    <nav class="nav container">
+      <a href="#top" class="brand" aria-label="Eli kafea, inicio">Eli kafea<span class="brand__dot">.</span></a>
+
+      <button class="nav__toggle" aria-label="Abrir menú" aria-expanded="false" id="navToggle">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav__links" id="navLinks">
+        <li><a href="#sobre">Nosotros</a></li>
+        <li><a href="#especialidades">Especialidades</a></li>
+        <li><a href="#carta">Carta</a></li>
+        <li><a href="#galeria">Galería</a></li>
+        <li><a href="#opiniones">Opiniones</a></li>
+        <li><a href="#visitanos" class="btn btn--sm">Visítanos</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="hero__text">
+      <p class="eyebrow reveal"><span class="star">✳</span> Ongi etorri · Hernani</p>
+      <h1 class="hero__title reveal">Café, brunch<br />y repostería<br />con alma.</h1>
+      <p class="hero__lead reveal">
+        La cafetería de barrio de Encarni. Desayunos ricos, brunch de fin de semana,
+        café bien hecho y repostería artesana. Y sí… nuestra <strong>Red Velvet</strong> es de otro mundo.
+      </p>
+      <div class="hero__actions reveal">
+        <a href="#carta" class="btn btn--primary">Ver la carta</a>
+        <a href="#visitanos" class="btn btn--ghost">Cómo llegar</a>
+      </div>
+      <div class="hero__badge reveal">
+        <span class="stars">★★★★★</span>
+        <span>5,0 · 11 opiniones en Google</span>
+      </div>
+    </div>
+    <div class="hero__media reveal" role="img" aria-label="Brunch y café en Eli kafea"></div>
+  </section>
+
+  <!-- ================= FRANJA INFO ================= -->
+  <section class="strip">
+    <div class="container strip__grid">
+      <div class="strip__item">
+        <span class="strip__k">Horario hoy</span>
+        <span class="strip__v" id="todayHours">7:30–13:30 · 16:00–20:00</span>
+      </div>
+      <div class="strip__item">
+        <span class="strip__k">Dónde</span>
+        <span class="strip__v">Latsunbeberri Auzoa 6 · Hernani</span>
+      </div>
+      <div class="strip__item">
+        <span class="strip__k">Estado</span>
+        <span class="strip__v" id="openStatus"><span class="dot"></span> Comprobando…</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SOBRE NOSOTROS ================= -->
+  <section class="section" id="sobre">
+    <div class="container about">
+      <div class="about__media reveal">
+        <div class="about__photo about__photo--1"></div>
+        <div class="about__photo about__photo--2"></div>
+      </div>
+      <div class="about__text reveal">
+        <p class="eyebrow"><span class="star">✳</span> Nuestra historia</p>
+        <h2>Un rincón nuevo en Latsunbeberri</h2>
+        <p>
+          Eli kafea abrió sus puertas en Hernani con una idea sencilla:
+          traer al barrio un <strong>producto de calidad</strong> que no encuentras en cualquier sitio,
+          y servirlo con el trato cercano de siempre.
+        </p>
+        <p>
+          Detrás de la barra está <strong>Encarni</strong>, que recibe a cada cliente como en casa.
+          Aquí el café se cuida, la repostería se hace a mano y las restricciones
+          alimentarias se tienen en cuenta. Desayunar bien nunca fue tan fácil.
+        </p>
+        <ul class="ticks">
+          <li>Repostería artesana hecha cada día</li>
+          <li>Brunch y tostadas de fin de semana</li>
+          <li>Opciones para restricciones alimentarias</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ESPECIALIDADES ================= -->
+  <section class="section section--tint" id="especialidades">
+    <div class="container">
+      <div class="section__head reveal">
+        <p class="eyebrow"><span class="star">✳</span> Lo que nos hace especiales</p>
+        <h2>Hecho con mimo, servido con cariño</h2>
+      </div>
+
+      <div class="cards">
+        <article class="card reveal">
+          <div class="card__num">01</div>
+          <h3>Red Velvet</h3>
+          <p>Nuestra estrella. Esponjosa, con su frosting justo. La razón por la que muchos vuelven.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card__num">02</div>
+          <h3>Café bien hecho</h3>
+          <p>Del café solo al cortado, cuidamos cada taza para que se note desde el primer sorbo.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card__num">03</div>
+          <h3>Brunch &amp; tostadas</h3>
+          <p>Tostadas clásicas entre semana y un brunch especial los fines de semana.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card__num">04</div>
+          <h3>Para todos</h3>
+          <p>Tenemos en cuenta las restricciones alimentarias para que nadie se quede sin su capricho.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CARTA ================= -->
+  <section class="section" id="carta">
+    <div class="container">
+      <div class="section__head reveal">
+        <p class="eyebrow"><span class="star">✳</span> Nuestra carta</p>
+        <h2>Bebidas &amp; Brunch</h2>
+      </div>
+
+      <div class="carta">
+
+        <!-- BEBIDAS -->
+        <div class="carta__group reveal">
+          <h3 class="carta__title">Bebidas <span class="star star--sup">✳</span></h3>
+
+          <h4 class="carta__sub">Bebidas calientes</h4>
+          <ul class="menu__list">
+            <li><span>Café solo</span><span class="dots"></span><span class="price">1,70 €</span></li>
+            <li><span>Cortado</span><span class="dots"></span><span class="price">1,80 €</span></li>
+            <li><span>Café con leche</span><span class="dots"></span><span class="price">2 €</span></li>
+            <li><span>Cola Cao</span><span class="dots"></span><span class="price">2 €</span></li>
+            <li><span>Infusión</span><span class="dots"></span><span class="price">2 €</span></li>
+          </ul>
+
+          <h4 class="carta__sub">Bebidas frías</h4>
+          <ul class="menu__list">
+            <li><span>Agua</span><span class="dots"></span><span class="price">1,50 €</span></li>
+            <li><span>Agua con gas</span><span class="dots"></span><span class="price">2,25 €</span></li>
+            <li><span>Zumo natural de naranja</span><span class="dots"></span><span class="price">3,50 €</span></li>
+            <li><span>Zumo (piña o melocotón)</span><span class="dots"></span><span class="price">2,50 €</span></li>
+            <li><span>Coca-Cola</span><span class="dots"></span><span class="price">2,80 €</span></li>
+            <li><span>Kas</span><span class="dots"></span><span class="price">2,80 €</span></li>
+            <li><span>Nestea</span><span class="dots"></span><span class="price">3 €</span></li>
+            <li><span>Mosto grande</span><span class="dots"></span><span class="price">2,40 €</span></li>
+            <li><span>Mosto txiki</span><span class="dots"></span><span class="price">1,20 €</span></li>
+            <li><span>Bitter Kas</span><span class="dots"></span><span class="price">2,80 €</span></li>
+          </ul>
+        </div>
+
+        <!-- BRUNCH -->
+        <div class="carta__group reveal">
+          <h3 class="carta__title">Brunch <span class="star star--sup">✳</span></h3>
+
+          <h4 class="carta__sub">Tostadas clásicas</h4>
+          <ul class="menu__list">
+            <li><span>Mantequilla y mermelada o suave crema de queso</span><span class="dots"></span><span class="price">4,50 €</span></li>
+            <li><span>AOVE con tomate natural, acompañada de jamón o huevo</span><span class="dots"></span><span class="price">6,80 €</span></li>
+            <li><span>Jamón, tomate y aguacate</span><span class="dots"></span><span class="price">7,50 €</span></li>
+            <li><span>Tomate, aguacate y huevo poché</span><span class="dots"></span><span class="price">6,50 €</span></li>
+            <li><span>Crema de queso o aguacate y salmón</span><span class="dots"></span><span class="price">6,50 €</span></li>
+            <li><span>Hummus con tomate seco, rúcula fresca y lascas de parmesano</span><span class="dots"></span><span class="price">6,90 €</span></li>
+          </ul>
+
+          <h4 class="carta__sub">Tostadas fin de semana <span class="stars stars--sm">★★</span></h4>
+          <ul class="menu__list">
+            <li><span>Brioche con Nutella, plátano y avellana</span><span class="dots"></span><span class="price">6 €</span></li>
+            <li><span>Tomate cherry confitado, queso feta y vinagre balsámico de Módena</span><span class="dots"></span><span class="price">6,50 €</span></li>
+            <li><span>Pesto, burrata, mortadela y rúcula</span><span class="dots"></span><span class="price">7,50 €</span></li>
+          </ul>
+
+          <p class="carta__note">
+            *Pan a elegir: de molde con semillas (o blanco), de payés, de maíz, brioche o de bola.
+            Ingrediente extra: suplemento de 0,50 €.
+          </p>
+        </div>
+      </div>
+
+      <div class="carta__foot reveal">
+        <span>Latsunbeberri Auzoa 6 · Hernani</span>
+        <span>@elikafea</span>
+      </div>
+      <p class="section__note reveal">Repostería artesana disponible en vitrina — pregunta por la selección del día, incluida nuestra famosa Red Velvet.</p>
+    </div>
+  </section>
+
+  <!-- ================= GALERÍA ================= -->
+  <section class="section section--tint" id="galeria">
+    <div class="container">
+      <div class="section__head reveal">
+        <p class="eyebrow"><span class="star">✳</span> Galería</p>
+        <h2>Date una vuelta por Eli kafea</h2>
+        <p class="section__note">Imágenes de muestra · aquí irán las fotos reales del local y los productos.</p>
+      </div>
+
+      <div class="gallery">
+        <div class="gallery__item gallery__item--tall g1" role="img" aria-label="Café recién hecho"></div>
+        <div class="gallery__item g2" role="img" aria-label="Repostería artesana"></div>
+        <div class="gallery__item g3" role="img" aria-label="Interior del local"></div>
+        <div class="gallery__item gallery__item--wide g4" role="img" aria-label="Tostadas de brunch"></div>
+        <div class="gallery__item g5" role="img" aria-label="Red Velvet"></div>
+      </div>
+
+      <div class="galeria__cta reveal">
+        <a href="https://www.instagram.com/elikafea/" target="_blank" rel="noopener" class="btn btn--ghost">
+          Ver más en Instagram @elikafea
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= OPINIONES ================= -->
+  <section class="section" id="opiniones">
+    <div class="container">
+      <div class="section__head reveal">
+        <p class="eyebrow"><span class="star">✳</span> Lo que dicen de nosotros</p>
+        <h2>5,0 ★ en Google</h2>
+      </div>
+
+      <div class="reviews">
+        <figure class="review reveal">
+          <div class="stars">★★★★★</div>
+          <blockquote>Muy recomendable, tanto la calidad del producto como la amabilidad del personal. ¡Las tostadas estaban buenísimas!</blockquote>
+          <figcaption>— Ane Esnaola</figcaption>
+        </figure>
+        <figure class="review reveal">
+          <div class="stars">★★★★★</div>
+          <blockquote>El local es muy bonito, la dueña es súper maja y el producto increíble.</blockquote>
+          <figcaption>— Lorena Suárez López</figcaption>
+        </figure>
+        <figure class="review reveal">
+          <div class="stars">★★★★★</div>
+          <blockquote>Restricciones alimentarias: las tienen en cuenta. Un detalle que se agradece muchísimo.</blockquote>
+          <figcaption>— Nerea Goitia</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VISÍTANOS ================= -->
+  <section class="section section--dark" id="visitanos">
+    <div class="container visit">
+      <div class="visit__info reveal">
+        <p class="eyebrow eyebrow--light"><span class="star">✳</span> Visítanos</p>
+        <h2>Te esperamos en Hernani</h2>
+
+        <div class="visit__block">
+          <h4>Dirección</h4>
+          <p>Latsunbeberri Auzoa, 6 (bajo izquierda)<br />20120 Hernani, Gipuzkoa</p>
+        </div>
+
+        <div class="visit__block">
+          <h4>Horario</h4>
+          <table class="hours">
+            <tr><td>Lunes – Viernes</td><td>7:30–13:30 · 16:00–20:00</td></tr>
+            <tr><td>Sábado – Domingo</td><td>7:30–14:00</td></tr>
+          </table>
+        </div>
+
+        <div class="visit__actions">
+          <a href="https://www.google.com/maps/search/?api=1&query=Eli+kafea+Latsunbeberri+Auzoa+6+Hernani" target="_blank" rel="noopener" class="btn btn--primary btn--primary-light">Cómo llegar</a>
+          <a href="https://www.instagram.com/elikafea/" target="_blank" rel="noopener" class="btn btn--ghost btn--ghost-light">Instagram</a>
+        </div>
+      </div>
+
+      <div class="visit__map reveal">
+        <iframe
+          title="Mapa de Eli kafea en Hernani"
+          src="https://www.google.com/maps?q=Latsunbeberri%20Auzoa%206%20Hernani&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div>
+        <a href="#top" class="brand brand--footer">Eli kafea<span class="brand__dot">.</span></a>
+        <p class="footer__tag">Cafetería · brunch · repostería artesana · Hernani</p>
+      </div>
+      <div class="footer__links">
+        <a href="#sobre">Nosotros</a>
+        <a href="#carta">Carta</a>
+        <a href="#galeria">Galería</a>
+        <a href="#visitanos">Cómo llegar</a>
+      </div>
+      <div class="footer__social">
+        <a href="https://www.instagram.com/elikafea/" target="_blank" rel="noopener">Instagram @elikafea</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© <span id="year"></span> Eli kafea · Hernani, Gipuzkoa</p>
+      <p class="footer__demo">Web de demostración — diseñada para Eli kafea</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
