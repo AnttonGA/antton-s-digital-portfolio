@@ -21,6 +21,15 @@ Haz **doble clic en `index.html`** y se abrirá en tu navegador.
   del menú; conviene confirmarlos.
 - 🔧 **De muestra (para cambiar):** las **fotos** (ahora son de banco de imágenes).
 
+## Idiomas (euskera / castellano)
+La web es **bilingüe**. El botón **EU/ES** de la barra superior cambia todo el
+contenido al vuelo (sin recargar) y recuerda la elección.
+
+- Las traducciones al euskera viven en el propio HTML, en el atributo `data-eu`
+  de cada texto. Para retocar una traducción, edita ese atributo.
+- Arranca en **castellano** por defecto. Para que arranque en **euskera**,
+  en `script.js` (al final, en "Arranque") cambia `var saved = "es";` por `"eu";`.
+
 ## Trastear rápido
 
 ### Cambiar textos, precios o platos

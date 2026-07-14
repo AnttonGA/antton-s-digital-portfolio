@@ -23,18 +23,22 @@
     <nav class="nav container">
       <a href="#top" class="brand" aria-label="Eli kafea, inicio">Eli kafea<span class="brand__dot">.</span></a>
 
-      <button class="nav__toggle" aria-label="Abrir menú" aria-expanded="false" id="navToggle">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="nav__right">
+        <ul class="nav__links" id="navLinks">
+          <li><a href="#sobre" data-eu="Guri buruz">Nosotros</a></li>
+          <li><a href="#especialidades" data-eu="Espezialitateak">Especialidades</a></li>
+          <li><a href="#carta" data-eu="Karta">Carta</a></li>
+          <li><a href="#galeria" data-eu="Galeria">Galería</a></li>
+          <li><a href="#opiniones" data-eu="Iritziak">Opiniones</a></li>
+          <li><a href="#visitanos" class="btn btn--sm" data-eu="Bisita gaitzazu">Visítanos</a></li>
+        </ul>
 
-      <ul class="nav__links" id="navLinks">
-        <li><a href="#sobre">Nosotros</a></li>
-        <li><a href="#especialidades">Especialidades</a></li>
-        <li><a href="#carta">Carta</a></li>
-        <li><a href="#galeria">Galería</a></li>
-        <li><a href="#opiniones">Opiniones</a></li>
-        <li><a href="#visitanos" class="btn btn--sm">Visítanos</a></li>
-      </ul>
+        <button class="lang-toggle" id="langToggle" aria-label="Aldatu hizkuntza / Cambiar idioma">EU</button>
+
+        <button class="nav__toggle" aria-label="Abrir menú" aria-expanded="false" id="navToggle">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </nav>
   </header>
 
@@ -42,18 +46,18 @@
   <section class="hero">
     <div class="hero__text">
       <p class="eyebrow reveal"><span class="star">✳</span> Ongi etorri · Hernani</p>
-      <h1 class="hero__title reveal">Café, brunch<br />y repostería<br />con alma.</h1>
-      <p class="hero__lead reveal">
+      <h1 class="hero__title reveal" data-eu="Kafea, brunch-a<br />eta gozogintza<br />gogoz egina.">Café, brunch<br />y repostería<br />con alma.</h1>
+      <p class="hero__lead reveal" data-eu="Encarniren auzoko kafetegia. Gosari goxoak, asteburuko brunch-a, ondo egindako kafea eta artisau-gozogintza. Eta bai… gure <strong>Red Velvet</strong>-a beste mundu batekoa da.">
         La cafetería de barrio de Encarni. Desayunos ricos, brunch de fin de semana,
         café bien hecho y repostería artesana. Y sí… nuestra <strong>Red Velvet</strong> es de otro mundo.
       </p>
       <div class="hero__actions reveal">
-        <a href="#carta" class="btn btn--primary">Ver la carta</a>
-        <a href="#visitanos" class="btn btn--ghost">Cómo llegar</a>
+        <a href="#carta" class="btn btn--primary" data-eu="Ikusi karta">Ver la carta</a>
+        <a href="#visitanos" class="btn btn--ghost" data-eu="Nola iritsi">Cómo llegar</a>
       </div>
       <div class="hero__badge reveal">
         <span class="stars">★★★★★</span>
-        <span>5,0 · 11 opiniones en Google</span>
+        <span data-eu="5,0 · 11 iritzi Google-n">5,0 · 11 opiniones en Google</span>
       </div>
     </div>
     <div class="hero__media reveal" role="img" aria-label="Brunch y café en Eli kafea"></div>
@@ -63,15 +67,15 @@
   <section class="strip">
     <div class="container strip__grid">
       <div class="strip__item">
-        <span class="strip__k">Horario hoy</span>
+        <span class="strip__k" data-eu="Gaurko ordutegia">Horario hoy</span>
         <span class="strip__v" id="todayHours">7:30–13:30 · 16:00–20:00</span>
       </div>
       <div class="strip__item">
-        <span class="strip__k">Dónde</span>
+        <span class="strip__k" data-eu="Non">Dónde</span>
         <span class="strip__v">Latsunbeberri Auzoa 6 · Hernani</span>
       </div>
       <div class="strip__item">
-        <span class="strip__k">Estado</span>
+        <span class="strip__k" data-eu="Egoera">Estado</span>
         <span class="strip__v" id="openStatus"><span class="dot"></span> Comprobando…</span>
       </div>
     </div>
@@ -85,22 +89,22 @@
         <div class="about__photo about__photo--2"></div>
       </div>
       <div class="about__text reveal">
-        <p class="eyebrow"><span class="star">✳</span> Nuestra historia</p>
-        <h2>Un rincón nuevo en Latsunbeberri</h2>
-        <p>
+        <p class="eyebrow"><span class="star">✳</span> <span data-eu="Gure istorioa">Nuestra historia</span></p>
+        <h2 data-eu="Txoko berri bat Latsunbeberrin">Un rincón nuevo en Latsunbeberri</h2>
+        <p data-eu="Eli kafea-k Hernanin ireki zituen ateak ideia sinple batekin: auzora nonahi aurkitzen ez den <strong>kalitatezko produktua</strong> ekartzea, eta betiko hurbiltasunez zerbitzatzea.">
           Eli kafea abrió sus puertas en Hernani con una idea sencilla:
           traer al barrio un <strong>producto de calidad</strong> que no encuentras en cualquier sitio,
           y servirlo con el trato cercano de siempre.
         </p>
-        <p>
+        <p data-eu="Barraren atzean <strong>Encarni</strong> dago, bezero bakoitza etxean bezala hartzen duena. Hemen kafea zaintzen da, gozogintza eskuz egiten da eta elikadura-murrizketak kontuan hartzen dira. Ondo gosaltzea ez da inoiz hain erraza izan.">
           Detrás de la barra está <strong>Encarni</strong>, que recibe a cada cliente como en casa.
           Aquí el café se cuida, la repostería se hace a mano y las restricciones
           alimentarias se tienen en cuenta. Desayunar bien nunca fue tan fácil.
         </p>
         <ul class="ticks">
-          <li>Repostería artesana hecha cada día</li>
-          <li>Brunch y tostadas de fin de semana</li>
-          <li>Opciones para restricciones alimentarias</li>
+          <li data-eu="Egunero egindako artisau-gozogintza">Repostería artesana hecha cada día</li>
+          <li data-eu="Asteburuko brunch-a eta tostadak">Brunch y tostadas de fin de semana</li>
+          <li data-eu="Aukerak elikadura-murrizketentzat">Opciones para restricciones alimentarias</li>
         </ul>
       </div>
     </div>
@@ -110,30 +114,30 @@
   <section class="section section--tint" id="especialidades">
     <div class="container">
       <div class="section__head reveal">
-        <p class="eyebrow"><span class="star">✳</span> Lo que nos hace especiales</p>
-        <h2>Hecho con mimo, servido con cariño</h2>
+        <p class="eyebrow"><span class="star">✳</span> <span data-eu="Bereziak egiten gaituena">Lo que nos hace especiales</span></p>
+        <h2 data-eu="Arretaz egina, maitasunez zerbitzatua">Hecho con mimo, servido con cariño</h2>
       </div>
 
       <div class="cards">
         <article class="card reveal">
           <div class="card__num">01</div>
           <h3>Red Velvet</h3>
-          <p>Nuestra estrella. Esponjosa, con su frosting justo. La razón por la que muchos vuelven.</p>
+          <p data-eu="Gure izarra. Bigun-biguna, bere frosting-a neurrian. Askok itzultzeko arrazoia.">Nuestra estrella. Esponjosa, con su frosting justo. La razón por la que muchos vuelven.</p>
         </article>
         <article class="card reveal">
           <div class="card__num">02</div>
-          <h3>Café bien hecho</h3>
-          <p>Del café solo al cortado, cuidamos cada taza para que se note desde el primer sorbo.</p>
+          <h3 data-eu="Ondo egindako kafea">Café bien hecho</h3>
+          <p data-eu="Kafe hutsetik ebakiraino, katilu bakoitza zaintzen dugu lehen zurrutadatik nabaritu dadin.">Del café solo al cortado, cuidamos cada taza para que se note desde el primer sorbo.</p>
         </article>
         <article class="card reveal">
           <div class="card__num">03</div>
-          <h3>Brunch &amp; tostadas</h3>
-          <p>Tostadas clásicas entre semana y un brunch especial los fines de semana.</p>
+          <h3 data-eu="Brunch-a eta tostadak">Brunch &amp; tostadas</h3>
+          <p data-eu="Astean zehar tostada klasikoak eta asteburuetan brunch berezia.">Tostadas clásicas entre semana y un brunch especial los fines de semana.</p>
         </article>
         <article class="card reveal">
           <div class="card__num">04</div>
-          <h3>Para todos</h3>
-          <p>Tenemos en cuenta las restricciones alimentarias para que nadie se quede sin su capricho.</p>
+          <h3 data-eu="Guztientzat">Para todos</h3>
+          <p data-eu="Elikadura-murrizketak kontuan hartzen ditugu inor bere kapritxorik gabe gera ez dadin.">Tenemos en cuenta las restricciones alimentarias para que nadie se quede sin su capricho.</p>
         </article>
       </div>
     </div>
@@ -143,62 +147,62 @@
   <section class="section" id="carta">
     <div class="container">
       <div class="section__head reveal">
-        <p class="eyebrow"><span class="star">✳</span> Nuestra carta</p>
-        <h2>Bebidas &amp; Brunch</h2>
+        <p class="eyebrow"><span class="star">✳</span> <span data-eu="Gure karta">Nuestra carta</span></p>
+        <h2 data-eu="Edariak eta Brunch-a">Bebidas &amp; Brunch</h2>
       </div>
 
       <div class="carta">
 
         <!-- BEBIDAS -->
         <div class="carta__group reveal">
-          <h3 class="carta__title">Bebidas <span class="star star--sup">✳</span></h3>
+          <h3 class="carta__title"><span data-eu="Edariak">Bebidas</span> <span class="star star--sup">✳</span></h3>
 
-          <h4 class="carta__sub">Bebidas calientes</h4>
+          <h4 class="carta__sub" data-eu="Edari beroak">Bebidas calientes</h4>
           <ul class="menu__list">
-            <li><span>Café solo</span><span class="dots"></span><span class="price">1,70 €</span></li>
-            <li><span>Cortado</span><span class="dots"></span><span class="price">1,80 €</span></li>
-            <li><span>Café con leche</span><span class="dots"></span><span class="price">2 €</span></li>
-            <li><span>Cola Cao</span><span class="dots"></span><span class="price">2 €</span></li>
-            <li><span>Infusión</span><span class="dots"></span><span class="price">2 €</span></li>
+            <li><span data-eu="Kafe hutsa">Café solo</span><span class="dots"></span><span class="price">1,70 €</span></li>
+            <li><span data-eu="Ebakia">Cortado</span><span class="dots"></span><span class="price">1,80 €</span></li>
+            <li><span data-eu="Kafesnea">Café con leche</span><span class="dots"></span><span class="price">2 €</span></li>
+            <li><span data-eu="Cola Cao">Cola Cao</span><span class="dots"></span><span class="price">2 €</span></li>
+            <li><span data-eu="Infusioa">Infusión</span><span class="dots"></span><span class="price">2 €</span></li>
           </ul>
 
-          <h4 class="carta__sub">Bebidas frías</h4>
+          <h4 class="carta__sub" data-eu="Edari hotzak">Bebidas frías</h4>
           <ul class="menu__list">
-            <li><span>Agua</span><span class="dots"></span><span class="price">1,50 €</span></li>
-            <li><span>Agua con gas</span><span class="dots"></span><span class="price">2,25 €</span></li>
-            <li><span>Zumo natural de naranja</span><span class="dots"></span><span class="price">3,50 €</span></li>
-            <li><span>Zumo (piña o melocotón)</span><span class="dots"></span><span class="price">2,50 €</span></li>
-            <li><span>Coca-Cola</span><span class="dots"></span><span class="price">2,80 €</span></li>
-            <li><span>Kas</span><span class="dots"></span><span class="price">2,80 €</span></li>
-            <li><span>Nestea</span><span class="dots"></span><span class="price">3 €</span></li>
-            <li><span>Mosto grande</span><span class="dots"></span><span class="price">2,40 €</span></li>
-            <li><span>Mosto txiki</span><span class="dots"></span><span class="price">1,20 €</span></li>
-            <li><span>Bitter Kas</span><span class="dots"></span><span class="price">2,80 €</span></li>
+            <li><span data-eu="Ura">Agua</span><span class="dots"></span><span class="price">1,50 €</span></li>
+            <li><span data-eu="Ur gasduna">Agua con gas</span><span class="dots"></span><span class="price">2,25 €</span></li>
+            <li><span data-eu="Laranja-zuku naturala">Zumo natural de naranja</span><span class="dots"></span><span class="price">3,50 €</span></li>
+            <li><span data-eu="Zukua (anana edo mertxika)">Zumo (piña o melocotón)</span><span class="dots"></span><span class="price">2,50 €</span></li>
+            <li><span data-eu="Coca-Cola">Coca-Cola</span><span class="dots"></span><span class="price">2,80 €</span></li>
+            <li><span data-eu="Kas">Kas</span><span class="dots"></span><span class="price">2,80 €</span></li>
+            <li><span data-eu="Nestea">Nestea</span><span class="dots"></span><span class="price">3 €</span></li>
+            <li><span data-eu="Mosto handia">Mosto grande</span><span class="dots"></span><span class="price">2,40 €</span></li>
+            <li><span data-eu="Mosto txikia">Mosto txiki</span><span class="dots"></span><span class="price">1,20 €</span></li>
+            <li><span data-eu="Bitter Kas">Bitter Kas</span><span class="dots"></span><span class="price">2,80 €</span></li>
           </ul>
         </div>
 
         <!-- BRUNCH -->
         <div class="carta__group reveal">
-          <h3 class="carta__title">Brunch <span class="star star--sup">✳</span></h3>
+          <h3 class="carta__title"><span data-eu="Brunch-a">Brunch</span> <span class="star star--sup">✳</span></h3>
 
-          <h4 class="carta__sub">Tostadas clásicas</h4>
+          <h4 class="carta__sub" data-eu="Tostada klasikoak">Tostadas clásicas</h4>
           <ul class="menu__list">
-            <li><span>Mantequilla y mermelada o suave crema de queso</span><span class="dots"></span><span class="price">4,50 €</span></li>
-            <li><span>AOVE con tomate natural, acompañada de jamón o huevo</span><span class="dots"></span><span class="price">6,80 €</span></li>
-            <li><span>Jamón, tomate y aguacate</span><span class="dots"></span><span class="price">7,50 €</span></li>
-            <li><span>Tomate, aguacate y huevo poché</span><span class="dots"></span><span class="price">6,50 €</span></li>
-            <li><span>Crema de queso o aguacate y salmón</span><span class="dots"></span><span class="price">6,50 €</span></li>
-            <li><span>Hummus con tomate seco, rúcula fresca y lascas de parmesano</span><span class="dots"></span><span class="price">6,90 €</span></li>
+            <li><span data-eu="Gurina eta marmelada edo gazta-krema leuna">Mantequilla y mermelada o suave crema de queso</span><span class="dots"></span><span class="price">4,50 €</span></li>
+            <li><span data-eu="Oliba-olio birjina estra tomate naturalarekin, urdaiazpiko edo arrautzarekin">AOVE con tomate natural, acompañada de jamón o huevo</span><span class="dots"></span><span class="price">6,80 €</span></li>
+            <li><span data-eu="Urdaiazpikoa, tomatea eta ahuakatea">Jamón, tomate y aguacate</span><span class="dots"></span><span class="price">7,50 €</span></li>
+            <li><span data-eu="Tomatea, ahuakatea eta arrautza poché">Tomate, aguacate y huevo poché</span><span class="dots"></span><span class="price">6,50 €</span></li>
+            <li><span data-eu="Gazta-krema edo ahuakatea eta izokina">Crema de queso o aguacate y salmón</span><span class="dots"></span><span class="price">6,50 €</span></li>
+            <li><span data-eu="Hummusa tomate lehorrarekin, errukula freskoarekin eta parmesano-xafletxoekin">Hummus con tomate seco, rúcula fresca y lascas de parmesano</span><span class="dots"></span><span class="price">6,90 €</span></li>
           </ul>
 
-          <h4 class="carta__sub">Tostadas fin de semana <span class="stars stars--sm">★★</span></h4>
+          <h4 class="carta__sub"><span data-eu="Asteburuko tostadak">Tostadas fin de semana</span> <span class="stars stars--sm">★★</span></h4>
           <ul class="menu__list">
-            <li><span>Brioche con Nutella, plátano y avellana</span><span class="dots"></span><span class="price">6 €</span></li>
-            <li><span>Tomate cherry confitado, queso feta y vinagre balsámico de Módena</span><span class="dots"></span><span class="price">6,50 €</span></li>
-            <li><span>Pesto, burrata, mortadela y rúcula</span><span class="dots"></span><span class="price">7,50 €</span></li>
+            <li><span data-eu="Brioxa Nutellarekin, bananarekin eta hurrarekin">Brioche con Nutella, plátano y avellana</span><span class="dots"></span><span class="price">6 €</span></li>
+            <li><span data-eu="Tomate cherry konfitatua, feta gazta eta Modenako ozpin baltsamikoa">Tomate cherry confitado, queso feta y vinagre balsámico de Módena</span><span class="dots"></span><span class="price">6,50 €</span></li>
+            <li><span data-eu="Pestoa, burrata, mortadela eta errukula">Pesto, burrata, mortadela y rúcula</span><span class="dots"></span><span class="price">7,50 €</span></li>
           </ul>
 
-          <p class="carta__note">
+          <p class="carta__note" data-eu="*Ogia aukeran: haziduna (edo zuria), baserrikoa, artozkoa, brioxa edo bola. Osagai gehigarria: 0,50 €-ko gehigarria.">
             *Pan a elegir: de molde con semillas (o blanco), de payés, de maíz, brioche o de bola.
             Ingrediente extra: suplemento de 0,50 €.
           </p>
@@ -209,7 +213,7 @@
         <span>Latsunbeberri Auzoa 6 · Hernani</span>
         <span>@elikafea</span>
       </div>
-      <p class="section__note reveal">Repostería artesana disponible en vitrina — pregunta por la selección del día, incluida nuestra famosa Red Velvet.</p>
+      <p class="section__note reveal" data-eu="Artisau-gozogintza erakusleihoan — galdetu eguneko aukeraz, gure Red Velvet ospetsua barne.">Repostería artesana disponible en vitrina — pregunta por la selección del día, incluida nuestra famosa Red Velvet.</p>
     </div>
   </section>
 
@@ -217,9 +221,9 @@
   <section class="section section--tint" id="galeria">
     <div class="container">
       <div class="section__head reveal">
-        <p class="eyebrow"><span class="star">✳</span> Galería</p>
-        <h2>Date una vuelta por Eli kafea</h2>
-        <p class="section__note">Imágenes de muestra · aquí irán las fotos reales del local y los productos.</p>
+        <p class="eyebrow"><span class="star">✳</span> <span data-eu="Galeria">Galería</span></p>
+        <h2 data-eu="Egin buelta bat Eli kafea-n">Date una vuelta por Eli kafea</h2>
+        <p class="section__note" data-eu="Adibidezko irudiak · hemen lokalaren eta produktuen benetako argazkiak jarriko dira.">Imágenes de muestra · aquí irán las fotos reales del local y los productos.</p>
       </div>
 
       <div class="gallery">
@@ -231,7 +235,7 @@
       </div>
 
       <div class="galeria__cta reveal">
-        <a href="https://www.instagram.com/elikafea/" target="_blank" rel="noopener" class="btn btn--ghost">
+        <a href="https://www.instagram.com/elikafea/" target="_blank" rel="noopener" class="btn btn--ghost" data-eu="Ikusi gehiago Instagram-en @elikafea">
           Ver más en Instagram @elikafea
         </a>
       </div>
@@ -242,24 +246,24 @@
   <section class="section" id="opiniones">
     <div class="container">
       <div class="section__head reveal">
-        <p class="eyebrow"><span class="star">✳</span> Lo que dicen de nosotros</p>
-        <h2>5,0 ★ en Google</h2>
+        <p class="eyebrow"><span class="star">✳</span> <span data-eu="Zer dioten guri buruz">Lo que dicen de nosotros</span></p>
+        <h2 data-eu="5,0 ★ Google-n">5,0 ★ en Google</h2>
       </div>
 
       <div class="reviews">
         <figure class="review reveal">
           <div class="stars">★★★★★</div>
-          <blockquote>Muy recomendable, tanto la calidad del producto como la amabilidad del personal. ¡Las tostadas estaban buenísimas!</blockquote>
+          <blockquote data-eu="Oso gomendagarria, bai produktuaren kalitatea bai langileen adeitasuna. Tostadak izugarri goxoak zeuden!">Muy recomendable, tanto la calidad del producto como la amabilidad del personal. ¡Las tostadas estaban buenísimas!</blockquote>
           <figcaption>— Ane Esnaola</figcaption>
         </figure>
         <figure class="review reveal">
           <div class="stars">★★★★★</div>
-          <blockquote>El local es muy bonito, la dueña es súper maja y el producto increíble.</blockquote>
+          <blockquote data-eu="Lokala oso polita da, jabea oso jatorra eta produktua izugarria.">El local es muy bonito, la dueña es súper maja y el producto increíble.</blockquote>
           <figcaption>— Lorena Suárez López</figcaption>
         </figure>
         <figure class="review reveal">
           <div class="stars">★★★★★</div>
-          <blockquote>Restricciones alimentarias: las tienen en cuenta. Un detalle que se agradece muchísimo.</blockquote>
+          <blockquote data-eu="Elikadura-murrizketak: kontuan hartzen dituzte. Asko eskertzen den xehetasuna.">Restricciones alimentarias: las tienen en cuenta. Un detalle que se agradece muchísimo.</blockquote>
           <figcaption>— Nerea Goitia</figcaption>
         </figure>
       </div>
@@ -270,24 +274,24 @@
   <section class="section section--dark" id="visitanos">
     <div class="container visit">
       <div class="visit__info reveal">
-        <p class="eyebrow eyebrow--light"><span class="star">✳</span> Visítanos</p>
-        <h2>Te esperamos en Hernani</h2>
+        <p class="eyebrow eyebrow--light"><span class="star">✳</span> <span data-eu="Bisita gaitzazu">Visítanos</span></p>
+        <h2 data-eu="Hernanin zain zaitugu">Te esperamos en Hernani</h2>
 
         <div class="visit__block">
-          <h4>Dirección</h4>
-          <p>Latsunbeberri Auzoa, 6 (bajo izquierda)<br />20120 Hernani, Gipuzkoa</p>
+          <h4 data-eu="Helbidea">Dirección</h4>
+          <p data-eu="Latsunbeberri Auzoa, 6 (beheko ezkerra)<br />20120 Hernani, Gipuzkoa">Latsunbeberri Auzoa, 6 (bajo izquierda)<br />20120 Hernani, Gipuzkoa</p>
         </div>
 
         <div class="visit__block">
-          <h4>Horario</h4>
+          <h4 data-eu="Ordutegia">Horario</h4>
           <table class="hours">
-            <tr><td>Lunes – Viernes</td><td>7:30–13:30 · 16:00–20:00</td></tr>
-            <tr><td>Sábado – Domingo</td><td>7:30–14:00</td></tr>
+            <tr><td data-eu="Astelehena – Ostirala">Lunes – Viernes</td><td>7:30–13:30 · 16:00–20:00</td></tr>
+            <tr><td data-eu="Larunbata – Igandea">Sábado – Domingo</td><td>7:30–14:00</td></tr>
           </table>
         </div>
 
         <div class="visit__actions">
-          <a href="https://www.google.com/maps/search/?api=1&query=Eli+kafea+Latsunbeberri+Auzoa+6+Hernani" target="_blank" rel="noopener" class="btn btn--primary btn--primary-light">Cómo llegar</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Eli+kafea+Latsunbeberri+Auzoa+6+Hernani" target="_blank" rel="noopener" class="btn btn--primary btn--primary-light" data-eu="Nola iritsi">Cómo llegar</a>
           <a href="https://www.instagram.com/elikafea/" target="_blank" rel="noopener" class="btn btn--ghost btn--ghost-light">Instagram</a>
         </div>
       </div>
@@ -307,13 +311,13 @@
     <div class="container footer__grid">
       <div>
         <a href="#top" class="brand brand--footer">Eli kafea<span class="brand__dot">.</span></a>
-        <p class="footer__tag">Cafetería · brunch · repostería artesana · Hernani</p>
+        <p class="footer__tag" data-eu="Kafetegia · brunch-a · artisau-gozogintza · Hernani">Cafetería · brunch · repostería artesana · Hernani</p>
       </div>
       <div class="footer__links">
-        <a href="#sobre">Nosotros</a>
-        <a href="#carta">Carta</a>
-        <a href="#galeria">Galería</a>
-        <a href="#visitanos">Cómo llegar</a>
+        <a href="#sobre" data-eu="Guri buruz">Nosotros</a>
+        <a href="#carta" data-eu="Karta">Carta</a>
+        <a href="#galeria" data-eu="Galeria">Galería</a>
+        <a href="#visitanos" data-eu="Nola iritsi">Cómo llegar</a>
       </div>
       <div class="footer__social">
         <a href="https://www.instagram.com/elikafea/" target="_blank" rel="noopener">Instagram @elikafea</a>
@@ -321,7 +325,7 @@
     </div>
     <div class="footer__bottom">
       <p>© <span id="year"></span> Eli kafea · Hernani, Gipuzkoa</p>
-      <p class="footer__demo">Web de demostración — diseñada para Eli kafea</p>
+      <p class="footer__demo" data-eu="Erakustaldi-weba — Eli kafea-rentzat diseinatua">Web de demostración — diseñada para Eli kafea</p>
     </div>
   </footer>
 

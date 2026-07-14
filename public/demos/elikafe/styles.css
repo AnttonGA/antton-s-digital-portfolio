@@ -99,7 +99,18 @@ h3 { font-size: 1.35rem; }
   border-bottom: 1px solid var(--line);
 }
 .nav { display: flex; align-items: center; justify-content: space-between; height: 74px; }
+.nav__right { display: flex; align-items: center; gap: 1.4rem; }
 .brand { font-family: var(--font-display); font-size: 1.5rem; color: var(--ink); letter-spacing: -.03em; }
+
+.lang-toggle {
+  font-family: var(--font-body); font-weight: 700; font-size: .76rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  border: 2px solid var(--ink); background: transparent; color: var(--ink);
+  border-radius: var(--radius); padding: .38rem .66rem; cursor: pointer;
+  transition: background .2s, color .2s, transform .15s;
+  min-width: 44px; text-align: center;
+}
+.lang-toggle:hover { background: var(--ink); color: var(--paper); transform: translateY(-1px); }
 .brand__dot { color: var(--ink); }
 .brand--footer { color: var(--paper); }
 .brand--footer .brand__dot { color: var(--paper); }
