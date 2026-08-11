@@ -5,108 +5,131 @@ import AboutTab from "./AboutTab";
 
 const projects: ProjectData[] = [
   {
+    id: "mekoa",
+    title: "MEKOA",
+    year: "2025 – Actualidad",
+    type: "SaaS · Telemedicina veterinaria con IA",
+    description:
+      "Plataforma de telemedicina veterinaria de extremo a extremo, construida en un equipo de dos como desarrollador full-stack. El flujo va del chat de triaje con IA a la reserva de cita, la videoconsulta con transcripción en vivo y un informe clínico generado automáticamente.",
+    features: [
+      {
+        title: "IA en un flujo clínico real",
+        description:
+          "8 roles de modelo configurables, verificador de segunda pasada para reducir alucinaciones y RAG sobre una base de conocimiento etológico y vademécum.",
+      },
+      {
+        title: "Multi-tenant seguro",
+        description:
+          "PostgreSQL con Row-Level Security y defensa en profundidad mediante triggers, con una suite de tests de RLS versionada.",
+      },
+      {
+        title: "Escala de producto",
+        description:
+          "117 endpoints de API y unas 62 pantallas para cuatro roles de usuario distintos.",
+      },
+    ],
+    stack: [
+      "React",
+      "TypeScript",
+      "TailwindCSS",
+      "Hono",
+      "Supabase / PostgreSQL",
+      "Vercel AI SDK",
+      "LiveKit",
+      "Deepgram",
+      "Stripe",
+      "Vitest",
+    ],
+    // TODO: confirmar URL pública (¿mekoavet.com?) antes de enlazar
+    link: null,
+  },
+  {
+    id: "canexion",
+    title: "CRM de fidelización — Canexion",
+    year: "2026",
+    type: "CRM a medida · En producción",
+    description:
+      "CRM a medida construido desde cero para gestionar el programa de fidelización de una tienda con venta física y online. En uso diario en producción.",
+    features: [
+      {
+        title: "Hecho a medida",
+        description:
+          "Construido desde cero para el programa de fidelización, sin plantillas de por medio.",
+      },
+      {
+        title: "Física y online",
+        description:
+          "Unifica la gestión de clientes de la tienda física y del canal online.",
+      },
+      {
+        title: "En producción",
+        description:
+          "En uso diario por el equipo para operar el día a día del negocio.",
+      },
+    ],
+    link: null,
+  },
+  {
+    id: "akademia-ene",
+    title: "Plataforma de cursos — Akademia eñe Online",
+    year: "2026",
+    type: "Plataforma LMS",
+    description:
+      "Desarrollo de la web que aloja los cursos online de la escuela, con una arquitectura LMS sobre WooCommerce. Proyecto realizado dentro del programa Erasmus para Jóvenes Emprendedores, entregado en remoto entre Bratislava y Donostia.",
+    features: [
+      {
+        title: "LMS sobre WooCommerce",
+        description: "Arquitectura de cursos online montada sobre WooCommerce.",
+      },
+      {
+        title: "Erasmus para Jóvenes Emprendedores",
+        description:
+          "Desarrollado dentro del programa de la UE para nuevos emprendedores.",
+      },
+      {
+        title: "Entrega en remoto",
+        description: "Colaboración a distancia entre Bratislava y Donostia.",
+      },
+    ],
+    stack: ["WordPress", "WooCommerce"],
+    link: null,
+  },
+  {
     id: "kahir",
     title: "Kahir",
-    year: "2024",
-    type: "Proyecto personal",
+    year: "2024 – 2025",
+    type: "Plataforma web + IA conversacional",
     description:
-      "Plataforma de compartición de rutas outdoor al estilo Wikiloc, con funciones sociales completas: perfiles de usuario, registro de actividad e interacción comunitaria. Incluye una capa de IA conversacional con gestión de contexto multi-turno que ofrece recomendaciones personalizadas de rutas según los hábitos deportivos del usuario y previsiones meteorológicas en tiempo real.",
+      "Plataforma de rutas de montaña estilo Wikiloc, con perfiles, registro de actividad y funciones de comunidad. Incluye una capa de IA conversacional con gestión de contexto multi-turno que ofrece recomendaciones personalizadas a partir del historial, los hábitos deportivos y la previsión meteorológica.",
     features: [
       {
         title: "Plataforma de rutas",
         description:
-          "Red social para compartir rutas outdoor con perfiles de usuario, registro de actividad e interacción comunitaria.",
+          "Estilo Wikiloc: perfiles de usuario, registro de actividad y funciones de comunidad.",
       },
       {
-        title: "IA Conversacional",
+        title: "IA conversacional",
         description:
-          "Chatbot con contexto multi-turno que adapta las recomendaciones de rutas al perfil, nivel y preferencias del usuario.",
+          "Contexto multi-turno con recomendaciones adaptadas al perfil y los hábitos del usuario.",
       },
       {
         title: "Datos en tiempo real",
-        description:
-          "Integración con APIs de meteorología y rutas para ofrecer información actualizada en cada recomendación.",
+        description: "Las recomendaciones integran la previsión meteorológica.",
       },
     ],
+    stack: ["PHP", "JavaScript", "HTML / CSS"],
+    // TODO: confirmar que Kahir.eus sigue siendo la URL correcta
     link: "Kahir.eus",
   },
   {
     id: "birakari",
     title: "Birakari",
     year: "2025",
-    type: "Proyecto personal",
+    type: "Proyecto propio · En pausa",
     description:
-      "La web de Birakari es un marketplace multivendedor donde los usuarios pueden publicar, buscar y filtrar anuncios de venta, alquiler o trueque de material outdoor. Incluye mensajería interna y gestión autónoma de anuncios. Se está trabajando en incluir una pasarela de pago segura. Además, ofrece servicios premium como verificación de productos, intermediación logística y perfiles destacados.",
-    features: [
-      {
-        title: "Ecommerce multivendedor",
-        description:
-          "Permite compra, alquiler y trueque de material deportivo outdoor, con publicación gratuita de anuncios.",
-      },
-      {
-        title: "Búsqueda avanzada",
-        description:
-          "Búsqueda avanzada utilizando buscador y filtros por tipo de material, precio, ubicación, etc. Para una búsqueda óptima.",
-      },
-      {
-        title: "Mensajería interna",
-        description:
-          "Permite intercambiar mensajes entre cuentas registradas para llevar a cabo la transacción.",
-      },
-    ],
-    link: "Birakari.com",
-  },
-  {
-    id: "teklatam",
-    title: "Teklatam",
-    year: "2025",
-    type: "Proyecto",
-    description:
-      "Web corporativa con sistema de gestión de contenidos personalizado. La página incluye un apartado privado para gestionar el contenido, tanto imágenes como textos y títulos. SEO técnico y on-page optimizado para maximizar resultados en buscadores.",
-    features: [
-      {
-        title: "Contenido dinámico",
-        description:
-          "La página incluye un apartado privado para gestionar el contenido, tanto imágenes como textos y títulos.",
-      },
-      {
-        title: "SEO Optimizado",
-        description:
-          "SEO técnico y on-page optimizado para maximizar resultados SEO en buscadores.",
-      },
-      {
-        title: "Análisis de datos",
-        description:
-          "El apartado privado permite conocer los datos de personas que visitan la web, duración media de las visitas, apartados visitados, etc.",
-      },
-    ],
-    link: "Teklatam.com",
-  },
-  {
-    id: "locopolo",
-    title: "Loco Polo",
-    year: "2021",
-    type: "Prácticas",
-    description:
-      "En Loco Polo colaboré en el desarrollo de la página web, trabajando con WordPress y diversos plugins para optimizar su funcionalidad y experiencia de usuario. Además, apoyé el posicionamiento SEO, mejorando la estructura, el contenido y la visibilidad orgánica del sitio.",
-    features: [
-      {
-        title: "WordPress",
-        description:
-          "Desarrollé y configuré la web utilizando WordPress y plugins específicos para mejorar su funcionalidad y rendimiento.",
-      },
-      {
-        title: "SEO Optimizado",
-        description:
-          "Implementé mejoras SEO centradas en estructura, contenido y metadatos para aumentar la visibilidad y el tráfico orgánico.",
-      },
-      {
-        title: "Experiencia de uso",
-        description:
-          "Optimicé la experiencia de usuario ajustando navegación, tiempos de carga y claridad visual para lograr una interacción más fluida e intuitiva.",
-      },
-    ],
-    link: "Locopolo.com",
+      "Marketplace P2P para comprar, vender e intercambiar material de montaña de segunda mano. Lo fundé y me encargué de producto, tecnología y go-to-market. Actualmente en pausa.",
+    features: [],
+    link: null,
   },
 ];
 
@@ -120,11 +143,11 @@ const ProjectsSection = () => {
     <section id="proyectos" className="px-6 py-24 md:py-32">
       <div className="max-w-4xl mx-auto">
         {/* Section Header */}
-        <div 
+        <div
           ref={titleRef as React.RefObject<HTMLDivElement>}
           className={`mb-16 transition-all duration-500 ease-out ${
-            titleVisible 
-              ? "opacity-100 translate-y-0" 
+            titleVisible
+              ? "opacity-100 translate-y-0"
               : "opacity-0 translate-y-4"
           }`}
         >

@@ -13,6 +13,7 @@ export interface ProjectData {
   type: string;
   description: string;
   features: ProjectFeature[];
+  stack?: string[];
   link?: string | null;
 }
 
@@ -61,22 +62,38 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
       </p>
 
       {/* Features Grid */}
-      <div className="grid md:grid-cols-3 gap-8">
-        {project.features.map((feature, i) => (
-          <div 
-            key={i} 
-            className={`space-y-2 transition-all duration-400 ${
-              isVisible 
-                ? "opacity-100 translate-y-0" 
-                : "opacity-0 translate-y-3"
-            }`}
-            style={{ transitionDelay: `${(index * 80) + (i * 60) + 150}ms` }}
-          >
-            <h4 className="font-medium text-sm tracking-wide">{feature.title}</h4>
-            <p className="text-subtle text-sm leading-relaxed font-light">{feature.description}</p>
-          </div>
-        ))}
-      </div>
+      {project.features.length > 0 && (
+        <div className="grid md:grid-cols-3 gap-8">
+          {project.features.map((feature, i) => (
+            <div
+              key={i}
+              className={`space-y-2 transition-all duration-400 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-3"
+              }`}
+              style={{ transitionDelay: `${(index * 80) + (i * 60) + 150}ms` }}
+            >
+              <h4 className="font-medium text-sm tracking-wide">{feature.title}</h4>
+              <p className="text-subtle text-sm leading-relaxed font-light">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Stack */}
+      {project.stack && project.stack.length > 0 && (
+        <ul className="flex flex-wrap gap-2 mt-8" aria-label="Tecnologías del proyecto">
+          {project.stack.map((tech) => (
+            <li
+              key={tech}
+              className="px-3 py-1 text-xs border border-divider rounded-full text-subtle"
+            >
+              {tech}
+            </li>
+          ))}
+        </ul>
+      )}
     </article>
   );
 };
