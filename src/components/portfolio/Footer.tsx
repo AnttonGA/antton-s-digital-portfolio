@@ -4,8 +4,14 @@ const Footer = () => {
       <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-subtle">
         <p className="tracking-wide">© 2026 Antton Gorrochategui</p>
         <nav className="flex gap-8">
-          <a 
-            href="#proyectos" 
+          <a
+            href="#servicios"
+            className="hover:text-foreground transition-colors duration-200 tracking-wide uppercase"
+          >
+            Servicios
+          </a>
+          <a
+            href="#proyectos"
             className="hover:text-foreground transition-colors duration-200 tracking-wide uppercase"
           >
             Proyectos
