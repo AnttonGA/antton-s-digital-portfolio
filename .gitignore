@@ -12,6 +12,14 @@ dist
 dist-ssr
 *.local
 
+# Variables de entorno
+.env
+.env.*
+!.env.example
+
+# Config local de herramientas
+.claude/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -1,74 +1,66 @@
-# Welcome to your Lovable project
+# Portfolio — Antton Gorrochategui
 
-## Project info
+Portfolio personal de Antton Gorrochategui: desarrollador full-stack especializado
+en integración de IA, con background de marketing. Es una single-page application
+que presenta perfil, servicios, proyectos y contacto, orientada a agencias y
+clientes freelance (incluida colaboración en marca blanca).
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Todo el contenido está **hardcodeado en el código** (sin backend ni base de datos):
+la web es estática y se sirve directamente, por lo que carga rápido y no depende de
+servicios externos.
 
-## How can I edit this code?
+## Stack
 
-There are several ways of editing your application.
+- **Vite** + **React 19** + **TypeScript**
+- **Tailwind CSS** + **shadcn/ui** (componentes en `src/components/ui`)
+- **React Router** para el enrutado
+- **Bun** como gestor de paquetes y runner
+- Despliegue en **Netlify**
 
-**Use Lovable**
+## Estructura
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Bun installed - [install Bun](https://bun.sh/docs/installation)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-bun install
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-bun run dev
+```
+src/
+  pages/           Index (home) y NotFound
+  components/
+    portfolio/     Secciones de la web (Hero, Services, Projects, About, Contact, Footer)
+    ui/            Componentes de shadcn/ui
+  hooks/           Hooks propios (p. ej. useScrollReveal)
+  assets/          Imágenes usadas por la app
+public/            Estáticos servidos tal cual (CV, favicon, imagen OG, demos)
 ```
 
-**Edit a file directly in GitHub**
+El contenido editable vive en los componentes de `src/components/portfolio`:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- **Perfil / titular / presentación** → `HeroSection.tsx`
+- **Servicios** → `ServicesSection.tsx`
+- **Proyectos** → array `projects` en `ProjectsSection.tsx`
+- **Skills, idiomas, experiencia y formación** → `AboutTab.tsx`
+- **Contacto** → `ContactSection.tsx`
 
-**Use GitHub Codespaces**
+## Desarrollo local
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Requiere [Bun](https://bun.sh/docs/installation).
 
-## What technologies are used for this project?
+```sh
+bun install       # instalar dependencias
+bun run dev       # servidor de desarrollo (http://localhost:8080)
+bun run lint      # eslint
+bun run build     # build de producción en dist/
+bun run preview   # servir el build de producción
+```
 
-This project is built with:
+## Despliegue
 
-- Bun 1.3.4
-- Vite 7.2.7
-- TypeScript
-- React 19.2.1
-- shadcn-ui
-- Tailwind CSS
+El despliegue es automático en **Netlify** a partir de la rama principal.
+La configuración está en `netlify.toml`:
 
-## How can I deploy this project?
+- Comando de build: `npm run build`
+- Directorio publicado: `dist`
+- Redirección SPA de `/*` a `/index.html`
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Notas
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- La imagen Open Graph (`public/og-cover.jpg`) y `og:url` deberían apuntar a la URL
+  absoluta del dominio final para máxima compatibilidad al compartir el enlace.
+- `public/demos/` contiene demos estáticos independientes que Netlify sirve tal cual.

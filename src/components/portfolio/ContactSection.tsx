@@ -21,7 +21,7 @@ const ContactSection = () => {
     {
       icon: Phone,
       label: "Móvil",
-      value: "+34 653 89 33 53",
+      value: "+34 653 893 353",
       href: "tel:+34653893353",
       copyable: true,
     },
@@ -66,9 +66,13 @@ const ContactSection = () => {
               Trabajemos<br />juntos
             </h2>
             <p className="text-base text-subtle leading-relaxed font-light">
-              Estoy abierto a colaborar en proyectos donde pueda aportar mi experiencia 
-              en marketing digital, desarrollo web y creación de contenido. Me gusta 
-              trabajar de forma clara, estratégica y orientada a resultados.
+              Colaboro con agencias y clientes freelance que necesitan un perfil técnico de
+              confianza: desarrollo full-stack, integración de IA y una base sólida de marketing.
+              También trabajo en marca blanca, ejecutando la parte técnica mientras tú das la cara
+              ante el cliente.
+            </p>
+            <p className="text-sm text-subtle font-light">
+              Con base en Donostia · disponible en remoto.
             </p>
           </div>
 
