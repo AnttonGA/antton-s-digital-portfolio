@@ -7,7 +7,7 @@ const projects: ProjectData[] = [
   {
     id: "mekoa",
     title: "MEKOA",
-    year: "2025 – Actualidad",
+    year: "Jun 2026 – Actualidad",
     type: "SaaS · Telemedicina veterinaria con IA",
     description:
       "Plataforma de telemedicina veterinaria de extremo a extremo, construida en un equipo de dos como desarrollador full-stack. El flujo va del chat de triaje con IA a la reserva de cita, la videoconsulta con transcripción en vivo y un informe clínico generado automáticamente.",
