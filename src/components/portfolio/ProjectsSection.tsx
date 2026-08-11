@@ -40,7 +40,6 @@ const projects: ProjectData[] = [
       "Stripe",
       "Vitest",
     ],
-    // TODO: confirmar URL pública (¿mekoavet.com?) antes de enlazar
     link: null,
   },
   {
@@ -118,8 +117,7 @@ const projects: ProjectData[] = [
       },
     ],
     stack: ["PHP", "JavaScript", "HTML / CSS"],
-    // TODO: confirmar que Kahir.eus sigue siendo la URL correcta
-    link: "Kahir.eus",
+    link: null,
   },
   {
     id: "birakari",
