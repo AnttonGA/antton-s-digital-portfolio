@@ -58,29 +58,29 @@ const experiences = [
   {
     id: "canexion",
     company: "Canexion",
-    role: "Marketing Director",
-    period: "2026 – Actualidad",
+    role: "Marketing Director & Internal Tooling",
+    period: "Mar 2026 – Actualidad",
     description: [
-      "Dirección de la estrategia de presencia digital para tienda física y e-commerce.",
-      "Desarrollo del CRM de fidelización a medida, hoy en producción.",
+      "CRM de fidelización a medida, construido desde cero y hoy en uso diario en producción.",
+      "Estrategia de presencia digital completa para la tienda física y la online.",
+      "+33 % de engagement orgánico y +5 % de seguidores en redes.",
     ],
   },
   {
     id: "akademia-ene",
     company: "Akademia eñe Online",
     role: "New Entrepreneur · Erasmus para Jóvenes Emprendedores",
-    period: "2026",
+    period: "Mar 2026 – Sep 2026",
     description: [
-      "Desarrollo de la plataforma de cursos con arquitectura LMS sobre WooCommerce.",
-      "Integración de una capa de IA conversacional en el producto.",
-      "Colaboración en remoto entre Bratislava y Donostia bajo metodología Scrum/Agile.",
+      "Desarrollo de la plataforma web que aloja los cursos online de la escuela.",
+      "Arquitectura LMS sobre WooCommerce, entregada en remoto entre Bratislava y Donostia bajo Scrum/Agile.",
     ],
   },
   {
     id: "ayesa",
     company: "Ayesa",
     role: "Customer Success & Retention Lead",
-    period: "2025 – 2026",
+    period: "Sep 2025 – Feb 2026",
     description: [
       "Onboarding de nuevos clientes y diseño de estrategias de retención.",
       "Gestión directa de relaciones con clientes y coordinación de eventos.",
@@ -90,12 +90,26 @@ const experiences = [
     id: "teklatam",
     company: "Teklatam",
     role: "Marketing Lead · Santiago de Chile",
-    period: "2025",
+    period: "Ene 2025 – Ago 2025",
     description: [
       "Estrategia de marketing digital y presencia online para una empresa tecnológica.",
       "Desarrollo de la web corporativa y lanzamiento de nuevos productos.",
       "SEO, contenido y adquisición de pago.",
     ],
+  },
+  {
+    id: "bizipoza",
+    company: "Bizipoza",
+    role: "Event Operations Supervisor · Euskadi",
+    period: "Abr 2025 – May 2025",
+    description: [],
+  },
+  {
+    id: "fitt",
+    company: "FITT",
+    role: "Asistente de Marketing (prácticas) · Rumanía",
+    period: "2022 – 2023",
+    description: [],
   },
 ];
 
@@ -103,7 +117,7 @@ const education = [
   {
     id: "uoc",
     title: "Grado en Marketing e Investigación de Mercados",
-    school: "UOC",
+    school: "Universitat Oberta de Catalunya",
     period: "2025",
   },
   {
@@ -195,13 +209,15 @@ const AboutTab = () => {
                 </div>
                 <span className="text-xs text-subtle">{exp.period}</span>
               </div>
-              <ul className="space-y-1">
-                {exp.description.map((item, i) => (
-                  <li key={i} className="text-sm text-subtle">
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              {exp.description.length > 0 && (
+                <ul className="space-y-1">
+                  {exp.description.map((item, i) => (
+                    <li key={i} className="text-sm text-subtle">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </div>
