@@ -1,12 +1,9 @@
 import { useState } from "react";
-import ProjectCard from "./ProjectCard";
+import ProjectCard, { ProjectData } from "./ProjectCard";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Loader2 } from "lucide-react";
 import AboutTab from "./AboutTab";
-import { useWebProjects, WebProject } from "@/hooks/useWebProjects";
 
-// Fallback data for when database is empty
-const fallbackProjects: WebProject[] = [
+const projects: ProjectData[] = [
   {
     id: "kahir",
     title: "Kahir",
@@ -118,10 +115,6 @@ type TabType = "web" | "about";
 const ProjectsSection = () => {
   const [activeTab, setActiveTab] = useState<TabType>("web");
   const { ref: titleRef, isVisible: titleVisible } = useScrollReveal({ threshold: 0.3 });
-  const { data: dbProjects, isLoading } = useWebProjects();
-
-  // Use database projects if available, otherwise fallback
-  const projects = dbProjects && dbProjects.length > 0 ? dbProjects : fallbackProjects;
 
   return (
     <section id="proyectos" className="px-6 py-24 md:py-32">
@@ -169,17 +162,11 @@ const ProjectsSection = () => {
 
         {/* Content based on active tab */}
         {activeTab === "web" ? (
-          isLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-5 h-5 animate-spin text-subtle" />
-            </div>
-          ) : (
-            <div>
-              {projects.map((project, index) => (
-                <ProjectCard key={project.id} project={project} index={index} />
-              ))}
-            </div>
-          )
+          <div>
+            {projects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
+            ))}
+          </div>
         ) : (
           <AboutTab />
         )}

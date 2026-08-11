@@ -1,8 +1,6 @@
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { useSkills, useLanguages, useExperiences } from "@/hooks/useAboutData";
 
-// Fallback data
-const fallbackSkills = [
+const skills = [
   { id: "1", name: "Google Analytics 4", category: "analytics", display_order: 0 },
   { id: "2", name: "SEMrush", category: "seo", display_order: 1 },
   { id: "3", name: "Ahrefs", category: "seo", display_order: 2 },
@@ -23,14 +21,14 @@ const fallbackSkills = [
   { id: "18", name: "Email Marketing", category: "marketing", display_order: 17 },
 ];
 
-const fallbackLanguages = [
+const languages = [
   { id: "1", language: "Euskera", level: "Nativo", display_order: 0 },
   { id: "2", language: "Castellano", level: "Nativo", display_order: 1 },
   { id: "3", language: "Inglés", level: "C1", display_order: 2 },
   { id: "4", language: "Francés", level: "A1", display_order: 3 },
 ];
 
-const fallbackExperiences = [
+const experiences = [
   {
     id: "1",
     company: "Canexion",
@@ -119,14 +117,6 @@ const AboutTab = () => {
   const { ref: skillsRef, isVisible: skillsVisible } = useScrollReveal({ threshold: 0.2 });
   const { ref: langRef, isVisible: langVisible } = useScrollReveal({ threshold: 0.2 });
   const { ref: expRef, isVisible: expVisible } = useScrollReveal({ threshold: 0.1 });
-
-  const { data: dbSkills, isLoading: skillsLoading } = useSkills();
-  const { data: dbLanguages, isLoading: languagesLoading } = useLanguages();
-  const { data: dbExperiences, isLoading: experiencesLoading } = useExperiences();
-
-  const skills = dbSkills && dbSkills.length > 0 ? dbSkills : fallbackSkills;
-  const languages = dbLanguages && dbLanguages.length > 0 ? dbLanguages : fallbackLanguages;
-  const experiences = dbExperiences && dbExperiences.length > 0 ? dbExperiences : fallbackExperiences;
 
   return (
     <div className="space-y-16">
