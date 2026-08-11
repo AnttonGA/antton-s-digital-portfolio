@@ -2,7 +2,6 @@ import { useState } from "react";
 import ProjectCard from "./ProjectCard";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Loader2 } from "lucide-react";
-import InstagramFeed from "./InstagramFeed";
 import AboutTab from "./AboutTab";
 import { useWebProjects, WebProject } from "@/hooks/useWebProjects";
 
@@ -114,7 +113,7 @@ const fallbackProjects: WebProject[] = [
   },
 ];
 
-type TabType = "web" | "social" | "about";
+type TabType = "web" | "about";
 
 const ProjectsSection = () => {
   const [activeTab, setActiveTab] = useState<TabType>("web");
@@ -157,16 +156,6 @@ const ProjectsSection = () => {
             Desarrollo Web
           </button>
           <button
-            onClick={() => setActiveTab("social")}
-            className={`pb-4 text-sm font-medium tracking-wide transition-all duration-200 border-b-2 -mb-px ${
-              activeTab === "social"
-                ? "border-foreground text-foreground"
-                : "border-transparent text-subtle hover:text-foreground"
-            }`}
-          >
-            Creación de Contenido
-          </button>
-          <button
             onClick={() => setActiveTab("about")}
             className={`pb-4 text-sm font-medium tracking-wide transition-all duration-200 border-b-2 -mb-px ${
               activeTab === "about"
@@ -191,8 +180,6 @@ const ProjectsSection = () => {
               ))}
             </div>
           )
-        ) : activeTab === "social" ? (
-          <InstagramFeed />
         ) : (
           <AboutTab />
         )}
