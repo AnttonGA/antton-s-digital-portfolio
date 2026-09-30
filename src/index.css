@@ -104,6 +104,12 @@
   html {
     scroll-behavior: smooth;
   }
+
+  /* Offset anchored sections so the sticky header doesn't cover them */
+  section[id],
+  [id="contacto"] {
+    scroll-margin-top: 5rem;
+  }
   
   body {
     @apply bg-background text-foreground font-body antialiased;
