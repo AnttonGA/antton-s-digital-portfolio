@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
+import Seo from "@/components/Seo";
 
 interface ServicePackage {
   title: string;
@@ -47,6 +48,11 @@ const packages: ServicePackage[] = [
 const Servicios = () => {
   return (
     <>
+      <Seo
+        title="Servicios · Automatización e IA para empresas · Antton Gorrochategui"
+        description="Diagnóstico de automatización, automatización de procesos concretos y asistentes con IA sobre tu documentación. Sin precios ocultos: el alcance se cierra en una valoración gratuita."
+        path="/servicios"
+      />
       {/* Intro */}
       <section className="px-6 pt-20 md:pt-28 pb-12">
         <div className="max-w-4xl mx-auto animate-fade-in-up">

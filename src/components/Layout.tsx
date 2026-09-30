@@ -1,5 +1,9 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { ClientOnly } from "vite-react-ssg";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import Header from "@/components/portfolio/Header";
 import Footer from "@/components/portfolio/Footer";
 
@@ -22,14 +26,25 @@ const ScrollManager = () => {
 };
 
 const Layout = () => (
-  <div className="min-h-screen bg-background flex flex-col">
-    <ScrollManager />
-    <Header />
-    <main className="flex-1">
-      <Outlet />
-    </main>
-    <Footer />
-  </div>
+  <TooltipProvider>
+    <div className="min-h-screen bg-background flex flex-col">
+      <ScrollManager />
+      <Header />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+    {/* Feedback UI: solo en cliente para no romper el prerender */}
+    <ClientOnly>
+      {() => (
+        <>
+          <Toaster />
+          <Sonner />
+        </>
+      )}
+    </ClientOnly>
+  </TooltipProvider>
 );
 
 export default Layout;

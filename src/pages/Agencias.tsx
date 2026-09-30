@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Seo from "@/components/Seo";
 
 const model = [
   {
@@ -43,6 +44,11 @@ const capabilities = [
 const Agencias = () => {
   return (
     <>
+      <Seo
+        title="Marca blanca para agencias · Antton Gorrochategui"
+        description="La capa técnica bajo tu marca: desarrollo y automatización con IA en marca blanca para agencias y estudios. Repositorio tuyo, sin captación y con dos rondas de revisión."
+        path="/agencias"
+      />
       {/* Intro */}
       <section className="px-6 pt-20 md:pt-28 pb-16">
         <div className="max-w-4xl mx-auto animate-fade-in-up">
