@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { useT } from "@/i18n/LanguageContext";
 
 interface Service {
   title: string;
@@ -8,31 +9,7 @@ interface Service {
   price?: string;
 }
 
-const services: Service[] = [
-  {
-    title: "Diagnóstico de automatización",
-    description:
-      "Reviso los procesos reales de tu empresa y te digo cuáles compensa automatizar. Te entrego un plan por fases con presupuesto para cada una. En pocos días tienes una hoja de ruta clara.",
-    price: "Desde 600 €",
-  },
-  {
-    title: "Automatizar un proceso concreto",
-    description:
-      "Esa tarea repetitiva que os come horas: pedidos que llegan por WhatsApp o email y acaban solos en el sistema, facturas en PDF que se vuelcan a contabilidad, informes que se generan solos.",
-  },
-  {
-    title: "Asistente sobre tu documentación",
-    description:
-      "Un buscador o asistente que responde desde tus manuales, catálogos y procedimientos reales. Tu equipo deja de perder el tiempo buscando en carpetas.",
-  },
-];
-
-interface ServiceCardProps {
-  service: Service;
-  index: number;
-}
-
-const ServiceCard = ({ service, index }: ServiceCardProps) => {
+const ServiceCard = ({ service, index }: { service: Service; index: number }) => {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.15 });
 
   return (
@@ -56,6 +33,7 @@ const ServiceCard = ({ service, index }: ServiceCardProps) => {
 };
 
 const ServicesSection = () => {
+  const t = useT();
   const { ref: titleRef, isVisible: titleVisible } = useScrollReveal({ threshold: 0.3 });
 
   return (
@@ -69,16 +47,16 @@ const ServicesSection = () => {
           }`}
         >
           <span className="inline-block text-xs font-medium text-year-accent tracking-[0.2em] uppercase mb-4">
-            Servicios
+            {t.services.eyebrow}
           </span>
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
-            Cómo te quito trabajo de encima
+            {t.services.title}
           </h2>
         </div>
 
         {/* Services Grid */}
         <div className="grid md:grid-cols-3 gap-10 md:gap-8">
-          {services.map((service, index) => (
+          {t.services.items.map((service, index) => (
             <ServiceCard key={service.title} service={service} index={index} />
           ))}
         </div>
@@ -88,22 +66,20 @@ const ServicesSection = () => {
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-xl">
               <span className="inline-block text-xs font-medium text-year-accent tracking-[0.2em] uppercase mb-3">
-                Servicio recurrente
+                {t.services.maintenanceEyebrow}
               </span>
               <h3 className="text-xl md:text-2xl font-semibold tracking-tight mb-2">
-                Mantenimiento mensual
+                {t.services.maintenanceTitle}
               </h3>
               <p className="text-subtle text-sm leading-relaxed font-light">
-                Una vez algo está funcionando, me encargo de que siga funcionando: vigilancia,
-                ajustes, pequeñas mejoras y soporte. Para que tu automatización evolucione contigo
-                y no dependas de nadie a última hora.
+                {t.services.maintenanceDesc}
               </p>
             </div>
             <Link
               to="/#contacto"
               className="inline-flex items-center justify-center text-sm font-medium bg-foreground text-background px-5 py-2.5 rounded-sm hover:opacity-90 transition-opacity duration-200 shrink-0"
             >
-              Hablar de mantenimiento
+              {t.services.maintenanceCta}
             </Link>
           </div>
         </div>
@@ -114,13 +90,13 @@ const ServicesSection = () => {
             to="/servicios"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground group"
           >
-            <span className="border-b border-foreground pb-0.5">Ver los servicios en detalle</span>
+            <span className="border-b border-foreground pb-0.5">{t.services.detailLink}</span>
             <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
           </Link>
           <p className="text-sm text-subtle font-light">
-            ¿Eres agencia o estudio de diseño?{" "}
+            {t.services.agenciesPre}{" "}
             <Link to="/agencias" className="text-foreground underline underline-offset-4 hover:no-underline">
-              Trabajo en marca blanca
+              {t.services.agenciesLink}
             </Link>
           </p>
         </div>

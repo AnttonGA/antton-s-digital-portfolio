@@ -1,17 +1,16 @@
 import Seo from "@/components/Seo";
+import { useT } from "@/i18n/LanguageContext";
 import HeroSection from "@/components/portfolio/HeroSection";
 import ServicesSection from "@/components/portfolio/ServicesSection";
 import ProjectsSection from "@/components/portfolio/ProjectsSection";
 import ContactSection from "@/components/portfolio/ContactSection";
 
 const Index = () => {
+  const t = useT();
+
   return (
     <>
-      <Seo
-        title="Antton Gorrochategui · Automatización de procesos con IA"
-        description="Automatizo los procesos que hoy haces a mano: pedidos, facturas, informes y asistentes con IA. Desarrollo full-stack a medida en Donostia. Valoración gratuita, sin compromiso."
-        path="/"
-      />
+      <Seo title={t.seo.home.title} description={t.seo.home.description} path="/" />
       <HeroSection />
       <ServicesSection />
       <ProjectsSection />

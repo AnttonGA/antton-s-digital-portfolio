@@ -1,134 +1,8 @@
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-
-const skillGroups = [
-  {
-    label: "Desarrollo",
-    items: [
-      "TypeScript",
-      "React",
-      "Node.js",
-      "Hono",
-      "PostgreSQL",
-      "Supabase",
-      "Row-Level Security",
-      "REST APIs",
-      "PHP",
-      "JavaScript",
-      "Vite",
-      "TailwindCSS",
-      "Zod",
-      "Vitest",
-      "Git",
-    ],
-  },
-  {
-    label: "IA",
-    items: [
-      "APIs de Anthropic y OpenAI",
-      "Vercel AI SDK",
-      "RAG y embeddings",
-      "Agentes conversacionales",
-      "Observabilidad de LLM",
-    ],
-  },
-  {
-    label: "Producto y marketing",
-    items: [
-      "WordPress",
-      "WooCommerce",
-      "Figma",
-      "SEO (SEMrush, Ahrefs)",
-      "GA4",
-      "GTM",
-      "Email marketing",
-      "Go-to-market",
-      "Scrum / Agile",
-    ],
-  },
-];
-
-const languages = [
-  { id: "eu", language: "Euskera", level: "Nativo" },
-  { id: "es", language: "Castellano", level: "Nativo" },
-  { id: "en", language: "Inglés", level: "C1" },
-  { id: "fr", language: "Francés", level: "A1" },
-];
-
-const experiences = [
-  {
-    id: "canexion",
-    company: "Canexion",
-    role: "Marketing Director & Internal Tooling",
-    period: "Mar 2026 – Actualidad",
-    description: [
-      "CRM de fidelización a medida, construido desde cero y hoy en uso diario en producción.",
-      "Estrategia de presencia digital completa para la tienda física y la online.",
-      "+33 % de engagement orgánico y +5 % de seguidores en redes.",
-    ],
-  },
-  {
-    id: "akademia-ene",
-    company: "Akademia eñe Online",
-    role: "New Entrepreneur · Erasmus para Jóvenes Emprendedores",
-    period: "Mar 2026 – Sep 2026",
-    description: [
-      "Desarrollo de la plataforma web que aloja los cursos online de la escuela.",
-      "Arquitectura LMS sobre WooCommerce, entregada en remoto entre Bratislava y Donostia bajo Scrum/Agile.",
-    ],
-  },
-  {
-    id: "ayesa",
-    company: "Ayesa",
-    role: "Customer Success & Retention Lead",
-    period: "Sep 2025 – Feb 2026",
-    description: [
-      "Onboarding de nuevos clientes y diseño de estrategias de retención.",
-      "Gestión directa de relaciones con clientes y coordinación de eventos.",
-    ],
-  },
-  {
-    id: "teklatam",
-    company: "Teklatam",
-    role: "Marketing Lead · Santiago de Chile",
-    period: "Ene 2025 – Ago 2025",
-    description: [
-      "Estrategia de marketing digital y presencia online para una empresa tecnológica.",
-      "Desarrollo de la web corporativa y lanzamiento de nuevos productos.",
-      "SEO, contenido y adquisición de pago.",
-    ],
-  },
-  {
-    id: "bizipoza",
-    company: "Bizipoza",
-    role: "Event Operations Supervisor · Euskadi",
-    period: "Abr 2025 – May 2025",
-    description: [],
-  },
-  {
-    id: "fitt",
-    company: "FITT",
-    role: "Asistente de Marketing (prácticas) · Rumanía",
-    period: "2022 – 2023",
-    description: [],
-  },
-];
-
-const education = [
-  {
-    id: "uoc",
-    title: "Grado en Marketing e Investigación de Mercados",
-    school: "Universitat Oberta de Catalunya",
-    period: "2025",
-  },
-  {
-    id: "lanbide",
-    title: "Desarrollo Web (FP)",
-    school: "Lanbide",
-    period: null,
-  },
-];
+import { useT } from "@/i18n/LanguageContext";
 
 const AboutTab = () => {
+  const t = useT();
   const { ref: skillsRef, isVisible: skillsVisible } = useScrollReveal({ threshold: 0.2 });
   const { ref: langRef, isVisible: langVisible } = useScrollReveal({ threshold: 0.2 });
   const { ref: expRef, isVisible: expVisible } = useScrollReveal({ threshold: 0.1 });
@@ -144,10 +18,10 @@ const AboutTab = () => {
         }`}
       >
         <h3 className="text-sm font-medium text-subtle tracking-wide uppercase mb-6">
-          Herramientas
+          {t.about.toolsTitle}
         </h3>
         <div className="space-y-6">
-          {skillGroups.map((group) => (
+          {t.about.groups.map((group) => (
             <div key={group.label}>
               <h4 className="text-xs font-medium text-year-accent tracking-[0.15em] uppercase mb-3">
                 {group.label}
@@ -175,11 +49,11 @@ const AboutTab = () => {
         }`}
       >
         <h3 className="text-sm font-medium text-subtle tracking-wide uppercase mb-6">
-          Idiomas
+          {t.about.languagesTitle}
         </h3>
         <div className="flex flex-wrap gap-8">
-          {languages.map((lang) => (
-            <div key={lang.id} className="flex items-center gap-2">
+          {t.about.languages.map((lang) => (
+            <div key={lang.language} className="flex items-center gap-2">
               <span className="text-foreground font-medium">{lang.language}</span>
               <span className="text-subtle text-sm">({lang.level})</span>
             </div>
@@ -195,11 +69,11 @@ const AboutTab = () => {
         }`}
       >
         <h3 className="text-sm font-medium text-subtle tracking-wide uppercase mb-6">
-          Experiencia
+          {t.about.experienceTitle}
         </h3>
         <div className="space-y-8">
-          {experiences.map((exp) => (
-            <div key={exp.id} className="relative pl-6 border-l border-divider">
+          {t.about.experiences.map((exp) => (
+            <div key={exp.company} className="relative pl-6 border-l border-divider">
               <div className="absolute left-0 top-1.5 w-2 h-2 -translate-x-[5px] rounded-full bg-foreground" />
               <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
                 <div>
@@ -231,12 +105,12 @@ const AboutTab = () => {
         }`}
       >
         <h3 className="text-sm font-medium text-subtle tracking-wide uppercase mb-6">
-          Formación
+          {t.about.educationTitle}
         </h3>
         <div className="space-y-4">
-          {education.map((edu) => (
+          {t.about.education.map((edu) => (
             <div
-              key={edu.id}
+              key={edu.title}
               className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1"
             >
               <div>
