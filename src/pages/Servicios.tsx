@@ -7,6 +7,7 @@ interface ServicePackage {
   description: string;
   points: string[];
   duration: string;
+  price?: string;
 }
 
 const packages: ServicePackage[] = [
@@ -20,6 +21,7 @@ const packages: ServicePackage[] = [
       "Plan por fases con un presupuesto para cada una",
     ],
     duration: "Dos o tres días",
+    price: "Desde 600 €",
   },
   {
     title: "Automatizar un proceso concreto",
@@ -94,6 +96,9 @@ const Servicios = () => {
                     ))}
                   </ul>
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                    {pkg.price && (
+                      <span className="text-sm font-semibold text-foreground">{pkg.price}</span>
+                    )}
                     <span className="text-xs text-subtle uppercase tracking-wider">
                       Duración orientativa: <span className="text-foreground/80">{pkg.duration}</span>
                     </span>

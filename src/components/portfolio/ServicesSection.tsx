@@ -5,6 +5,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 interface Service {
   title: string;
   description: string;
+  price?: string;
 }
 
 const services: Service[] = [
@@ -12,6 +13,7 @@ const services: Service[] = [
     title: "Diagnóstico de automatización",
     description:
       "Reviso los procesos reales de tu empresa y te digo cuáles compensa automatizar. Te entrego un plan por fases con presupuesto para cada una. En pocos días tienes una hoja de ruta clara.",
+    price: "Desde 600 €",
   },
   {
     title: "Automatizar un proceso concreto",
@@ -46,6 +48,9 @@ const ServiceCard = ({ service, index }: ServiceCardProps) => {
       </span>
       <h3 className="text-lg font-semibold tracking-tight mb-3">{service.title}</h3>
       <p className="text-subtle text-sm leading-relaxed font-light">{service.description}</p>
+      {service.price && (
+        <p className="mt-4 text-sm font-medium text-foreground">{service.price}</p>
+      )}
     </article>
   );
 };

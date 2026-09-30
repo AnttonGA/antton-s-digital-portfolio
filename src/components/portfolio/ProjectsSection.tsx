@@ -43,7 +43,7 @@ const cases: CaseStudy[] = [
     solucion:
       "Un CRM a medida, construido desde cero, que reúne a los clientes de la tienda física y de la online y automatiza el día a día del programa.",
     resultado:
-      "Sustituyó la hoja de cálculo y se usa a diario en producción. En paralelo, la presencia digital creció un 33 % en engagement orgánico y un 5 % en seguidores.",
+      "Sustituyó la hoja de cálculo y hoy se usa a diario en producción: el programa de fidelización se gestiona en un solo sitio, con una visión del cliente que antes estaba dispersa.",
   },
   {
     id: "akademia-ene",
@@ -61,18 +61,18 @@ const cases: CaseStudy[] = [
 
 const otherProjects = [
   {
-    id: "kahir",
-    title: "Kahir",
-    year: "2024 – 2025",
-    description:
-      "Plataforma de rutas de montaña estilo Wikiloc con una IA conversacional que recomienda rutas según tu historial, tus hábitos y la previsión del tiempo.",
-  },
-  {
     id: "birakari",
     title: "Birakari",
     year: "2025",
     description:
       "Marketplace de compraventa de material de montaña de segunda mano. Lo fundé y llevé producto, tecnología y captación. En pausa.",
+  },
+  {
+    id: "kahir",
+    title: "Kahir",
+    year: "2024 – 2025",
+    description:
+      "Plataforma de rutas de montaña estilo Wikiloc con una IA conversacional que recomienda rutas según tu historial, tus hábitos y la previsión del tiempo.",
   },
 ];
 
