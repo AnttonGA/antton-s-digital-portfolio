@@ -78,28 +78,47 @@ const ServicesSection = () => {
           ))}
         </div>
 
-        {/* Maintenance + links */}
-        <div className="mt-16 pt-8 border-t border-divider flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-subtle font-light max-w-md">
-            ¿Ya está funcionando? Ofrezco <span className="text-foreground">mantenimiento mensual</span>{" "}
-            para que siga rodando y evolucione contigo.
-          </p>
+        {/* Maintenance — bloque propio (ingreso recurrente) */}
+        <div className="mt-16 rounded-lg border border-divider bg-background p-6 md:p-8">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="max-w-xl">
+              <span className="inline-block text-xs font-medium text-year-accent tracking-[0.2em] uppercase mb-3">
+                Servicio recurrente
+              </span>
+              <h3 className="text-xl md:text-2xl font-semibold tracking-tight mb-2">
+                Mantenimiento mensual
+              </h3>
+              <p className="text-subtle text-sm leading-relaxed font-light">
+                Una vez algo está funcionando, me encargo de que siga funcionando: vigilancia,
+                ajustes, pequeñas mejoras y soporte. Para que tu automatización evolucione contigo
+                y no dependas de nadie a última hora.
+              </p>
+            </div>
+            <Link
+              to="/#contacto"
+              className="inline-flex items-center justify-center text-sm font-medium bg-foreground text-background px-5 py-2.5 rounded-sm hover:opacity-90 transition-opacity duration-200 shrink-0"
+            >
+              Hablar de mantenimiento
+            </Link>
+          </div>
+        </div>
+
+        {/* Links */}
+        <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Link
             to="/servicios"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground group shrink-0"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground group"
           >
             <span className="border-b border-foreground pb-0.5">Ver los servicios en detalle</span>
             <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
           </Link>
+          <p className="text-sm text-subtle font-light">
+            ¿Eres agencia o estudio de diseño?{" "}
+            <Link to="/agencias" className="text-foreground underline underline-offset-4 hover:no-underline">
+              Trabajo en marca blanca
+            </Link>
+          </p>
         </div>
-
-        {/* Agencies pointer */}
-        <p className="mt-6 text-sm text-subtle font-light">
-          ¿Eres agencia o estudio de diseño? Trabajo en marca blanca bajo tu marca.{" "}
-          <Link to="/agencias" className="text-foreground underline underline-offset-4 hover:no-underline">
-            Cómo colaboro con agencias
-          </Link>
-        </p>
       </div>
     </section>
   );

@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Download } from "lucide-react";
 import profilePhoto from "@/assets/profile-antton.jpg";
 
 const HeroSection = () => {
@@ -45,11 +44,7 @@ const HeroSection = () => {
             {/* About line */}
             <p className="text-sm text-subtle leading-relaxed max-w-2xl font-light pt-2">
               Soy Antton Gorrochategui, desarrollador full-stack en Donostia. Vengo del marketing,
-              así que entiendo tu negocio antes de escribir una línea de código.{" "}
-              <a href="/Antton-CV.pdf" download className="inline-flex items-center gap-1 text-foreground underline underline-offset-4 hover:no-underline">
-                <Download size={13} />
-                Descargar CV
-              </a>
+              así que entiendo tu negocio antes de escribir una línea de código.
             </p>
           </div>
 
