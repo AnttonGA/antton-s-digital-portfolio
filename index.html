@@ -36,6 +36,18 @@
   </head>
 
   <body>
+    <!--
+      Formulario estático oculto: Netlify lo detecta en el build para registrar
+      el formulario. El envío real lo hace el componente React (LeadForm) por AJAX.
+    -->
+    <form name="valoracion" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="empresa" />
+      <textarea name="mensaje"></textarea>
+      <input type="text" name="bot-field" />
+    </form>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
