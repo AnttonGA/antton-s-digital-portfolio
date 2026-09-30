@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { ArrowUpRight } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 interface Service {
@@ -7,19 +9,19 @@ interface Service {
 
 const services: Service[] = [
   {
-    title: "Desarrollo web y ecommerce",
+    title: "Diagnóstico de automatización",
     description:
-      "Sitios y tiendas online a medida, de la base de datos a la interfaz. Rápidos, mantenibles y pensados para vender, no plantillas maquilladas.",
+      "Reviso los procesos reales de tu empresa y te digo cuáles compensa automatizar. Te entrego un plan por fases con presupuesto para cada una. En pocos días tienes una hoja de ruta clara.",
   },
   {
-    title: "Automatización e integración de IA",
+    title: "Automatizar un proceso concreto",
     description:
-      "Flujos con LLMs que hacen trabajo real: triaje, generación de contenido, RAG sobre tus propios datos y la observabilidad para saber qué está pasando.",
+      "Esa tarea repetitiva que os come horas: pedidos que llegan por WhatsApp o email y acaban solos en el sistema, facturas en PDF que se vuelcan a contabilidad, informes que se generan solos.",
   },
   {
-    title: "Colaboración en marca blanca para agencias",
+    title: "Asistente sobre tu documentación",
     description:
-      "Ejecuto la parte técnica y tú das la cara ante el cliente. Vengo del marketing, así que entiendo un briefing de agencia sin traducción de por medio.",
+      "Un buscador o asistente que responde desde tus manuales, catálogos y procedimientos reales. Tu equipo deja de perder el tiempo buscando en carpetas.",
   },
 ];
 
@@ -57,7 +59,7 @@ const ServicesSection = () => {
         {/* Section Header */}
         <div
           ref={titleRef as React.RefObject<HTMLDivElement>}
-          className={`mb-16 transition-all duration-500 ease-out ${
+          className={`mb-16 max-w-2xl transition-all duration-500 ease-out ${
             titleVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
         >
@@ -65,7 +67,7 @@ const ServicesSection = () => {
             Servicios
           </span>
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
-            En qué puedo ayudarte
+            Cómo te quito trabajo de encima
           </h2>
         </div>
 
@@ -75,6 +77,29 @@ const ServicesSection = () => {
             <ServiceCard key={service.title} service={service} index={index} />
           ))}
         </div>
+
+        {/* Maintenance + links */}
+        <div className="mt-16 pt-8 border-t border-divider flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-subtle font-light max-w-md">
+            ¿Ya está funcionando? Ofrezco <span className="text-foreground">mantenimiento mensual</span>{" "}
+            para que siga rodando y evolucione contigo.
+          </p>
+          <Link
+            to="/servicios"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground group shrink-0"
+          >
+            <span className="border-b border-foreground pb-0.5">Ver los servicios en detalle</span>
+            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+          </Link>
+        </div>
+
+        {/* Agencies pointer */}
+        <p className="mt-6 text-sm text-subtle font-light">
+          ¿Eres agencia o estudio de diseño? Trabajo en marca blanca bajo tu marca.{" "}
+          <Link to="/agencias" className="text-foreground underline underline-offset-4 hover:no-underline">
+            Cómo colaboro con agencias
+          </Link>
+        </p>
       </div>
     </section>
   );
