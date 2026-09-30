@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
-
-const links = [
-  { label: "Servicios", to: "/servicios" },
-  { label: "Casos", to: "/#casos" },
-  { label: "Agencias", to: "/agencias" },
-  { label: "Contacto", to: "/#contacto" },
-];
+import { useT } from "@/i18n/LanguageContext";
 
 const Footer = () => {
+  const t = useT();
+
+  const links = [
+    { label: t.footer.servicios, to: "/servicios" },
+    { label: t.footer.casos, to: "/#casos" },
+    { label: t.footer.agencias, to: "/agencias" },
+    { label: t.footer.contacto, to: "/#contacto" },
+  ];
+
   return (
     <footer className="px-6 py-10 border-t border-divider">
       <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-subtle">

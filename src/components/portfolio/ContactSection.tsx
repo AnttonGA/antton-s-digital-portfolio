@@ -1,29 +1,28 @@
 import { Mail, Phone, Linkedin, ArrowUpRight } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { useT } from "@/i18n/LanguageContext";
 import LeadForm from "./LeadForm";
 
 const contactItems = [
   {
     icon: Mail,
-    label: "Email",
     value: "anttongorrochategui@gmail.com",
     href: "mailto:anttongorrochategui@gmail.com",
   },
   {
     icon: Phone,
-    label: "Móvil",
     value: "+34 653 893 353",
     href: "tel:+34653893353",
   },
   {
     icon: Linkedin,
-    label: "LinkedIn",
     value: "Antton Gorrochategui",
     href: "https://www.linkedin.com/in/antton-gorrochategui-aguirre-03502330a/",
   },
 ];
 
 const ContactSection = () => {
+  const t = useT();
   const { ref: titleRef, isVisible: titleVisible } = useScrollReveal({ threshold: 0.2 });
 
   return (
@@ -37,15 +36,12 @@ const ContactSection = () => {
           }`}
         >
           <span className="inline-block text-xs font-medium text-year-accent tracking-[0.2em] uppercase mb-4">
-            Valoración gratuita
+            {t.contact.eyebrow}
           </span>
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-5">
-            Cuéntame el proceso que te come horas
+            {t.contact.title}
           </h2>
-          <p className="text-base text-subtle leading-relaxed font-light">
-            Te digo si tiene solución, cuánto costaría a grandes rasgos y por dónde
-            empezaría. Sin compromiso y sin tecnicismos.
-          </p>
+          <p className="text-base text-subtle leading-relaxed font-light">{t.contact.intro}</p>
         </div>
 
         <div className="grid md:grid-cols-[1.3fr_1fr] gap-12 md:gap-16 items-start">
@@ -54,13 +50,11 @@ const ContactSection = () => {
 
           {/* Direct contact */}
           <div className="space-y-6">
-            <p className="text-sm text-subtle font-light">
-              ¿Prefieres el trato directo? Escríbeme o llámame.
-            </p>
+            <p className="text-sm text-subtle font-light">{t.contact.directIntro}</p>
             <div className="space-y-1">
               {contactItems.map((item) => (
                 <a
-                  key={item.label}
+                  key={item.value}
                   href={item.href}
                   target={item.href.startsWith("http") ? "_blank" : undefined}
                   rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
@@ -74,9 +68,7 @@ const ContactSection = () => {
                 </a>
               ))}
             </div>
-            <p className="text-sm text-subtle font-light">
-              Con base en Donostia · disponible en remoto.
-            </p>
+            <p className="text-sm text-subtle font-light">{t.contact.location}</p>
           </div>
         </div>
       </div>

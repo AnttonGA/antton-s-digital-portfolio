@@ -1,15 +1,42 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { useLang, useT } from "@/i18n/LanguageContext";
 
-const navItems = [
-  { label: "Servicios", href: "/servicios" },
-  { label: "Casos", href: "/#casos" },
-  { label: "Agencias", href: "/agencias" },
-];
+const LangToggle = ({ className = "" }: { className?: string }) => {
+  const { lang, setLang } = useLang();
+  return (
+    <div className={`inline-flex items-center text-xs font-medium ${className}`} role="group" aria-label="Idioma / Language">
+      <button
+        type="button"
+        onClick={() => setLang("es")}
+        aria-pressed={lang === "es"}
+        className={`px-1.5 py-0.5 rounded-sm transition-colors ${lang === "es" ? "text-foreground" : "text-subtle hover:text-foreground"}`}
+      >
+        ES
+      </button>
+      <span className="text-divider" aria-hidden="true">/</span>
+      <button
+        type="button"
+        onClick={() => setLang("en")}
+        aria-pressed={lang === "en"}
+        className={`px-1.5 py-0.5 rounded-sm transition-colors ${lang === "en" ? "text-foreground" : "text-subtle hover:text-foreground"}`}
+      >
+        EN
+      </button>
+    </div>
+  );
+};
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const t = useT();
+
+  const navItems = [
+    { label: t.nav.servicios, href: "/servicios" },
+    { label: t.nav.casos, href: "/#casos" },
+    { label: t.nav.agencias, href: "/agencias" },
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-divider bg-background/80 backdrop-blur-md">
@@ -33,25 +60,29 @@ const Header = () => {
               {item.label}
             </Link>
           ))}
+          <LangToggle />
           <Link
             to="/#contacto"
             className="text-sm font-medium bg-foreground text-background px-4 py-2 rounded-sm hover:opacity-90 transition-opacity duration-200"
           >
-            Valoración gratuita
+            {t.nav.cta}
           </Link>
         </nav>
 
-        {/* Mobile toggle */}
-        <button
-          type="button"
-          className="md:hidden p-2 -mr-2 text-foreground"
-          aria-label={open ? "Cerrar menú" : "Abrir menú"}
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <X size={20} strokeWidth={1.5} /> : <Menu size={20} strokeWidth={1.5} />}
-        </button>
+        {/* Mobile controls */}
+        <div className="flex items-center gap-2 md:hidden">
+          <LangToggle />
+          <button
+            type="button"
+            className="p-2 -mr-2 text-foreground"
+            aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X size={20} strokeWidth={1.5} /> : <Menu size={20} strokeWidth={1.5} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile nav */}
@@ -75,7 +106,7 @@ const Header = () => {
             onClick={() => setOpen(false)}
             className="text-sm font-medium bg-foreground text-background px-4 py-2 rounded-sm text-center hover:opacity-90 transition-opacity duration-200"
           >
-            Valoración gratuita
+            {t.nav.cta}
           </Link>
         </nav>
       )}

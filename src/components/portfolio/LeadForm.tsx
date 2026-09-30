@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/i18n/LanguageContext";
 
 const FORM_NAME = "valoracion";
 
@@ -16,6 +17,7 @@ const encode = (data: Record<string, string>) =>
 const initialState = { name: "", email: "", empresa: "", mensaje: "" };
 
 const LeadForm = () => {
+  const t = useT();
   const [values, setValues] = useState(initialState);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -42,11 +44,9 @@ const LeadForm = () => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setDone(true);
       setValues(initialState);
-      toast.success("¡Recibido! Te respondo en menos de 24 h.");
+      toast.success(t.leadForm.toastSuccess);
     } catch {
-      toast.error(
-        "No se ha podido enviar. Escríbeme a anttongorrochategui@gmail.com."
-      );
+      toast.error(t.leadForm.toastError);
     } finally {
       setSubmitting(false);
     }
@@ -58,10 +58,8 @@ const LeadForm = () => {
         <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-foreground text-background">
           <Check size={20} strokeWidth={2} />
         </div>
-        <h3 className="text-lg font-semibold mb-2">Mensaje enviado</h3>
-        <p className="text-sm text-subtle font-light">
-          Gracias. Reviso tu caso y te respondo en menos de 24 horas.
-        </p>
+        <h3 className="text-lg font-semibold mb-2">{t.leadForm.successTitle}</h3>
+        <p className="text-sm text-subtle font-light">{t.leadForm.successBody}</p>
       </div>
     );
   }
@@ -85,7 +83,7 @@ const LeadForm = () => {
       </p>
 
       <div className="space-y-2">
-        <Label htmlFor="lf-name">Nombre</Label>
+        <Label htmlFor="lf-name">{t.leadForm.name}</Label>
         <Input
           id="lf-name"
           name="name"
@@ -93,12 +91,12 @@ const LeadForm = () => {
           onChange={handleChange}
           required
           autoComplete="name"
-          placeholder="Tu nombre"
+          placeholder={t.leadForm.namePlaceholder}
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="lf-email">Email</Label>
+        <Label htmlFor="lf-email">{t.leadForm.email}</Label>
         <Input
           id="lf-email"
           name="email"
@@ -107,13 +105,13 @@ const LeadForm = () => {
           onChange={handleChange}
           required
           autoComplete="email"
-          placeholder="tucorreo@empresa.com"
+          placeholder={t.leadForm.emailPlaceholder}
         />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="lf-empresa">
-          Empresa <span className="text-subtle font-normal">(opcional)</span>
+          {t.leadForm.empresa} <span className="text-subtle font-normal">{t.leadForm.empresaOptional}</span>
         </Label>
         <Input
           id="lf-empresa"
@@ -121,12 +119,12 @@ const LeadForm = () => {
           value={values.empresa}
           onChange={handleChange}
           autoComplete="organization"
-          placeholder="Nombre de tu empresa"
+          placeholder={t.leadForm.empresaPlaceholder}
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="lf-mensaje">¿Qué proceso te come horas?</Label>
+        <Label htmlFor="lf-mensaje">{t.leadForm.mensaje}</Label>
         <Textarea
           id="lf-mensaje"
           name="mensaje"
@@ -134,7 +132,7 @@ const LeadForm = () => {
           onChange={handleChange}
           required
           rows={4}
-          placeholder="Cuéntame brevemente la tarea manual que quieres quitarte de encima."
+          placeholder={t.leadForm.mensajePlaceholder}
         />
       </div>
 
@@ -142,10 +140,10 @@ const LeadForm = () => {
         {submitting ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
-            Enviando…
+            {t.leadForm.submitting}
           </>
         ) : (
-          "Pedir valoración gratuita"
+          t.leadForm.submit
         )}
       </Button>
     </form>
