@@ -15,4 +15,9 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // vite-react-ssg: desactivamos el inlining de CSS crítico (beasties) porque
+  // reescribe el HTML e inyecta un <link> dentro de #root que rompe la hidratación.
+  ssgOptions: {
+    beastiesOptions: false,
+  },
 }));

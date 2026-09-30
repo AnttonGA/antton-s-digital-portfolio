@@ -60,7 +60,7 @@
     --project-card-border: 0 0% 88%;
     --feature-badge-bg: 0 0% 94%;
     --feature-badge-text: 0 0% 25%;
-    --year-accent: 0 0% 50%;
+    --year-accent: 0 0% 42%;
     --divider: 0 0% 92%;
   }
 
@@ -135,6 +135,26 @@
   
   h3 {
     @apply text-xl md:text-2xl;
+  }
+
+  /* Foco visible por teclado en enlaces y botones sin estilo propio */
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  /* Respetar la preferencia de menos movimiento */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
