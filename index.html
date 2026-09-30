@@ -5,30 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <title>Antton Gorrochategui · Full-Stack Developer & AI Integration</title>
-    <meta
-      name="description"
-      content="Desarrollador full-stack especializado en integración de IA, con background de marketing. Construyo producto digital de extremo a extremo. Disponible para colaboración freelance y en marca blanca para agencias."
-    />
-    <meta name="author" content="Antton Gorrochategui" />
-
-    <!-- Open Graph -->
-    <!-- TODO: fijar og:url y og:image con la URL absoluta del dominio final (p. ej. https://tudominio.com/og-cover.jpg) para máxima compatibilidad al compartir -->
-    <meta property="og:title" content="Antton Gorrochategui · Full-Stack Developer & AI Integration" />
-    <meta
-      property="og:description"
-      content="Producto digital de extremo a extremo: base de datos, capa de IA, interfaz y estrategia de captación. Colaboración freelance y en marca blanca."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/og-cover.jpg" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Antton Gorrochategui · Full-Stack Developer & AI Integration" />
-    <meta
-      name="twitter:description"
-      content="Producto digital de extremo a extremo: base de datos, capa de IA, interfaz y estrategia de captación. Colaboración freelance y en marca blanca."
-    />
-    <meta name="twitter:image" content="/og-cover.jpg" />
+    <!-- El título, la descripción y las Open Graph se definen por página con <Seo> (react-helmet). -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,6 +13,18 @@
   </head>
 
   <body>
+    <!--
+      Formulario estático oculto: Netlify lo detecta en el build para registrar
+      el formulario. El envío real lo hace el componente React (LeadForm) por AJAX.
+    -->
+    <form name="valoracion" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="empresa" />
+      <textarea name="mensaje"></textarea>
+      <input type="text" name="bot-field" />
+    </form>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

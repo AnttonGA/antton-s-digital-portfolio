@@ -18,6 +18,16 @@ export const useScrollReveal = ({
     const element = ref.current;
     if (!element) return;
 
+    // Accesibilidad y robustez: si el usuario prefiere menos movimiento, o el
+    // navegador no soporta IntersectionObserver, mostramos el contenido ya.
+    const prefersReducedMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion || typeof IntersectionObserver === "undefined") {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
